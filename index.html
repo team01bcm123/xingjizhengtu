@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>星际征途</title>
+    <title>星际征途 · 完整版</title>
     <style>
-        /* ===== 全局重置 ===== */
+        /* ===== 完整样式（与之前保持一致，此处完整包含） ===== */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -819,8 +819,8 @@
 
         /* ===== 右侧面板 ===== */
         .right-panel {
-            width: 250px;
-            min-width: 190px;
+            width: 260px;
+            min-width: 200px;
             background: #0b1422;
             border-left: 1px solid #1a2842;
             padding: 6px 10px;
@@ -1584,7 +1584,7 @@
                     <div class="page-container">
                         <div style="font-size:0.6rem;color:#6f8bb0;margin-bottom:4px;">🏭 战舰工厂 — 建造强大的战舰</div>
                         <div style="flex:1;overflow-y:auto;padding-right:3px;" id="factoryList">
-                            <div style="color:#4a6080;font-size:0.6rem;text-align:center;padding:20px 0;">暂无可建造蓝图<br>打怪获得蓝图后在此建造</div>
+                            <div style="color:#4a6080;font-size:0.6rem;text-align:center;padding:20px 0;">暂无可建造蓝图<br>打怪获得蓝图后在仓库学习，然后在此建造</div>
                         </div>
                         <div style="font-size:0.5rem;color:#4a6080;margin-top:4px;">建造需要10个同等级材料，耗时60秒</div>
                     </div>
@@ -1616,15 +1616,16 @@
                 <div class="tab-content" id="tab-settings">
                     <div class="page-container" style="overflow-y:auto;padding-right:3px;">
                         <div style="background:#0b1422;border:1px solid #1a2842;border-radius:6px;padding:10px 12px;margin-bottom:8px;">
-                            <div style="color:#d4a843;font-weight:600;font-size:0.7rem;">🎁 邀请码兑换</div>
-                            <div style="font-size:0.6rem;color:#6f8bb0;margin:4px 0;">加入QQ群获取邀请码</div>
+                            <div style="color:#d4a843;font-weight:600;font-size:0.7rem;">🎁 兑换码</div>
+                            <div style="font-size:0.6rem;color:#6f8bb0;margin:4px 0;">输入兑换码领取奖励</div>
                             <div style="display:flex;gap:6px;margin-top:4px;">
-                                <input type="text" id="inviteInput" placeholder="输入邀请码..." style="flex:1;background:#0b1422;border:1px solid #1a2842;border-radius:4px;padding:4px 8px;color:#d6e4ff;font-size:0.6rem;">
+                                <input type="text" id="inviteInput" placeholder="输入兑换码..." style="flex:1;background:#0b1422;border:1px solid #1a2842;border-radius:4px;padding:4px 8px;color:#d6e4ff;font-size:0.6rem;">
                                 <button class="btn-sm" id="redeemInviteBtn" style="background:#6a5a2a;border-color:#8a7a3a;padding:2px 12px;">兑换</button>
                             </div>
                             <div id="inviteResult" style="font-size:0.55rem;margin-top:4px;color:#4a6080;"></div>
                             <div style="font-size:0.55rem;color:#4a6080;margin-top:6px;">📢 官方QQ群: <span style="color:#d4a843;">1078418755</span></div>
                         </div>
+
                         <div class="cloudflare-section">
                             <div style="color:#d4a843;font-weight:600;font-size:0.7rem;margin-bottom:4px;">☁️ 云端自动同步</div>
                             <p style="color:#6f8bb0;font-size:0.6rem;">✅ 数据自动保存到云端，无需任何手动操作</p>
@@ -1648,21 +1649,21 @@
 
     <script>
         // ============================================================
-        //  🔥 唯一需要修改的地方：替换成你的 Worker URL
+        //  配置 - 后端地址（已替换为用户提供的Railway地址）
         // ============================================================
-        const CF_WORKER_URL = 'https://xjzt.2207276908.workers.dev/';  // ← 替换成你的 Worker 地址
-
-        // ============================================================
-        //  游戏完整逻辑（自动同步，无需玩家操作）
-        // ============================================================
+        const CF_WORKER_URL = 'https://xingjizhengtu.up.railway.app';
 
         document.addEventListener('DOMContentLoaded', function() {
 
-            // ---- 用户系统 ----
+            // ============================================================
+            //  用户系统
+            // ============================================================
             let currentUser = null;
             let users = {};
 
-            // ---- 游戏状态 ----
+            // ============================================================
+            //  游戏状态
+            // ============================================================
             let inventory = {};
             let tradeList = [];
             let credits = 0;
@@ -1687,13 +1688,36 @@
                 battleTimer = 0,
                 isDefeated = false,
                 defeatTimer = null;
-            let mineralPlanets = [],
-                mineralTimer = 0;
+            let mineralPlanets = [];
+            let mineralTimer = 0;
             let marketPage = 1,
                 myOrdersPage = 1,
                 PAGE_SIZE = 8;
 
-            // ---- DOM 引用 ----
+            // ---- 阿尔法小队相关 ----
+            let alphaSquadDefeated = {}; // 记录每个矿物星球ID是否已击败阿尔法小队
+            let alphaSquadEnemies = []; // 当前阿尔法小队敌人列表
+            let isAlphaBattle = false;
+
+            // ---- 兑换码系统 ----
+            const VALID_CODES = {
+                'Star Trek': { type: 'ship', tier: 3, pos: 'front' },
+                'BDGOnb': { type: 'credits', amount: 10000 }
+            };
+            let redeemedCodes = {}; // 记录已兑换的码
+
+            // ---- 锻造系统 ----
+            const AFFIX_TYPES = [
+                { id: 'heavy_armor', name: '重甲', desc: '血量上限加10%~15%' },
+                { id: 'burst', name: '连发', desc: '攻击降低20%~35%，每次攻击攻击两次' },
+                { id: 'focus', name: '聚焦', desc: '伤害提高5%~20%' },
+                { id: 'plunder', name: '掠夺', desc: '每击沉一架战舰回复10%~25%生命' },
+                { id: 'self_destruct', name: '自爆', desc: '死亡时对敌方所有战舰造成自身血量5%~15%的伤害' }
+            ];
+
+            // ============================================================
+            //  DOM引用
+            // ============================================================
             const $ = id => document.getElementById(id);
             const loginOverlay = $('loginOverlay');
             const loginFields = $('loginFields');
@@ -1743,7 +1767,6 @@
             const btnRefreshMarket = $('btnRefreshMarket');
             const btnViewBlueprints = $('btnViewBlueprints');
             const btnEditFleet = $('btnEditFleet');
-            const btnUpgradeLimit = $('btnUpgradeLimit');
             const modalOverlay = $('modalOverlay');
             const modalTitle = $('modalTitle');
             const modalContent = $('modalContent');
@@ -1757,7 +1780,9 @@
             const sellPricePage = $('sellPricePage');
             const sellQtyPage = $('sellQtyPage');
 
-            // ---- 数据定义 ----
+            // ============================================================
+            //  数据定义
+            // ============================================================
             const GALAXY_DATA = [
                 { name: '银河系', tier: 1, levelBase: 1, dropTier: 1, systems: ['太阳系', '泰尔斯达', '奥维尔', '诺瓦里斯', '艾德隆',
                         '赛伦迪斯', '维拉克斯', '卡佩尔', '达米安', '雷克萨'
@@ -2164,7 +2189,17 @@
                 return { hp: Math.floor(hp), atk: Math.floor(atk) };
             }
 
-            // ---- Cloudflare 同步函数（自动，无需玩家操作） ----
+            // ---- 随机词条 ----
+            function randomAffix() {
+                const idx = Math.floor(Math.random() * AFFIX_TYPES.length);
+                const type = AFFIX_TYPES[idx];
+                const val = 10 + Math.floor(Math.random() * 6);
+                return { ...type, value: val };
+            }
+
+            // ============================================================
+            //  云端同步
+            // ============================================================
             async function syncToCloud(data) {
                 if (!CF_WORKER_URL || !currentUser) return false;
                 try {
@@ -2175,7 +2210,7 @@
                     });
                     return resp.ok;
                 } catch (e) {
-                    console.error('Cloudflare sync error:', e);
+                    console.error('同步失败:', e);
                     return false;
                 }
             }
@@ -2187,12 +2222,11 @@
                     if (!resp.ok) return null;
                     return await resp.json();
                 } catch (e) {
-                    console.error('Cloudflare load error:', e);
+                    console.error('加载失败:', e);
                     return null;
                 }
             }
 
-            // ---- 存档/读档（自动） ----
             function getCurrentSaveData() {
                 return {
                     inventory: inventory,
@@ -2212,8 +2246,9 @@
                     constructionQueue: constructionQueue,
                     maxShips: maxShips,
                     upgradeLevel: upgradeLevel,
-                    inviteRedeemed: true,
-                    lastOnline: Date.now()
+                    lastOnline: Date.now(),
+                    alphaSquadDefeated: alphaSquadDefeated,
+                    redeemedCodes: redeemedCodes
                 };
             }
 
@@ -2221,7 +2256,6 @@
                 if (!currentUser) return;
                 const data = getCurrentSaveData();
                 await syncToCloud(data);
-                // 本地缓存备份
                 localStorage.setItem('starfleet_data_' + currentUser, JSON.stringify(data));
             }
 
@@ -2229,7 +2263,6 @@
                 if (!currentUser) return;
                 const data = await loadFromCloud();
                 if (data && data.inventory) {
-                    // 从云端恢复
                     inventory = data.inventory || {};
                     tradeList = data.tradeList || [];
                     credits = data.credits || 0;
@@ -2247,15 +2280,15 @@
                     constructionQueue = data.constructionQueue || [];
                     maxShips = data.maxShips || { front: 2, mid: 1, rear: 2 };
                     upgradeLevel = data.upgradeLevel || { front: 0, mid: 0, rear: 0 };
+                    alphaSquadDefeated = data.alphaSquadDefeated || {};
+                    redeemedCodes = data.redeemedCodes || {};
                     if (!inventory['电路板']) inventory['电路板'] = { count: 10, tier: 1 };
                     if (!inventory['螺丝']) inventory['螺丝'] = { count: 50, tier: 2 };
                     if (!inventory['基础护盾发生器']) inventory['基础护盾发生器'] = { count: 1, tier: 1 };
                     blueprints.forEach(bp => { if (bp.learned === undefined) bp.learned = false; });
-                    // 保存到本地缓存
                     localStorage.setItem('starfleet_data_' + currentUser, JSON.stringify(data));
                     return true;
                 } else {
-                    // 云端无数据，尝试本地
                     const localData = localStorage.getItem('starfleet_data_' + currentUser);
                     if (localData) {
                         const data = JSON.parse(localData);
@@ -2276,13 +2309,15 @@
                         constructionQueue = data.constructionQueue || [];
                         maxShips = data.maxShips || { front: 2, mid: 1, rear: 2 };
                         upgradeLevel = data.upgradeLevel || { front: 0, mid: 0, rear: 0 };
+                        alphaSquadDefeated = data.alphaSquadDefeated || {};
+                        redeemedCodes = data.redeemedCodes || {};
                         if (!inventory['电路板']) inventory['电路板'] = { count: 10, tier: 1 };
                         if (!inventory['螺丝']) inventory['螺丝'] = { count: 50, tier: 2 };
                         if (!inventory['基础护盾发生器']) inventory['基础护盾发生器'] = { count: 1, tier: 1 };
                         blueprints.forEach(bp => { if (bp.learned === undefined) bp.learned = false; });
                         return true;
                     } else {
-                        // 新玩家
+                        // 新玩家初始化
                         inventory = {};
                         inventory['电路板'] = { count: 10, tier: 1 };
                         inventory['螺丝'] = { count: 50, tier: 2 };
@@ -2303,12 +2338,16 @@
                         constructionQueue = [];
                         maxShips = { front: 2, mid: 1, rear: 2 };
                         upgradeLevel = { front: 0, mid: 0, rear: 0 };
+                        alphaSquadDefeated = {};
+                        redeemedCodes = {};
                         return true;
                     }
                 }
             }
 
-            // ---- 用户系统 ----
+            // ============================================================
+            //  用户系统
+            // ============================================================
             function getUsers() {
                 try { return JSON.parse(localStorage.getItem('starfleet_users')) || {}; } catch { return {}; }
             }
@@ -2340,9 +2379,6 @@
             toggleMode.addEventListener('click', showRegister);
             toggleModeBack.addEventListener('click', showLogin);
 
-            const INVITE_CODE = 'Star Trek';
-
-            // ---- 登录/注册 ----
             async function doLogin() {
                 const username = loginUsername.value.trim();
                 const password = loginPassword.value.trim();
@@ -2357,7 +2393,6 @@
                 loginOverlay.classList.add('hidden');
                 app.style.display = 'flex';
 
-                // 从云端加载数据
                 const loaded = await loadGameFromCloud();
                 if (loaded) {
                     checkOfflineEarnings();
@@ -2384,7 +2419,6 @@
                 if (users[username]) { registerError.textContent = '账号已存在，请登录'; return; }
                 users[username] = password;
                 saveUsers(users);
-                // 创建空数据
                 const emptyData = {
                     inventory: {},
                     tradeList: [],
@@ -2403,15 +2437,15 @@
                     constructionQueue: [],
                     maxShips: { front: 2, mid: 1, rear: 2 },
                     upgradeLevel: { front: 0, mid: 0, rear: 0 },
-                    inviteRedeemed: false,
-                    lastOnline: Date.now()
+                    lastOnline: Date.now(),
+                    alphaSquadDefeated: {},
+                    redeemedCodes: {}
                 };
                 localStorage.setItem('starfleet_data_' + username, JSON.stringify(emptyData));
                 registerError.textContent = '';
                 registerSuccess.textContent = '注册成功！请登录';
                 loginUsername.value = username;
                 loginPassword.value = password;
-                // 同步到云端
                 await syncToCloud(emptyData);
                 setTimeout(() => { showLogin();
                     doLogin(); }, 500);
@@ -2441,8 +2475,7 @@
                 const data = JSON.parse(localData);
                 const lastOnline = data.lastOnline || Date.now();
                 const now = Date.now();
-                const diffMs = now - lastOnline;
-                const diffMinutes = Math.floor(diffMs / 60000);
+                const diffMinutes = Math.floor((now - lastOnline) / 60000);
                 if (diffMinutes < 2) return;
 
                 const offlineMinutes = Math.min(diffMinutes, 180);
@@ -2501,14 +2534,7 @@
                         msg += ` ${name}x${materialGain[name]}`;
                     });
                     addLog('💰 ' + msg, 'loot');
-                    // 通知栏显示
-                    const notif = document.getElementById('notifText');
-                    if (notif) notif.textContent = '⏰ ' + msg;
-                    setTimeout(() => {
-                        if (notif) notif.textContent = '🚀 星际征途 · 云端版';
-                    }, 5000);
                 }
-                // 更新最后在线时间
                 data.lastOnline = now;
                 localStorage.setItem('starfleet_data_' + currentUser, JSON.stringify(data));
             }
@@ -2530,7 +2556,8 @@
                         maxHp: base.hp,
                         atk: base.atk,
                         affixes: [],
-                        deployed: false
+                        deployed: false,
+                        forgeCount: 0 // 锻造次数
                     };
                 };
 
@@ -2603,7 +2630,7 @@
                 levelDisplay.textContent = 'Lv.' + playerLevel;
             }
 
-            // ---- 敌人生成 ----
+            // ---- 生成普通敌人 ----
             function generateEnemies() {
                 const lv = getSystemLevel();
                 const galaxyTier = getGalaxyTier();
@@ -2641,6 +2668,36 @@
                 updateBattleInfo();
             }
 
+            // ---- 生成阿尔法小队 ----
+            function generateAlphaSquad() {
+                const lv = getSystemLevel();
+                const galaxyTier = getGalaxyTier();
+                const tier = Math.min(galaxyTier, 7);
+                const tierKey = 'T' + tier;
+                const db = SHIP_DB[tierKey];
+                if (!db) return [];
+
+                const allShips = [...db.front, ...db.mid, ...db.rear];
+                const squad = [];
+                const count = 3 + Math.floor(Math.random() * 3);
+                for (let i = 0; i < count; i++) {
+                    const name = allShips[Math.floor(Math.random() * allShips.length)];
+                    const baseLv = lv.min + Math.floor(Math.random() * (lv.max - lv.min + 1));
+                    const hp = 10 + baseLv * 2 + Math.floor(Math.random() * 10);
+                    const atk = 3 + baseLv * 0.8 + Math.floor(Math.random() * 3);
+                    squad.push({
+                        id: 'alpha_' + i,
+                        name: '阿尔法小队 - ' + name,
+                        hp: Math.floor(hp),
+                        maxHp: Math.floor(hp),
+                        atk: Math.floor(atk),
+                        alive: true,
+                        level: baseLv
+                    });
+                }
+                return squad;
+            }
+
             // ---- 编队UI ----
             function updateFleetUI() {
                 const deployed = playerShips.filter(s => s.deployed);
@@ -2671,7 +2728,8 @@
                     name: s.name,
                     pos: s.pos,
                     id: s.id,
-                    tier: s.tier
+                    tier: s.tier,
+                    forgeCount: s.forgeCount || 0
                 }));
                 renderFleet();
                 updatePower();
@@ -2746,152 +2804,45 @@
                 enemyCount.textContent = enemies.filter(e => e.alive).length;
             }
 
-            // ---- 战舰详情 ----
-            function showShipDetail(shipId) {
-                const ship = playerShips.find(s => s.id === shipId);
-                if (!ship) return;
-                const color = getQualityColor(ship.tier);
-                let affixHtml = ship.affixes.length > 0 ? ship.affixes.map(a =>
-                    `<div style="font-size:0.7rem;color:#9b59b6;">${a.name}: ${a.desc}</div>`).join('') :
-                    '<div style="color:#4a6080;font-size:0.7rem;">无词条</div>';
-                const isDeployed = ship.deployed;
-                const posLabel = ship.pos === 'front' ? '先锋' : ship.pos === 'mid' ? '中间' : '后勤';
-
-                let html = `
-                    <div class="item"><span>名称</span><span style="color:${color};">${ship.name}</span></div>
-                    <div class="item"><span>等级</span><span>T${ship.tier}</span></div>
-                    <div class="item"><span>位置</span><span>${posLabel}</span></div>
-                    <div class="item"><span>生命</span><span>${ship.maxHp}</span></div>
-                    <div class="item"><span>攻击</span><span>${ship.atk}</span></div>
-                    <div class="item"><span>状态</span><span>${isDeployed ? '✅ 已上阵' : '⏸️ 未上阵'}</span></div>
-                    <div style="margin-top:8px;border-top:1px solid #1a2842;padding-top:6px;">
-                        <div style="font-size:0.75rem;color:#6f8bb0;">词条 (${ship.affixes.length}/5)</div>
-                        ${affixHtml}
-                    </div>
-                    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-                        ${isDeployed ? `<button class="btn-sm" style="background:#4a1a1a;border-color:#6a2a2a;" onclick="deployShip('${ship.id}',false)">撤下</button>` :
-                        `<button class="btn-sm" style="background:#1a4a2a;border-color:#2a6a4a;" onclick="deployShip('${ship.id}',true)">上阵</button>`}
-                        <button class="btn-sm" style="background:#6a5a2a;border-color:#8a7a3a;" onclick="enhanceShip('${ship.id}')">强化 (5个T${ship.tier}材料)</button>
-                        <button class="btn-sm" style="background:#2a2a4a;border-color:#4a4a6a;" onclick="document.getElementById('modalClose').click()">关闭</button>
-                    </div>
-                `;
-                showModal('🚀 战舰详情', html);
-            }
-
-            window.deployShip = function(shipId, deploy) {
-                const ship = playerShips.find(s => s.id === shipId);
-                if (!ship) return;
-                if (deploy) {
-                    const deployed = playerShips.filter(s => s.deployed && s.pos === ship.pos);
-                    if (deployed.length >= maxShips[ship.pos]) {
-                        addLog('❌ ' + ship.pos + ' 位置已满 (上限' + maxShips[ship.pos] + ')', 'dmg');
-                        return;
-                    }
-                    ship.deployed = true;
-                    addLog('✅ ' + ship.name + ' 已上阵', 'sys');
-                } else {
-                    ship.deployed = false;
-                    addLog('📤 ' + ship.name + ' 已撤下', 'sys');
+            // ---- 阿尔法小队战斗 ----
+            function startAlphaBattle(planetId) {
+                if (!planetId) return;
+                // 检查是否已击败
+                if (alphaSquadDefeated[planetId]) {
+                    addLog('✅ 阿尔法小队已被击败，可直接开采', 'sys');
+                    startMining(planetId);
+                    return;
                 }
-                modalClose.click();
-                updateFleetUI();
-                saveGameToCloud();
-            };
-
-            window.enhanceShip = function(shipId) {
-                const ship = playerShips.find(s => s.id === shipId);
-                if (!ship) return;
-                const tier = ship.tier;
-                const matPool = ALL_MATERIALS.filter(m => m.tier === tier);
-                if (matPool.length === 0) { addLog('❌ 没有T' + tier + '材料', 'dmg'); return; }
-                let hasEnough = false;
-                let usedMat = null;
-                for (const mat of matPool) {
-                    if (inventory[mat.name] && inventory[mat.name].count >= 5) { hasEnough = true;
-                        usedMat = mat; break; }
+                // 生成阿尔法小队
+                alphaSquadEnemies = generateAlphaSquad();
+                if (alphaSquadEnemies.length === 0) {
+                    addLog('⚠️ 无法生成阿尔法小队', 'dmg');
+                    return;
                 }
-                if (!hasEnough) { addLog('❌ 需要5个T' + tier + '材料', 'dmg'); return; }
-                inventory[usedMat.name].count -= 5;
-                if (inventory[usedMat.name].count <= 0) delete inventory[usedMat.name];
-                const affix = randomAffix();
-                ship.affixes.push(affix);
-                if (affix.id === 'heavy_armor') {
-                    const bonus = affix.value / 100;
-                    ship.maxHp = Math.floor(ship.maxHp * (1 + bonus));
-                    ship.hp = Math.min(ship.hp, ship.maxHp);
-                }
-                if (affix.id === 'burst') { ship.burst = true;
-                    ship.atk = Math.floor(ship.atk * (1 - affix.value / 100)); }
-                if (affix.id === 'focus') { ship.dmgBonus = (ship.dmgBonus || 0) + affix.value / 100; }
-                if (affix.id === 'plunder') { ship.plunder = affix.value / 100; }
-                if (affix.id === 'self_destruct') { ship.selfDestruct = affix.value / 100; }
-                addLog('🔧 ' + ship.name + ' 获得词条 [' + affix.name + ']', 'affix');
-                renderWarehouse();
-                updateFleetUI();
-                saveGameToCloud();
-                modalClose.click();
-                setTimeout(() => showShipDetail(shipId), 300);
-            };
-
-            function randomAffix() {
-                const idx = Math.floor(Math.random() * AFFIX_TYPES.length);
-                const type = AFFIX_TYPES[idx];
-                const val = 10 + Math.floor(Math.random() * 6);
-                return { ...type, value: val };
+                // 替换当前敌人为阿尔法小队
+                enemies = alphaSquadEnemies.map(e => ({ ...e, reward: 0, tier: 1 }));
+                renderEnemy();
+                isAlphaBattle = true;
+                addLog('⚔️ 阿尔法小队出现！击败他们以开采矿物星球', 'sys');
+                // 标记当前正在战斗的是阿尔法小队
+                window._alphaBattlePlanetId = planetId;
+                // 设置战斗胜利后的回调
+                window._alphaBattleCallback = function() {
+                    // 击败后标记
+                    alphaSquadDefeated[planetId] = true;
+                    isAlphaBattle = false;
+                    saveGameToCloud();
+                    addLog('🏆 阿尔法小队已击败！可以开采矿物星球了', 'loot');
+                    // 恢复普通敌人
+                    generateEnemies();
+                    // 自动开始开采
+                    startMining(planetId);
+                };
             }
 
-            const AFFIX_TYPES = [
-                { id: 'heavy_armor', name: '重甲', desc: '血量上限加10%~15%' },
-                { id: 'burst', name: '连发', desc: '攻击降低20%~35%，每次攻击攻击两次' },
-                { id: 'focus', name: '聚焦', desc: '伤害提高5%~20%' },
-                { id: 'plunder', name: '掠夺', desc: '每击沉一架战舰回复10%~25%生命' },
-                { id: 'self_destruct', name: '自爆', desc: '死亡时对敌方所有战舰造成自身血量5%~15%的伤害' }
-            ];
-
-            // ---- 星系渲染 ----
-            function renderGalaxies() {
-                galaxyList.innerHTML = '';
-                GALAXY_DATA.forEach((g, idx) => {
-                    const div = document.createElement('div');
-                    div.className = 'galaxy-item' + (idx === currentGalaxyIdx ? ' active' : '');
-                    div.innerHTML = `${g.name} <span class="g-tier">T${g.tier}</span>`;
-                    div.addEventListener('click', function() {
-                        currentGalaxyIdx = idx;
-                        currentSystemIdx = 0;
-                        renderGalaxies();
-                        renderSystems();
-                        updateBattleInfo();
-                        generateEnemies();
-                        saveGameToCloud();
-                        addLog('🔄 跃迁至 ' + g.name, 'sys');
-                    });
-                    galaxyList.appendChild(div);
-                });
-            }
-
-            function renderSystems() {
-                systemList.innerHTML = '';
-                const galaxy = getCurrentGalaxy();
-                galaxy.systems.forEach((name, idx) => {
-                    const lv = { min: galaxy.levelBase + idx * 2, max: galaxy.levelBase + idx * 2 + 3 };
-                    const div = document.createElement('div');
-                    div.className = 'system-chip' + (idx === currentSystemIdx ? ' active' : '');
-                    div.innerHTML = `${name} <span class="s-lvl">(${lv.min}-${lv.max})</span>`;
-                    div.addEventListener('click', function() {
-                        currentSystemIdx = idx;
-                        renderSystems();
-                        updateBattleInfo();
-                        generateEnemies();
-                        saveGameToCloud();
-                        addLog('🪐 进入 ' + name, 'sys');
-                    });
-                    systemList.appendChild(div);
-                });
-                document.getElementById('currentSystemLabel').textContent = getCurrentSystemName() || '太阳系';
-            }
-
-            // ---- 战斗逻辑 ----
-            function doBattle() {
+            // ---- 修改 doBattle 支持阿尔法小队回调 ----
+            const originalDoBattle = doBattle;
+            doBattle = function() {
                 if (!isAuto || isDefeated || isPaused) return;
 
                 enemies = enemies.filter(e => e.alive || e.hp > 0);
@@ -2907,17 +2858,29 @@
 
                 const aliveEnemies = enemies.filter(e => e.alive);
                 if (aliveEnemies.length === 0) {
-                    statWins++;
-                    statBattles++;
-                    addLog('🎉 战斗胜利！点击"继续"刷下一波', 'loot');
-                    isAuto = false;
-                    btnAuto.textContent = '▶️ 继续';
-                    statusLabel.textContent = '⏸️ 已暂停(胜利)';
-                    statusLabel.style.color = '#d4a843';
-                    updateStats();
-                    return;
+                    // 检查是否有阿尔法小队回调
+                    if (window._alphaBattlePlanetId && window._alphaBattleCallback) {
+                        // 击败阿尔法小队
+                        const planetId = window._alphaBattlePlanetId;
+                        window._alphaBattleCallback();
+                        window._alphaBattlePlanetId = null;
+                        window._alphaBattleCallback = null;
+                        return;
+                    } else {
+                        // 普通胜利
+                        statWins++;
+                        statBattles++;
+                        addLog('🎉 战斗胜利！点击"继续"刷下一波', 'loot');
+                        isAuto = false;
+                        btnAuto.textContent = '▶️ 继续';
+                        statusLabel.textContent = '⏸️ 已暂停(胜利)';
+                        statusLabel.style.color = '#d4a843';
+                        updateStats();
+                        return;
+                    }
                 }
 
+                // 原有战斗逻辑...
                 const order = ['front', 'mid', 'rear'];
                 const sortedShips = [...friendlyShips].filter(s => s.hp > 0).sort((a, b) => order.indexOf(a.pos) - order.indexOf(b
                     .pos));
@@ -3044,6 +3007,131 @@
                 }
             }
 
+            // ---- 战败处理 ----
+            function handleDefeat() {
+                if (isDefeated) return;
+                isDefeated = true;
+                isAuto = false;
+                statusLabel.textContent = '💀 战败·暂停5秒';
+                statusLabel.style.color = '#c0392b';
+                btnAuto.textContent = '⏳ 等待...';
+                addLog('💀 舰队战败，暂停5秒后自动修复', 'dmg');
+                enemies = [];
+                renderEnemy();
+                if (defeatTimer) clearTimeout(defeatTimer);
+                defeatTimer = setTimeout(() => {
+                    isDefeated = false;
+                    friendlyShips.forEach(s => { s.hp = s.maxHp;
+                        s.charge = 0; });
+                    addLog('🔧 舰队已修复，继续战斗', 'heal');
+                    statusLabel.textContent = '⚔️ 战斗中';
+                    statusLabel.style.color = '#6f8bb0';
+                    isAuto = true;
+                    btnAuto.textContent = '⏸️ 暂停';
+                    generateEnemies();
+                    renderFleet();
+                    defeatTimer = null;
+                    doBattle();
+                }, 5000);
+            }
+
+            // ---- 更新统计 ----
+            function updateStats() {
+                document.getElementById('statBattles').textContent = statBattles;
+                document.getElementById('statWins').textContent = statWins;
+                document.getElementById('statLosses').textContent = statLosses;
+                document.getElementById('statDrops').textContent = statDrops;
+                updatePower();
+                renderRank();
+                saveGameToCloud();
+            }
+
+            // ---- 仓库 ----
+            function renderWarehouse() {
+                warehouseGrid.innerHTML = '';
+                const slots = Object.keys(inventory);
+                slots.sort((a, b) => (inventory[b].tier || 0) - (inventory[a].tier || 0));
+
+                slots.forEach(name => {
+                    const data = inventory[name];
+                    const qClass = getQualityClass(data.tier);
+                    const div = document.createElement('div');
+                    div.className = 'warehouse-slot has-item ' + qClass;
+                    div.innerHTML =
+                        `<div class="name">${name}</div><div class="info-row"><span>T${data.tier}</span><span>×${data.count}</span></div>`;
+                    div.addEventListener('click', function() {
+                        const d = inventory[name];
+                        const desc = getItemDesc(name);
+                        showModal('📦 ' + name, `
+                            <div class="item"><span>名称</span><span style="color:${getQualityColor(d.tier)};">${name}</span></div>
+                            <div class="item"><span>数量</span><span>${d.count}</span></div>
+                            <div class="item"><span>等级</span><span>T${d.tier}</span></div>
+                            <div class="item"><span>品质</span><span style="color:${getQualityColor(d.tier)};">${getQualityName(d.tier)}</span></div>
+                            <div class="item"><span>描述</span><span style="color:#9bb3d9;font-size:0.8rem;">${desc}</span></div>
+                            <div style="margin-top:12px;display:flex;gap:8px;">
+                                <button class="btn-sm" style="flex:1;background:#2a5a7a;border-color:#4a7aad;" onclick="document.getElementById('modalClose').click();quickSell('${name}')">📤 上架</button>
+                                <button class="btn-sm" style="flex:1;background:#4a1a1a;border-color:#6a2a2a;" onclick="document.getElementById('modalClose').click();dropItem('${name}')">🗑️ 丢弃</button>
+                            </div>
+                        `);
+                    });
+                    warehouseGrid.appendChild(div);
+                });
+
+                // 蓝图（未学习的）
+                const unlearnedBlueprints = blueprints.filter(b => !b.learned && !b.used);
+                unlearnedBlueprints.forEach(bp => {
+                    const div = document.createElement('div');
+                    div.className = 'warehouse-slot has-item blueprint';
+                    div.innerHTML =
+                        `<div class="name">📐 ${bp.name}</div><div class="info-row"><span>T${bp.tier}</span><span>可学习</span></div>`;
+                    div.addEventListener('click', function() {
+                        showModal('📐 ' + bp.name, `
+                            <div class="item"><span>名称</span><span style="color:#d4a843;">${bp.name}</span></div>
+                            <div class="item"><span>等级</span><span>T${bp.tier}</span></div>
+                            <div class="item"><span>位置</span><span>${bp.pos}</span></div>
+                            <div class="item"><span>描述</span><span>${bp.desc}</span></div>
+                            <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+                                <button class="btn-sm" style="flex:1;background:#4a2a6a;border-color:#6a3a8a;" onclick="document.getElementById('modalClose').click();learnBlueprint('${bp.id}')">📖 学习 (蓝图将消失)</button>
+                                <button class="btn-sm" style="flex:1;background:#4a1a1a;border-color:#6a2a2a;" onclick="document.getElementById('modalClose').click();discardBlueprint('${bp.id}')">🗑️ 丢弃</button>
+                            </div>
+                        `);
+                    });
+                    warehouseGrid.appendChild(div);
+                });
+
+                const usedSlots = Object.keys(inventory).length + unlearnedBlueprints.length;
+                const emptySlots = 100 - usedSlots;
+                for (let i = 0; i < Math.min(emptySlots, 40); i++) {
+                    const div = document.createElement('div');
+                    div.className = 'warehouse-slot';
+                    div.innerHTML = `<span style="color:#2a3a4a;">空</span>`;
+                    div.addEventListener('click', function() {
+                        showModal('仓库 - 空槽位',
+                            `<div style="text-align:center;padding:20px 0;color:#6f8bb0;"><div style="font-size:3rem;">▢</div><p>这个槽位是空的</p><p style="font-size:0.7rem;color:#4a6080;">打怪掉落或从交易行购买</p></div>`
+                            );
+                    });
+                    warehouseGrid.appendChild(div);
+                }
+                updateWarehouseCount();
+                updateSellSelect();
+            }
+
+            function updateWarehouseCount() {
+                const count = Object.keys(inventory).length + blueprints.filter(b => !b.learned && !b.used).length;
+                warehouseCount.textContent = count + '/100';
+                const total = Object.values(inventory).reduce((s, d) => s + d.count, 0);
+                itemCount.textContent = total;
+            }
+
+            function updateSellSelect() {
+                const slots = Object.keys(inventory);
+                if (slots.length === 0) { sellSelectPage.innerHTML = '<option value="">仓库为空</option>'; return; }
+                sellSelectPage.innerHTML = slots.map(name => {
+                    const d = inventory[name];
+                    return `<option value="${name}">${name} x${d.count} (T${d.tier})</option>`;
+                }).join('');
+            }
+
             // ---- 蓝图系统 ----
             function addBlueprint(galaxyTier) {
                 const tier = Math.min(galaxyTier, 7);
@@ -3068,11 +3156,13 @@
                 return bp;
             }
 
+            // ---- 学习蓝图 ----
             window.learnBlueprint = function(bpId) {
                 const bp = blueprints.find(b => b.id === bpId);
                 if (!bp || bp.used) { addLog('❌ 蓝图不可用', 'dmg'); return; }
                 if (bp.learned) { addLog('ℹ️ 已学习该蓝图', 'sys'); return; }
                 bp.learned = true;
+                // 从仓库移除（即从blueprints中移除）
                 const idx = blueprints.indexOf(bp);
                 if (idx > -1) {
                     blueprints.splice(idx, 1);
@@ -3082,6 +3172,15 @@
                 renderFactory();
                 saveGameToCloud();
                 modalClose.click();
+            };
+
+            window.discardBlueprint = function(bpId) {
+                const idx = blueprints.findIndex(b => b.id === bpId);
+                if (idx > -1) { blueprints.splice(idx, 1);
+                    addLog('🗑️ 蓝图已丢弃', 'dmg');
+                    renderWarehouse();
+                    renderFactory();
+                    saveGameToCloud(); }
             };
 
             // ---- 工厂 ----
@@ -3151,6 +3250,7 @@
                 factoryList.innerHTML = html;
             }
 
+            // ---- 开始建造 ----
             window.startBuilding = function(bpId) {
                 const bp = blueprints.find(b => b.id === bpId);
                 if (!bp || !bp.learned || bp.used) { addLog('❌ 蓝图不可用', 'dmg'); return; }
@@ -3186,7 +3286,7 @@
                 saveGameToCloud();
             };
 
-            // 建造进度
+            // ---- 建造进度 ----
             setInterval(() => {
                 let changed = false;
                 constructionQueue.forEach(c => {
@@ -3204,7 +3304,8 @@
                                 maxHp: base.hp,
                                 atk: base.atk,
                                 affixes: [],
-                                deployed: false
+                                deployed: false,
+                                forgeCount: 0
                             };
                             playerShips.push(newShip);
                             addLog('✅ 战舰建造完成！' + c.name + ' (T' + c.tier + ') 已加入舰队', 'loot');
@@ -3222,147 +3323,21 @@
                 }
             }, 2000);
 
-            // ---- 战败处理 ----
-            function handleDefeat() {
-                if (isDefeated) return;
-                isDefeated = true;
-                isAuto = false;
-                statusLabel.textContent = '💀 战败·暂停5秒';
-                statusLabel.style.color = '#c0392b';
-                btnAuto.textContent = '⏳ 等待...';
-                addLog('💀 舰队战败，暂停5秒后自动修复', 'dmg');
-                enemies = [];
-                renderEnemy();
-                if (defeatTimer) clearTimeout(defeatTimer);
-                defeatTimer = setTimeout(() => {
-                    isDefeated = false;
-                    friendlyShips.forEach(s => { s.hp = s.maxHp;
-                        s.charge = 0; });
-                    addLog('🔧 舰队已修复，继续战斗', 'heal');
-                    statusLabel.textContent = '⚔️ 战斗中';
-                    statusLabel.style.color = '#6f8bb0';
-                    isAuto = true;
-                    btnAuto.textContent = '⏸️ 暂停';
-                    generateEnemies();
-                    renderFleet();
-                    defeatTimer = null;
-                    doBattle();
-                }, 5000);
-            }
-
-            function updateStats() {
-                document.getElementById('statBattles').textContent = statBattles;
-                document.getElementById('statWins').textContent = statWins;
-                document.getElementById('statLosses').textContent = statLosses;
-                document.getElementById('statDrops').textContent = statDrops;
-                updatePower();
-                renderRank();
-                saveGameToCloud();
-            }
-
-            // ---- 仓库 ----
-            function renderWarehouse() {
-                warehouseGrid.innerHTML = '';
-                const slots = Object.keys(inventory);
-                slots.sort((a, b) => (inventory[b].tier || 0) - (inventory[a].tier || 0));
-
-                slots.forEach(name => {
-                    const data = inventory[name];
-                    const qClass = getQualityClass(data.tier);
-                    const div = document.createElement('div');
-                    div.className = 'warehouse-slot has-item ' + qClass;
-                    div.innerHTML =
-                        `<div class="name">${name}</div><div class="info-row"><span>T${data.tier}</span><span>×${data.count}</span></div>`;
-                    div.addEventListener('click', function() {
-                        const d = inventory[name];
-                        const desc = getItemDesc(name);
-                        showModal('📦 ' + name, `
-                            <div class="item"><span>名称</span><span style="color:${getQualityColor(d.tier)};">${name}</span></div>
-                            <div class="item"><span>数量</span><span>${d.count}</span></div>
-                            <div class="item"><span>等级</span><span>T${d.tier}</span></div>
-                            <div class="item"><span>品质</span><span style="color:${getQualityColor(d.tier)};">${getQualityName(d.tier)}</span></div>
-                            <div class="item"><span>描述</span><span style="color:#9bb3d9;font-size:0.8rem;">${desc}</span></div>
-                            <div style="margin-top:12px;display:flex;gap:8px;">
-                                <button class="btn-sm" style="flex:1;background:#2a5a7a;border-color:#4a7aad;" onclick="document.getElementById('modalClose').click();quickSell('${name}')">📤 上架</button>
-                                <button class="btn-sm" style="flex:1;background:#4a1a1a;border-color:#6a2a2a;" onclick="document.getElementById('modalClose').click();dropItem('${name}')">🗑️ 丢弃</button>
-                            </div>
-                        `);
-                    });
-                    warehouseGrid.appendChild(div);
-                });
-
-                const unlearnedBlueprints = blueprints.filter(b => !b.learned && !b.used);
-                unlearnedBlueprints.forEach(bp => {
-                    const div = document.createElement('div');
-                    div.className = 'warehouse-slot has-item blueprint';
-                    div.innerHTML =
-                        `<div class="name">📐 ${bp.name}</div><div class="info-row"><span>T${bp.tier}</span><span>可学习</span></div>`;
-                    div.addEventListener('click', function() {
-                        showModal('📐 ' + bp.name, `
-                            <div class="item"><span>名称</span><span style="color:#d4a843;">${bp.name}</span></div>
-                            <div class="item"><span>等级</span><span>T${bp.tier}</span></div>
-                            <div class="item"><span>位置</span><span>${bp.pos}</span></div>
-                            <div class="item"><span>描述</span><span>${bp.desc}</span></div>
-                            <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-                                <button class="btn-sm" style="flex:1;background:#4a2a6a;border-color:#6a3a8a;" onclick="document.getElementById('modalClose').click();learnBlueprint('${bp.id}')">📖 学习 (蓝图将消失)</button>
-                                <button class="btn-sm" style="flex:1;background:#4a1a1a;border-color:#6a2a2a;" onclick="document.getElementById('modalClose').click();discardBlueprint('${bp.id}')">🗑️ 丢弃</button>
-                            </div>
-                        `);
-                    });
-                    warehouseGrid.appendChild(div);
-                });
-
-                const usedSlots = Object.keys(inventory).length + unlearnedBlueprints.length;
-                const emptySlots = 100 - usedSlots;
-                for (let i = 0; i < Math.min(emptySlots, 40); i++) {
-                    const div = document.createElement('div');
-                    div.className = 'warehouse-slot';
-                    div.innerHTML = `<span style="color:#2a3a4a;">空</span>`;
-                    div.addEventListener('click', function() {
-                        showModal('仓库 - 空槽位',
-                            `<div style="text-align:center;padding:20px 0;color:#6f8bb0;"><div style="font-size:3rem;">▢</div><p>这个槽位是空的</p><p style="font-size:0.7rem;color:#4a6080;">打怪掉落或从交易行购买</p></div>`
-                            );
-                    });
-                    warehouseGrid.appendChild(div);
-                }
-                updateWarehouseCount();
-                updateSellSelect();
-            }
-
-            function updateWarehouseCount() {
-                const count = Object.keys(inventory).length + blueprints.filter(b => !b.learned && !b.used).length;
-                warehouseCount.textContent = count + '/100';
-                const total = Object.values(inventory).reduce((s, d) => s + d.count, 0);
-                itemCount.textContent = total;
-            }
-
-            function updateSellSelect() {
-                const slots = Object.keys(inventory);
-                if (slots.length === 0) { sellSelectPage.innerHTML = '<option value="">仓库为空</option>'; return; }
-                sellSelectPage.innerHTML = slots.map(name => {
-                    const d = inventory[name];
-                    return `<option value="${name}">${name} x${d.count} (T${d.tier})</option>`;
-                }).join('');
-            }
-
-            window.discardBlueprint = function(bpId) {
-                const idx = blueprints.findIndex(b => b.id === bpId);
-                if (idx > -1) { blueprints.splice(idx, 1);
-                    addLog('🗑️ 蓝图已丢弃', 'dmg');
-                    renderWarehouse();
-                    renderFactory();
-                    saveGameToCloud(); }
-            };
-
             // ---- 交易行 ----
+            // ---- 上架 ----
             window.quickSell = function(name) {
                 if (!inventory[name] || inventory[name].count <= 0) { addLog('❌ 没有 ' + name, 'dmg'); return; }
                 const qty = 1;
                 const price = 10 + inventory[name].tier * 20 + Math.floor(Math.random() * 30);
                 inventory[name].count -= qty;
                 if (inventory[name].count <= 0) delete inventory[name];
-                tradeList.push({ name: name, price: price, qty: qty, tier: inventory[name]?.tier || 1, seller: currentUser ||
-                        '玩家' });
+                tradeList.push({
+                    name: name,
+                    price: price,
+                    qty: qty,
+                    tier: inventory[name]?.tier || 1,
+                    seller: currentUser || '玩家'
+                });
                 addLog(`📤 上架 ${name} x1 单价 ${price}`, 'loot');
                 renderWarehouse();
                 renderMarket();
@@ -3387,8 +3362,13 @@
                 if (inventory[name].count < qty) { addLog('❌ 数量不足，仅有 ' + inventory[name].count, 'dmg'); return; }
                 inventory[name].count -= qty;
                 if (inventory[name].count <= 0) delete inventory[name];
-                tradeList.push({ name: name, price: price, qty: qty, tier: inventory[name]?.tier || 1, seller: currentUser ||
-                        '玩家' });
+                tradeList.push({
+                    name: name,
+                    price: price,
+                    qty: qty,
+                    tier: inventory[name]?.tier || 1,
+                    seller: currentUser || '玩家'
+                });
                 addLog('📤 上架 ' + name + ' x' + qty + ' 单价 ' + price, 'loot');
                 renderWarehouse();
                 renderMarket();
@@ -3544,18 +3524,15 @@
                             miner: null,
                             startTime: Date.now(),
                             expireTime: Date.now() + 3600000,
-                            active: true
+                            active: true,
+                            alphaDefeated: false
                         };
                         mineralPlanets.push(planet);
                         if (tier >= 4) {
-                            const color = getQualityColor(tier);
-                            const tierName = getQualityName(tier);
                             const notifMsg =
-                                `💎 【全服通报】${tierName}级矿物星球出现在 ${g.name} · ${systemName}！ (T${tier})`;
+                                `💎 【全服通报】${getQualityName(tier)}级矿物星球出现在 ${g.name} · ${systemName}！ (T${tier})`;
                             document.getElementById('notifText').textContent = notifMsg;
-                            document.getElementById('notifText').className = 'notif-text t' + tier;
                             setTimeout(() => {
-                                document.getElementById('notifText').className = 'notif-text';
                                 document.getElementById('notifText').textContent = '🚀 星际征途 · 云端版';
                             }, 10000);
                             addLog('📢 ' + notifMsg, 'loot');
@@ -3580,27 +3557,49 @@
                     const remain = Math.max(0, Math.floor((p.expireTime - now) / 60000));
                     const isMining = p.miner === currentUser;
                     const canBattle = p.miner && p.miner !== currentUser;
+                    const alphaDefeated = alphaSquadDefeated[p.id] || false;
                     const div = document.createElement('div');
                     div.className = 'mineral-info';
+                    let minerDisplay = p.miner ? '👤 开采中: ' + p.miner : '⏸️ 无人开采';
+                    let actionHtml = '';
+                    if (isMining) {
+                        actionHtml = `<div style="color:#4aad7a;font-size:0.5rem;">✅ 你正在开采</div>`;
+                    } else if (canBattle) {
+                        actionHtml =
+                            `<div class="m-battle" onclick="challengeMiner('${p.id}')">⚔️ 挑战开采者</div>`;
+                    } else if (!p.miner) {
+                        if (alphaDefeated) {
+                            actionHtml =
+                                `<div class="m-battle" style="color:#4aad7a;" onclick="startMining('${p.id}')">⛏️ 开始开采</div>`;
+                        } else {
+                            actionHtml =
+                                `<div class="m-battle" onclick="startAlphaBattle('${p.id}')">⚔️ 击败阿尔法小队后开采</div>`;
+                        }
+                    }
                     div.innerHTML = `
                         <div class="m-title" style="color:${color};">💎 ${p.galaxyName} · ${p.systemName} (T${p.tier})</div>
-                        <div class="m-status">⏱️ 剩余 ${remain} 分钟 | ${p.miner ? '👤 开采中: ' + p.miner : '⏸️ 无人开采'}</div>
-                        ${isMining ? `<div style="color:#4aad7a;font-size:0.5rem;">✅ 你正在开采</div>` : ''}
-                        ${canBattle ? `<div class="m-battle" onclick="challengeMiner('${p.id}')">⚔️ 挑战开采者</div>` : ''}
-                        ${!p.miner && currentUser ? `<div class="m-battle" style="color:#4aad7a;" onclick="startMining('${p.id}')">⛏️ 开始开采</div>` : ''}
+                        <div class="m-status">⏱️ 剩余 ${remain} 分钟 | ${minerDisplay}</div>
+                        ${alphaDefeated ? '<div style="color:#4aad7a;font-size:0.5rem;">✅ 阿尔法小队已击败</div>' : ''}
+                        ${actionHtml}
                     `;
                     mineralStatus.appendChild(div);
                 });
             }
 
+            // ---- 开采矿物星球 ----
             window.startMining = function(planetId) {
                 const planet = mineralPlanets.find(p => p.id === planetId);
                 if (!planet || !planet.active) { addLog('❌ 矿物星球已消失', 'dmg'); return; }
                 if (planet.miner) { addLog('❌ 已被其他玩家开采', 'dmg'); return; }
                 if (!currentUser) { addLog('❌ 请先登录', 'dmg'); return; }
+                if (!alphaSquadDefeated[planetId]) {
+                    addLog('⚠️ 请先击败阿尔法小队', 'dmg');
+                    return;
+                }
                 planet.miner = currentUser;
                 addLog('⛏️ 你开始开采 ' + planet.galaxyName + ' · ' + planet.systemName, 'loot');
                 renderMineralStatus();
+                // 开采产出
                 const miningInterval = setInterval(() => {
                     const p = mineralPlanets.find(p2 => p2.id === planetId);
                     if (!p || !p.active || p.miner !== currentUser) {
@@ -3616,6 +3615,7 @@
                                     tier: mat.tier }; }
                             addLog(`⛏️ 开采到 ${mat.name} x${qty} (T${p.tier})`, 'loot');
                             renderWarehouse();
+                            saveGameToCloud();
                         }
                     }
                 }, 60000);
@@ -3637,6 +3637,10 @@
                         clearInterval(window.miningIntervals[planetId]);
                         delete window.miningIntervals[planetId];
                     }
+                    // 标记该星球阿尔法小队为已击败（继承原开采者的状态）
+                    if (alphaSquadDefeated[planetId] === undefined) {
+                        alphaSquadDefeated[planetId] = true;
+                    }
                     planet.miner = currentUser;
                     renderMineralStatus();
                     startMining(planetId);
@@ -3654,6 +3658,7 @@
                 }
             };
 
+            // ---- 矿物星球定时更新 ----
             setInterval(() => {
                 mineralTimer++;
                 if (mineralTimer % 10 === 0) { checkMineralSpawn(); }
@@ -3712,6 +3717,110 @@
                 });
             }
 
+            // ---- 战舰详情（含锻造功能） ----
+            function showShipDetail(shipId) {
+                const ship = playerShips.find(s => s.id === shipId);
+                if (!ship) return;
+                const color = getQualityColor(ship.tier);
+                let affixHtml = ship.affixes.length > 0 ? ship.affixes.map(a =>
+                    `<div style="font-size:0.7rem;color:#9b59b6;">${a.name}: ${a.desc}</div>`).join('') :
+                    '<div style="color:#4a6080;font-size:0.7rem;">无词条</div>';
+                const isDeployed = ship.deployed;
+                const posLabel = ship.pos === 'front' ? '先锋' : ship.pos === 'mid' ? '中间' : '后勤';
+                const forgeCount = ship.forgeCount || 0;
+                const maxForge = 5;
+
+                let html = `
+                    <div class="item"><span>名称</span><span style="color:${color};">${ship.name}</span></div>
+                    <div class="item"><span>等级</span><span>T${ship.tier}</span></div>
+                    <div class="item"><span>位置</span><span>${posLabel}</span></div>
+                    <div class="item"><span>生命</span><span>${ship.maxHp}</span></div>
+                    <div class="item"><span>攻击</span><span>${ship.atk}</span></div>
+                    <div class="item"><span>锻造次数</span><span>${forgeCount}/${maxForge}</span></div>
+                    <div class="item"><span>状态</span><span>${isDeployed ? '✅ 已上阵' : '⏸️ 未上阵'}</span></div>
+                    <div style="margin-top:8px;border-top:1px solid #1a2842;padding-top:6px;">
+                        <div style="font-size:0.75rem;color:#6f8bb0;">词条 (${ship.affixes.length}/5)</div>
+                        ${affixHtml}
+                    </div>
+                    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+                        ${isDeployed ? `<button class="btn-sm" style="background:#4a1a1a;border-color:#6a2a2a;" onclick="deployShip('${ship.id}',false)">撤下</button>` :
+                        `<button class="btn-sm" style="background:#1a4a2a;border-color:#2a6a4a;" onclick="deployShip('${ship.id}',true)">上阵</button>`}
+                        <button class="btn-sm" style="background:#6a5a2a;border-color:#8a7a3a;" onclick="forgeShip('${ship.id}')">🔨 锻造 (10个T${ship.tier}材料)</button>
+                        <button class="btn-sm" style="background:#2a2a4a;border-color:#4a4a6a;" onclick="document.getElementById('modalClose').click()">关闭</button>
+                    </div>
+                `;
+                showModal('🚀 战舰详情', html);
+            }
+
+            // ---- 锻造系统 ----
+            window.forgeShip = function(shipId) {
+                const ship = playerShips.find(s => s.id === shipId);
+                if (!ship) return;
+                const tier = ship.tier;
+                const forgeCount = ship.forgeCount || 0;
+                if (forgeCount >= 5) {
+                    addLog('❌ 该战舰已达到最大锻造次数 (5次)', 'dmg');
+                    return;
+                }
+                // 检查材料：10个同等级材料
+                const matPool = ALL_MATERIALS.filter(m => m.tier === tier);
+                if (matPool.length === 0) { addLog('❌ 没有T' + tier + '材料', 'dmg'); return; }
+                let hasEnough = false;
+                let usedMat = null;
+                for (const mat of matPool) {
+                    if (inventory[mat.name] && inventory[mat.name].count >= 10) {
+                        hasEnough = true;
+                        usedMat = mat;
+                        break;
+                    }
+                }
+                if (!hasEnough) { addLog('❌ 需要10个T' + tier + '材料', 'dmg'); return; }
+                // 消耗材料
+                inventory[usedMat.name].count -= 10;
+                if (inventory[usedMat.name].count <= 0) delete inventory[usedMat.name];
+                // 获得随机词条
+                const affix = randomAffix();
+                ship.affixes.push(affix);
+                ship.forgeCount = (ship.forgeCount || 0) + 1;
+                // 应用词条效果
+                if (affix.id === 'heavy_armor') {
+                    const bonus = affix.value / 100;
+                    ship.maxHp = Math.floor(ship.maxHp * (1 + bonus));
+                    ship.hp = Math.min(ship.hp, ship.maxHp);
+                }
+                if (affix.id === 'burst') { ship.burst = true;
+                    ship.atk = Math.floor(ship.atk * (1 - affix.value / 100)); }
+                if (affix.id === 'focus') { ship.dmgBonus = (ship.dmgBonus || 0) + affix.value / 100; }
+                if (affix.id === 'plunder') { ship.plunder = affix.value / 100; }
+                if (affix.id === 'self_destruct') { ship.selfDestruct = affix.value / 100; }
+                addLog('🔨 锻造成功！' + ship.name + ' 获得词条 [' + affix.name + ']', 'affix');
+                renderWarehouse();
+                updateFleetUI();
+                saveGameToCloud();
+                modalClose.click();
+                setTimeout(() => showShipDetail(shipId), 300);
+            };
+
+            window.deployShip = function(shipId, deploy) {
+                const ship = playerShips.find(s => s.id === shipId);
+                if (!ship) return;
+                if (deploy) {
+                    const deployed = playerShips.filter(s => s.deployed && s.pos === ship.pos);
+                    if (deployed.length >= maxShips[ship.pos]) {
+                        addLog('❌ ' + ship.pos + ' 位置已满 (上限' + maxShips[ship.pos] + ')', 'dmg');
+                        return;
+                    }
+                    ship.deployed = true;
+                    addLog('✅ ' + ship.name + ' 已上阵', 'sys');
+                } else {
+                    ship.deployed = false;
+                    addLog('📤 ' + ship.name + ' 已撤下', 'sys');
+                }
+                modalClose.click();
+                updateFleetUI();
+                saveGameToCloud();
+            };
+
             // ---- 编队编辑（拖拽） ----
             btnEditFleet.addEventListener('click', function() {
                 let html = `
@@ -3719,11 +3828,9 @@
                         <div style="color:#6f8bb0;font-size:0.7rem;">💡 拖拽卡片调整位置 · 点击卡片查看详情</div>
                         <div style="max-height:400px;overflow-y:auto;padding:4px 0;" id="fleetEditList">
                 `;
-
                 const order = ['front', 'mid', 'rear'];
                 const labels = { 'front': '⚔️ 先锋', 'mid': '💥 中间', 'rear': '💚 后勤' };
                 const colors = { 'front': '#e74c3c', 'mid': '#f1c40f', 'rear': '#2ecc71' };
-
                 order.forEach(pos => {
                     const ships = playerShips.filter(s => s.pos === pos);
                     const deployed = ships.filter(s => s.deployed).length;
@@ -3732,7 +3839,6 @@
                             <div style="font-size:0.6rem;color:#6f8bb0;">${labels[pos]} (${deployed}/${maxShips[pos]})</div>
                             <div style="display:flex;flex-direction:column;gap:3px;margin-top:3px;" id="fleetPos-${pos}">
                     `;
-
                     ships.forEach((s) => {
                         const color = getQualityColor(s.tier);
                         const status = s.deployed ? '✅' : '⏸️';
@@ -3757,10 +3863,8 @@
                             </div>
                         `;
                     });
-
                     html += `</div></div>`;
                 });
-
                 const totalDeployed = playerShips.filter(s => s.deployed).length;
                 const totalMax = maxShips.front + maxShips.mid + maxShips.rear;
                 html +=
@@ -3798,7 +3902,6 @@
                             const fromShipId = fromCard.dataset.id;
                             const toShipId = toCard.dataset.id;
                             if (!fromShipId || !toShipId) return;
-
                             const fromShip = playerShips.find(s => s.id === fromShipId);
                             const toShip = playerShips.find(s => s.id === toShipId);
                             if (!fromShip || !toShip) return;
@@ -3808,7 +3911,6 @@
                             fromShip.deployed = toShip.deployed;
                             toShip.pos = tempPos;
                             toShip.deployed = tempDeployed;
-
                             updateFleetUI();
                             renderFleet();
                             saveGameToCloud();
@@ -3817,6 +3919,70 @@
                         });
                     });
                 }, 200);
+            });
+
+            // ---- 兑换码系统 ----
+            redeemInviteBtn.addEventListener('click', function() {
+                const code = inviteInput.value.trim();
+                if (!code) { inviteResult.textContent = '❌ 请输入兑换码';
+                    inviteResult.style.color = '#c0392b'; return; }
+                if (!currentUser) { inviteResult.textContent = '❌ 请先登录';
+                    inviteResult.style.color = '#c0392b'; return; }
+                // 检查是否已兑换
+                if (redeemedCodes[code]) {
+                    inviteResult.textContent = '❌ 该兑换码已兑换过';
+                    inviteResult.style.color = '#c0392b';
+                    return;
+                }
+                // 检查是否有效
+                const reward = VALID_CODES[code];
+                if (!reward) {
+                    inviteResult.textContent = '❌ 无效兑换码';
+                    inviteResult.style.color = '#c0392b';
+                    return;
+                }
+                // 发放奖励
+                if (reward.type === 'credits') {
+                    credits += reward.amount;
+                    creditDisplay.textContent = credits;
+                    inviteResult.textContent = `✅ 兑换成功！获得 ${reward.amount} 星际币`;
+                    inviteResult.style.color = '#4aad7a';
+                    addLog(`🎁 兑换成功！获得 ${reward.amount} 星际币`, 'loot');
+                } else if (reward.type === 'ship') {
+                    const tier = reward.tier;
+                    const pos = reward.pos;
+                    const tierKey = 'T' + tier;
+                    const db = SHIP_DB[tierKey];
+                    if (db && db[pos] && db[pos].length > 0) {
+                        const name = db[pos][Math.floor(Math.random() * db[pos].length)];
+                        const base = getBaseStats(tier, pos);
+                        const newShip = {
+                            id: 'ship_' + Date.now() + Math.random().toString(36).substr(2, 4),
+                            name: name,
+                            tier: tier,
+                            pos: pos,
+                            hp: base.hp,
+                            maxHp: base.hp,
+                            atk: base.atk,
+                            affixes: [],
+                            deployed: false,
+                            forgeCount: 0
+                        };
+                        playerShips.push(newShip);
+                        inviteResult.textContent = `✅ 兑换成功！获得 ${name} (T${tier})`;
+                        inviteResult.style.color = '#4aad7a';
+                        addLog(`🎁 兑换成功！获得 ${name} (T${tier})`, 'loot');
+                        updateFleetUI();
+                    } else {
+                        inviteResult.textContent = '❌ 奖励发放失败，请重试';
+                        inviteResult.style.color = '#c0392b';
+                        return;
+                    }
+                }
+                // 标记已兑换
+                redeemedCodes[code] = true;
+                saveGameToCloud();
+                inviteInput.value = '';
             });
 
             // ---- 导航切换 ----
@@ -3860,6 +4026,7 @@
             });
 
             btnViewBlueprints.addEventListener('click', function() {
+                // 切换到工厂标签
                 document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
                 document.querySelector('[data-tab="factory"]')?.classList.add('active');
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -3917,6 +4084,8 @@
                 blueprints = [];
                 constructionQueue = [];
                 mineralPlanets = [];
+                alphaSquadDefeated = {};
+                redeemedCodes = {};
                 inventory['电路板'] = { count: 10, tier: 1 };
                 inventory['螺丝'] = { count: 50, tier: 2 };
                 inventory['基础护盾发生器'] = { count: 1, tier: 1 };
@@ -3935,11 +4104,54 @@
                 renderMyOrders();
                 renderRank();
                 renderFactory();
+                renderMineralStatus();
                 updateStats();
                 updateWarehouseCount();
                 updateSellSelect();
                 saveGameToCloud();
             });
+
+            // ---- 星系 ----
+            function renderGalaxies() {
+                galaxyList.innerHTML = '';
+                GALAXY_DATA.forEach((g, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'galaxy-item' + (idx === currentGalaxyIdx ? ' active' : '');
+                    div.innerHTML = `${g.name} <span class="g-tier">T${g.tier}</span>`;
+                    div.addEventListener('click', function() {
+                        currentGalaxyIdx = idx;
+                        currentSystemIdx = 0;
+                        renderGalaxies();
+                        renderSystems();
+                        updateBattleInfo();
+                        generateEnemies();
+                        saveGameToCloud();
+                        addLog('🔄 跃迁至 ' + g.name, 'sys');
+                    });
+                    galaxyList.appendChild(div);
+                });
+            }
+
+            function renderSystems() {
+                systemList.innerHTML = '';
+                const galaxy = getCurrentGalaxy();
+                galaxy.systems.forEach((name, idx) => {
+                    const lv = { min: galaxy.levelBase + idx * 2, max: galaxy.levelBase + idx * 2 + 3 };
+                    const div = document.createElement('div');
+                    div.className = 'system-chip' + (idx === currentSystemIdx ? ' active' : '');
+                    div.innerHTML = `${name} <span class="s-lvl">(${lv.min}-${lv.max})</span>`;
+                    div.addEventListener('click', function() {
+                        currentSystemIdx = idx;
+                        renderSystems();
+                        updateBattleInfo();
+                        generateEnemies();
+                        saveGameToCloud();
+                        addLog('🪐 进入 ' + name, 'sys');
+                    });
+                    systemList.appendChild(div);
+                });
+                document.getElementById('currentSystemLabel').textContent = getCurrentSystemName() || '太阳系';
+            }
 
             // ---- 弹窗 ----
             function showModal(title, contentHTML) {
@@ -3954,58 +4166,7 @@
             modalClose.addEventListener('click', hideModal);
             modalOverlay.addEventListener('click', function(e) { if (e.target === this) hideModal(); });
 
-            // ---- 邀请码兑换 ----
-            redeemInviteBtn.addEventListener('click', function() {
-                const code = inviteInput.value.trim();
-                if (!code) { inviteResult.textContent = '❌ 请输入邀请码';
-                    inviteResult.style.color = '#c0392b'; return; }
-                if (code === 'Star Trek') {
-                    const localData = localStorage.getItem('starfleet_data_' + currentUser);
-                    if (localData) {
-                        const data = JSON.parse(localData);
-                        if (data.inviteRedeemed) {
-                            inviteResult.textContent = '❌ 该账号已兑换过邀请码';
-                            inviteResult.style.color = '#c0392b';
-                            return;
-                        }
-                        const t3front = SHIP_DB.T3.front;
-                        if (t3front && t3front.length > 0) {
-                            const name = t3front[Math.floor(Math.random() * t3front.length)];
-                            const base = getBaseStats(3, 'front');
-                            const newShip = {
-                                id: 'ship_' + Date.now() + Math.random().toString(36).substr(2, 4),
-                                name: name,
-                                tier: 3,
-                                pos: 'front',
-                                hp: base.hp,
-                                maxHp: base.hp,
-                                atk: base.atk,
-                                affixes: [],
-                                deployed: false
-                            };
-                            playerShips.push(newShip);
-                            data.inviteRedeemed = true;
-                            localStorage.setItem('starfleet_data_' + currentUser, JSON.stringify(data));
-                            inviteResult.textContent = '✅ 兑换成功！获得 T3 先锋舰: ' + name;
-                            inviteResult.style.color = '#4aad7a';
-                            addLog('🎁 兑换成功！获得 T3 先锋舰: ' + name, 'loot');
-                            updateFleetUI();
-                            saveGameToCloud();
-                        } else {
-                            inviteResult.textContent = '❌ 奖励发放失败，请重试';
-                            inviteResult.style.color = '#c0392b';
-                        }
-                    } else {
-                        inviteResult.textContent = '❌ 数据异常，请重新登录';
-                        inviteResult.style.color = '#c0392b';
-                    }
-                } else {
-                    inviteResult.textContent = '❌ 无效邀请码，请加入QQ群获取';
-                    inviteResult.style.color = '#c0392b';
-                }
-            });
-
-            // ---- 自动同步定时器 ----
+            // ---- 自动同步 ----
             setInterval(() => {
                 if (currentUser) {
                     saveGameToCloud();
@@ -4035,6 +4196,7 @@
                 renderMyOrders();
                 renderRank();
                 renderFactory();
+                renderMineralStatus();
                 updateStats();
                 updateWarehouseCount();
                 updateSellSelect();
@@ -4045,9 +4207,9 @@
             // ---- 启动 ----
             loginOverlay.classList.remove('hidden');
             app.style.display = 'none';
-            console.log('🚀 星际征途已加载');
-            console.log('☁️ 数据自动同步到 Cloudflare Workers');
-            console.log('💡 邀请码:加QQ：1078418755');
+            console.log('🚀 星际征途 · 完整版已加载');
+            console.log('☁️ 数据自动同步到: ' + CF_WORKER_URL);
+            console.log('💡 兑换码: Star Trek (T3战舰), BDGOnb (10000星际币)');
         });
     </script>
 </body>
