@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>星际征途 · 完整版</title>
+    <title>星际征途</title>
     <style>
-        /* ===== 完整样式（与之前保持一致，此处完整包含） ===== */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -30,7 +29,6 @@
             overflow: hidden;
         }
 
-        /* ===== 登录界面 ===== */
         .login-overlay {
             position: fixed;
             top: 0;
@@ -140,7 +138,6 @@
             margin: 14px 0 10px;
         }
 
-        /* ===== 顶部栏 ===== */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -197,14 +194,12 @@
             color: #d4a843;
         }
 
-        /* ===== 主体布局 ===== */
         .main-body {
             display: flex;
             flex: 1;
             overflow: hidden;
         }
 
-        /* ===== 左侧面板 ===== */
         .left-panel {
             width: 220px;
             min-width: 160px;
@@ -307,7 +302,6 @@
             color: #4a6080;
         }
 
-        /* ===== 仓库 ===== */
         .warehouse-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -359,7 +353,6 @@
             border-color: #d4a843;
             background: rgba(212, 168, 67, 0.08);
         }
-        /* 品质颜色 */
         .q-1 {
             color: #8fa5c9;
             border-color: #3a4a5a;
@@ -465,7 +458,6 @@
             border-color: #5a8fc9;
         }
 
-        /* ===== 中央战斗区 ===== */
         .center-panel {
             flex: 1;
             display: flex;
@@ -707,7 +699,6 @@
             text-align: left;
         }
 
-        /* ===== 底部日志 ===== */
         .battle-footer {
             display: flex;
             gap: 6px;
@@ -817,7 +808,6 @@
             background: #5a3a7a;
         }
 
-        /* ===== 右侧面板 ===== */
         .right-panel {
             width: 260px;
             min-width: 200px;
@@ -869,7 +859,6 @@
             display: flex;
         }
 
-        /* ===== 交易行 ===== */
         .page-container {
             flex: 1;
             overflow: hidden;
@@ -1047,7 +1036,6 @@
             padding: 1px 6px;
         }
 
-        /* ===== 排行榜 ===== */
         .rank-list {
             flex: 1;
             overflow-y: auto;
@@ -1117,7 +1105,6 @@
             font-weight: 600;
         }
 
-        /* ===== 工厂 ===== */
         .factory-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1164,7 +1151,6 @@
             transition: width 0.5s;
         }
 
-        /* ===== 矿物星球 ===== */
         .mineral-info {
             background: #0b1422;
             border-radius: 4px;
@@ -1191,7 +1177,6 @@
             text-decoration: underline;
         }
 
-        /* ===== 设置 ===== */
         .cloudflare-section {
             background: #0b1422;
             border: 1px solid #1a2842;
@@ -1205,7 +1190,6 @@
             font-weight: 600;
         }
 
-        /* ===== 弹窗 ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -1323,7 +1307,6 @@
             background: #2a5a7a;
         }
 
-        /* 拖动排序 */
         .ship-card.dragging {
             opacity: 0.4;
             border-color: #d4a843;
@@ -1333,7 +1316,6 @@
             background: rgba(74, 173, 122, 0.1);
         }
 
-        /* ===== 响应式 ===== */
         @media (max-width: 1024px) {
             .left-panel {
                 width: 180px;
@@ -1431,7 +1413,6 @@
 </head>
 <body>
 
-    <!-- ===== 登录界面 ===== -->
     <div class="login-overlay" id="loginOverlay">
         <div class="login-box">
             <h1>星际征途</h1>
@@ -1458,7 +1439,6 @@
         </div>
     </div>
 
-    <!-- ===== 主游戏 ===== -->
     <div id="app" style="display:none;">
         <div class="top-bar">
             <div class="user-info">
@@ -1519,7 +1499,6 @@
                         <button class="btn btn-success" id="btnAutoBattle">⏸️ 暂停</button>
                         <button class="btn btn-gold" id="btnRefreshMarket">🔄 刷新市场</button>
                         <button class="btn btn-purple" id="btnViewBlueprints">📐 蓝图</button>
-                        <button class="btn btn-danger" id="btnReset">重置</button>
                     </div>
                 </div>
             </div>
@@ -1535,7 +1514,6 @@
                     </div>
                 </div>
 
-                <!-- 交易行 -->
                 <div class="tab-content active" id="tab-trade">
                     <div class="page-container">
                         <div class="page-tabs">
@@ -1579,7 +1557,6 @@
                     </div>
                 </div>
 
-                <!-- 工厂 -->
                 <div class="tab-content" id="tab-factory">
                     <div class="page-container">
                         <div style="font-size:0.6rem;color:#6f8bb0;margin-bottom:4px;">🏭 战舰工厂 — 建造强大的战舰</div>
@@ -1590,7 +1567,6 @@
                     </div>
                 </div>
 
-                <!-- 矿物 -->
                 <div class="tab-content" id="tab-mineral">
                     <div class="page-container">
                         <div style="font-size:0.6rem;color:#6f8bb0;margin-bottom:3px;">💎 矿物星球</div>
@@ -1601,7 +1577,6 @@
                     </div>
                 </div>
 
-                <!-- 排行榜 -->
                 <div class="tab-content" id="tab-rank">
                     <div class="page-container">
                         <div style="display:flex;gap:6px;flex-shrink:0;margin-bottom:3px;">
@@ -1612,7 +1587,6 @@
                     </div>
                 </div>
 
-                <!-- 设置 -->
                 <div class="tab-content" id="tab-settings">
                     <div class="page-container" style="overflow-y:auto;padding-right:3px;">
                         <div style="background:#0b1422;border:1px solid #1a2842;border-radius:6px;padding:10px 12px;margin-bottom:8px;">
@@ -1638,7 +1612,6 @@
         </div>
     </div>
 
-    <!-- ===== 弹窗 ===== -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-box">
             <h2 id="modalTitle">标题</h2>
@@ -1649,7 +1622,7 @@
 
     <script>
         // ============================================================
-        //  配置 - 后端地址（已替换为用户提供的Railway地址）
+        //  配置 - 后端地址
         // ============================================================
         const CF_WORKER_URL = 'https://xingjizhengtu.up.railway.app';
 
@@ -1694,19 +1667,16 @@
                 myOrdersPage = 1,
                 PAGE_SIZE = 8;
 
-            // ---- 阿尔法小队相关 ----
-            let alphaSquadDefeated = {}; // 记录每个矿物星球ID是否已击败阿尔法小队
-            let alphaSquadEnemies = []; // 当前阿尔法小队敌人列表
+            let alphaSquadDefeated = {};
+            let alphaSquadEnemies = [];
             let isAlphaBattle = false;
 
-            // ---- 兑换码系统 ----
             const VALID_CODES = {
                 'Star Trek': { type: 'ship', tier: 3, pos: 'front' },
                 'BDGOnb': { type: 'credits', amount: 10000 }
             };
-            let redeemedCodes = {}; // 记录已兑换的码
+            let redeemedCodes = {};
 
-            // ---- 锻造系统 ----
             const AFFIX_TYPES = [
                 { id: 'heavy_armor', name: '重甲', desc: '血量上限加10%~15%' },
                 { id: 'burst', name: '连发', desc: '攻击降低20%~35%，每次攻击攻击两次' },
@@ -1763,7 +1733,6 @@
             const mineralStatus = $('mineralStatus');
             const factoryList = $('factoryList');
             const btnAuto = $('btnAutoBattle');
-            const btnReset = $('btnReset');
             const btnRefreshMarket = $('btnRefreshMarket');
             const btnViewBlueprints = $('btnViewBlueprints');
             const btnEditFleet = $('btnEditFleet');
@@ -2189,7 +2158,6 @@
                 return { hp: Math.floor(hp), atk: Math.floor(atk) };
             }
 
-            // ---- 随机词条 ----
             function randomAffix() {
                 const idx = Math.floor(Math.random() * AFFIX_TYPES.length);
                 const type = AFFIX_TYPES[idx];
@@ -2317,7 +2285,7 @@
                         blueprints.forEach(bp => { if (bp.learned === undefined) bp.learned = false; });
                         return true;
                     } else {
-                        // 新玩家初始化
+                        // 新玩家
                         inventory = {};
                         inventory['电路板'] = { count: 10, tier: 1 };
                         inventory['螺丝'] = { count: 50, tier: 2 };
@@ -2557,7 +2525,7 @@
                         atk: base.atk,
                         affixes: [],
                         deployed: false,
-                        forgeCount: 0 // 锻造次数
+                        forgeCount: 0
                     };
                 };
 
@@ -2807,40 +2775,32 @@
             // ---- 阿尔法小队战斗 ----
             function startAlphaBattle(planetId) {
                 if (!planetId) return;
-                // 检查是否已击败
                 if (alphaSquadDefeated[planetId]) {
                     addLog('✅ 阿尔法小队已被击败，可直接开采', 'sys');
                     startMining(planetId);
                     return;
                 }
-                // 生成阿尔法小队
                 alphaSquadEnemies = generateAlphaSquad();
                 if (alphaSquadEnemies.length === 0) {
                     addLog('⚠️ 无法生成阿尔法小队', 'dmg');
                     return;
                 }
-                // 替换当前敌人为阿尔法小队
                 enemies = alphaSquadEnemies.map(e => ({ ...e, reward: 0, tier: 1 }));
                 renderEnemy();
                 isAlphaBattle = true;
                 addLog('⚔️ 阿尔法小队出现！击败他们以开采矿物星球', 'sys');
-                // 标记当前正在战斗的是阿尔法小队
                 window._alphaBattlePlanetId = planetId;
-                // 设置战斗胜利后的回调
                 window._alphaBattleCallback = function() {
-                    // 击败后标记
                     alphaSquadDefeated[planetId] = true;
                     isAlphaBattle = false;
                     saveGameToCloud();
                     addLog('🏆 阿尔法小队已击败！可以开采矿物星球了', 'loot');
-                    // 恢复普通敌人
                     generateEnemies();
-                    // 自动开始开采
                     startMining(planetId);
                 };
             }
 
-            // ---- 修改 doBattle 支持阿尔法小队回调 ----
+            // ---- 修改 doBattle ----
             const originalDoBattle = doBattle;
             doBattle = function() {
                 if (!isAuto || isDefeated || isPaused) return;
@@ -2858,16 +2818,13 @@
 
                 const aliveEnemies = enemies.filter(e => e.alive);
                 if (aliveEnemies.length === 0) {
-                    // 检查是否有阿尔法小队回调
                     if (window._alphaBattlePlanetId && window._alphaBattleCallback) {
-                        // 击败阿尔法小队
                         const planetId = window._alphaBattlePlanetId;
                         window._alphaBattleCallback();
                         window._alphaBattlePlanetId = null;
                         window._alphaBattleCallback = null;
                         return;
                     } else {
-                        // 普通胜利
                         statWins++;
                         statBattles++;
                         addLog('🎉 战斗胜利！点击"继续"刷下一波', 'loot');
@@ -2880,7 +2837,6 @@
                     }
                 }
 
-                // 原有战斗逻辑...
                 const order = ['front', 'mid', 'rear'];
                 const sortedShips = [...friendlyShips].filter(s => s.hp > 0).sort((a, b) => order.indexOf(a.pos) - order.indexOf(b
                     .pos));
@@ -3077,7 +3033,6 @@
                     warehouseGrid.appendChild(div);
                 });
 
-                // 蓝图（未学习的）
                 const unlearnedBlueprints = blueprints.filter(b => !b.learned && !b.used);
                 unlearnedBlueprints.forEach(bp => {
                     const div = document.createElement('div');
@@ -3156,13 +3111,11 @@
                 return bp;
             }
 
-            // ---- 学习蓝图 ----
             window.learnBlueprint = function(bpId) {
                 const bp = blueprints.find(b => b.id === bpId);
                 if (!bp || bp.used) { addLog('❌ 蓝图不可用', 'dmg'); return; }
                 if (bp.learned) { addLog('ℹ️ 已学习该蓝图', 'sys'); return; }
                 bp.learned = true;
-                // 从仓库移除（即从blueprints中移除）
                 const idx = blueprints.indexOf(bp);
                 if (idx > -1) {
                     blueprints.splice(idx, 1);
@@ -3250,7 +3203,6 @@
                 factoryList.innerHTML = html;
             }
 
-            // ---- 开始建造 ----
             window.startBuilding = function(bpId) {
                 const bp = blueprints.find(b => b.id === bpId);
                 if (!bp || !bp.learned || bp.used) { addLog('❌ 蓝图不可用', 'dmg'); return; }
@@ -3324,7 +3276,6 @@
             }, 2000);
 
             // ---- 交易行 ----
-            // ---- 上架 ----
             window.quickSell = function(name) {
                 if (!inventory[name] || inventory[name].count <= 0) { addLog('❌ 没有 ' + name, 'dmg'); return; }
                 const qty = 1;
@@ -3586,7 +3537,6 @@
                 });
             }
 
-            // ---- 开采矿物星球 ----
             window.startMining = function(planetId) {
                 const planet = mineralPlanets.find(p => p.id === planetId);
                 if (!planet || !planet.active) { addLog('❌ 矿物星球已消失', 'dmg'); return; }
@@ -3599,7 +3549,6 @@
                 planet.miner = currentUser;
                 addLog('⛏️ 你开始开采 ' + planet.galaxyName + ' · ' + planet.systemName, 'loot');
                 renderMineralStatus();
-                // 开采产出
                 const miningInterval = setInterval(() => {
                     const p = mineralPlanets.find(p2 => p2.id === planetId);
                     if (!p || !p.active || p.miner !== currentUser) {
@@ -3637,7 +3586,6 @@
                         clearInterval(window.miningIntervals[planetId]);
                         delete window.miningIntervals[planetId];
                     }
-                    // 标记该星球阿尔法小队为已击败（继承原开采者的状态）
                     if (alphaSquadDefeated[planetId] === undefined) {
                         alphaSquadDefeated[planetId] = true;
                     }
@@ -3762,7 +3710,6 @@
                     addLog('❌ 该战舰已达到最大锻造次数 (5次)', 'dmg');
                     return;
                 }
-                // 检查材料：10个同等级材料
                 const matPool = ALL_MATERIALS.filter(m => m.tier === tier);
                 if (matPool.length === 0) { addLog('❌ 没有T' + tier + '材料', 'dmg'); return; }
                 let hasEnough = false;
@@ -3775,14 +3722,11 @@
                     }
                 }
                 if (!hasEnough) { addLog('❌ 需要10个T' + tier + '材料', 'dmg'); return; }
-                // 消耗材料
                 inventory[usedMat.name].count -= 10;
                 if (inventory[usedMat.name].count <= 0) delete inventory[usedMat.name];
-                // 获得随机词条
                 const affix = randomAffix();
                 ship.affixes.push(affix);
                 ship.forgeCount = (ship.forgeCount || 0) + 1;
-                // 应用词条效果
                 if (affix.id === 'heavy_armor') {
                     const bonus = affix.value / 100;
                     ship.maxHp = Math.floor(ship.maxHp * (1 + bonus));
@@ -3928,20 +3872,17 @@
                     inviteResult.style.color = '#c0392b'; return; }
                 if (!currentUser) { inviteResult.textContent = '❌ 请先登录';
                     inviteResult.style.color = '#c0392b'; return; }
-                // 检查是否已兑换
                 if (redeemedCodes[code]) {
                     inviteResult.textContent = '❌ 该兑换码已兑换过';
                     inviteResult.style.color = '#c0392b';
                     return;
                 }
-                // 检查是否有效
                 const reward = VALID_CODES[code];
                 if (!reward) {
-                    inviteResult.textContent = '❌ 无效兑换码';
+                    inviteResult.textContent = '❌ 无效兑换码，请加入QQ群获取';
                     inviteResult.style.color = '#c0392b';
                     return;
                 }
-                // 发放奖励
                 if (reward.type === 'credits') {
                     credits += reward.amount;
                     creditDisplay.textContent = credits;
@@ -3979,7 +3920,6 @@
                         return;
                     }
                 }
-                // 标记已兑换
                 redeemedCodes[code] = true;
                 saveGameToCloud();
                 inviteInput.value = '';
@@ -4026,7 +3966,6 @@
             });
 
             btnViewBlueprints.addEventListener('click', function() {
-                // 切换到工厂标签
                 document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
                 document.querySelector('[data-tab="factory"]')?.classList.add('active');
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -4057,58 +3996,6 @@
                 statusLabel.textContent = '⏸️ 已暂停';
                 statusLabel.style.color = '#d4a843';
                 addLog('⏸️ 战斗暂停（当前敌人继续战斗，不刷下一波）', 'sys');
-            });
-
-            // ---- 重置 ----
-            btnReset.addEventListener('click', function() {
-                if (defeatTimer) { clearTimeout(defeatTimer);
-                    defeatTimer = null; }
-                isDefeated = false;
-                isAuto = true;
-                isPaused = false;
-                statusLabel.textContent = '⚔️ 战斗中';
-                statusLabel.style.color = '#6f8bb0';
-                btnAuto.textContent = '⏸️ 暂停';
-                playerShips.forEach(s => { s.hp = s.maxHp;
-                    s.charge = 0; });
-                credits = 0;
-                creditDisplay.textContent = '0';
-                statBattles = 0;
-                statWins = 0;
-                statLosses = 0;
-                statDrops = 0;
-                playerExp = 0;
-                playerLevel = 1;
-                maxExp = 100;
-                inventory = {};
-                blueprints = [];
-                constructionQueue = [];
-                mineralPlanets = [];
-                alphaSquadDefeated = {};
-                redeemedCodes = {};
-                inventory['电路板'] = { count: 10, tier: 1 };
-                inventory['螺丝'] = { count: 50, tier: 2 };
-                inventory['基础护盾发生器'] = { count: 1, tier: 1 };
-                tradeList = [];
-                maxShips = { front: 2, mid: 1, rear: 2 };
-                upgradeLevel = { front: 0, mid: 0, rear: 0 };
-                playerShips = initPlayerShips();
-                battleLog.innerHTML = '';
-                levelDisplay.textContent = 'Lv.1';
-                addLog('🔄 舰队已重置', 'sys');
-                addLog('📦 初始物资：电路板x10，螺丝x50，基础护盾x1', 'sys');
-                generateEnemies();
-                updateFleetUI();
-                renderWarehouse();
-                renderMarket();
-                renderMyOrders();
-                renderRank();
-                renderFactory();
-                renderMineralStatus();
-                updateStats();
-                updateWarehouseCount();
-                updateSellSelect();
-                saveGameToCloud();
             });
 
             // ---- 星系 ----
@@ -4202,12 +4089,17 @@
                 updateSellSelect();
                 creditDisplay.textContent = credits;
                 levelDisplay.textContent = 'Lv.' + playerLevel;
+                // 修复舰队加载问题
+                if (friendlyShips.length === 0) {
+                    friendlyShips = initPlayerShips();
+                    updateFleetUI();
+                }
             }
 
             // ---- 启动 ----
             loginOverlay.classList.remove('hidden');
             app.style.display = 'none';
-            console.log('🚀 星际征途 · 完整版已加载');
+            console.log('🚀 星际征途已加载');
             console.log('☁️ 数据自动同步到: ' + CF_WORKER_URL);
             console.log('💡 兑换码: Star Trek (T3战舰), BDGOnb (10000星际币)');
         });
