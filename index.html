@@ -843,54 +843,128 @@
         }
 
         // ============================================================
-        //  初始化函数
+        //  重写：初始化玩家战舰（必定生成5艘）
         // ============================================================
-        function initPlayerShips() {
+        function createInitialShips() {
             const t1f = SHIP_DB.T1.front;
             const t1m = SHIP_DB.T1.mid;
             const t1r = SHIP_DB.T1.rear;
-            const create = (name, pos, tier) => {
+            
+            console.log('🔧 创建初始战舰...');
+            console.log('T1先锋池:', t1f);
+            console.log('T1中间池:', t1m);
+            console.log('T1后勤池:', t1r);
+            
+            const createShip = (name, pos, tier) => {
                 const base = getBaseStats(tier, pos);
-                return {
-                    id: 'ship_' + Date.now() + Math.random().toString(36).substr(2, 4),
-                    name, tier, pos,
-                    hp: base.hp, maxHp: base.hp, atk: base.atk,
-                    affixes: [], deployed: false, forgeCount: 0, charge: 0
+                const ship = {
+                    id: 'ship_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                    name: name,
+                    tier: tier,
+                    pos: pos,
+                    hp: base.hp,
+                    maxHp: base.hp,
+                    atk: base.atk,
+                    affixes: [],
+                    deployed: false,
+                    forgeCount: 0,
+                    charge: 0
                 };
+                console.log('  ✅ 创建战舰:', ship.name, '位置:', ship.pos);
+                return ship;
             };
+
             const ships = [];
-            for (let i = 0; i < 2; i++) ships.push(create(t1f[Math.floor(Math.random() * t1f.length)], 'front', 1));
-            ships.push(create(t1m[Math.floor(Math.random() * t1m.length)], 'mid', 1));
-            for (let i = 0; i < 2; i++) ships.push(create(t1r[Math.floor(Math.random() * t1r.length)], 'rear', 1));
-            ships.forEach((s, idx) => { if (idx < 4) s.deployed = true; });
+            
+            // 2艘随机先锋
+            for (let i = 0; i < 2; i++) {
+                const name = t1f[Math.floor(Math.random() * t1f.length)];
+                ships.push(createShip(name, 'front', 1));
+            }
+            
+            // 1艘随机中间
+            const midName = t1m[Math.floor(Math.random() * t1m.length)];
+            ships.push(createShip(midName, 'mid', 1));
+            
+            // 2艘随机后勤
+            for (let i = 0; i < 2; i++) {
+                const name = t1r[Math.floor(Math.random() * t1r.length)];
+                ships.push(createShip(name, 'rear', 1));
+            }
+            
+            // 默认部署前4艘（2先锋+1中间+1后勤）
+            ships.forEach((s, idx) => { 
+                if (idx < 4) s.deployed = true; 
+            });
+            
+            console.log('✅ 初始战舰创建完成，共', ships.length, '艘');
+            ships.forEach(s => console.log('  -', s.name, s.pos, '部署:', s.deployed));
+            
             return ships;
         }
 
-        function ensureInitialItems() {
-            if (!inventory['电路板']) inventory['电路板'] = { count: 10, tier: 1 };
-            if (!inventory['螺丝']) inventory['螺丝'] = { count: 20, tier: 2 };
-            if (!inventory['基础护盾发生器']) inventory['基础护盾发生器'] = { count: 1, tier: 1 };
+        // ============================================================
+        //  初始化物资（必定包含）
+        // ============================================================
+        function createInitialInventory() {
+            const inv = {};
+            inv['电路板'] = { count: 10, tier: 1 };
+            inv['螺丝'] = { count: 20, tier: 2 };
+            inv['基础护盾发生器'] = { count: 1, tier: 1 };
+            return inv;
         }
 
+        // ============================================================
+        //  确保数据完整（修复函数）
+        // ============================================================
         function ensurePlayerData() {
             let changed = false;
-            if (!playerShips || playerShips.length === 0) { playerShips = initPlayerShips(); changed = true; }
-            playerShips.forEach(s => {
-                if (s.deployed === undefined) s.deployed = false;
-                if (s.affixes === undefined) s.affixes = [];
-                if (s.forgeCount === undefined) s.forgeCount = 0;
-                if (s.charge === undefined) s.charge = 0;
-                if (s.hp === undefined || s.maxHp === undefined) {
-                    const base = getBaseStats(s.tier, s.pos);
-                    s.hp = base.hp; s.maxHp = base.hp; s.atk = base.atk;
-                }
-            });
-            if (!playerShips.some(s => s.deployed)) {
-                const toDeploy = Math.min(4, playerShips.length);
-                for (let i = 0; i < toDeploy; i++) playerShips[i].deployed = true;
+            
+            // 检查并修复战舰
+            if (!playerShips || playerShips.length === 0) {
+                console.log('⚠️ 玩家没有战舰，重新创建');
+                playerShips = createInitialShips();
                 changed = true;
+            } else {
+                // 检查每艘战舰的必要字段
+                playerShips.forEach(s => {
+                    if (s.deployed === undefined) { s.deployed = false; changed = true; }
+                    if (s.affixes === undefined) { s.affixes = []; changed = true; }
+                    if (s.forgeCount === undefined) { s.forgeCount = 0; changed = true; }
+                    if (s.charge === undefined) { s.charge = 0; changed = true; }
+                    if (s.hp === undefined || s.maxHp === undefined || s.atk === undefined) {
+                        const base = getBaseStats(s.tier || 1, s.pos || 'front');
+                        s.hp = base.hp;
+                        s.maxHp = base.hp;
+                        s.atk = base.atk;
+                        changed = true;
+                    }
+                });
+                
+                // 检查是否至少有一艘部署
+                if (!playerShips.some(s => s.deployed)) {
+                    const toDeploy = Math.min(4, playerShips.length);
+                    for (let i = 0; i < toDeploy; i++) {
+                        playerShips[i].deployed = true;
+                    }
+                    changed = true;
+                    console.log('🔧 自动部署了', toDeploy, '艘战舰');
+                }
             }
-            ensureInitialItems();
+            
+            // 检查并修复物资
+            if (!inventory || Object.keys(inventory).length === 0) {
+                console.log('⚠️ 玩家没有物资，重新创建');
+                inventory = createInitialInventory();
+                changed = true;
+            } else {
+                // 确保三种基础物资存在
+                if (!inventory['电路板']) { inventory['电路板'] = { count: 10, tier: 1 }; changed = true; }
+                if (!inventory['螺丝']) { inventory['螺丝'] = { count: 20, tier: 2 }; changed = true; }
+                if (!inventory['基础护盾发生器']) { inventory['基础护盾发生器'] = { count: 1, tier: 1 }; changed = true; }
+            }
+            
+            // 检查其他必要字段
             if (!maxShips) { maxShips = { front: 2, mid: 1, rear: 2 }; changed = true; }
             if (!upgradeLevel) { upgradeLevel = { front: 0, mid: 0, rear: 0 }; changed = true; }
             if (!blueprints) { blueprints = []; changed = true; }
@@ -908,11 +982,15 @@
             if (maxExp === undefined) { maxExp = 100; changed = true; }
             if (currentGalaxyIdx === undefined) { currentGalaxyIdx = 0; changed = true; }
             if (currentSystemIdx === undefined) { currentSystemIdx = 0; changed = true; }
+            
+            if (changed) {
+                console.log('📝 数据已修复，变更内容已保存');
+            }
             return changed;
         }
 
         // ============================================================
-        //  纯云端存储（无本地）
+        //  纯云端存储
         // ============================================================
         function updateSyncStatus(state) {
             const el = document.getElementById('syncStatus');
@@ -933,7 +1011,6 @@
         async function saveGameImmediate() {
             if (!currentUser) return false;
             if (_saveInProgress) {
-                // 等待当前保存完成
                 await new Promise(r => setTimeout(r, 100));
                 return saveGameImmediate();
             }
@@ -1004,6 +1081,7 @@
             const cloudData = await loadFromCloud();
             if (cloudData && Object.keys(cloudData).length > 0) {
                 Object.assign(this, cloudData);
+                // 修复数据
                 ensurePlayerData();
                 return true;
             }
@@ -1075,7 +1153,7 @@
         const sellQtyPage = $('sellQtyPage');
 
         // ============================================================
-        //  用户系统
+        //  用户系统（重写注册逻辑）
         // ============================================================
         function getUsers() { try { return JSON.parse(localStorage.getItem('starfleet_users')) || {}; } catch { return {}; } }
         function saveUsers(u) { localStorage.setItem('starfleet_users', JSON.stringify(u)); }
@@ -1084,6 +1162,120 @@
         toggleMode.addEventListener('click', showRegister);
         toggleModeBack.addEventListener('click', showLogin);
 
+        // ===== 重写：注册 =====
+        async function doRegister() {
+            const username = registerUsername.value.trim();
+            const password = registerPassword.value.trim();
+            const confirm = registerConfirm.value.trim();
+            
+            if (!username || !password || !confirm) { 
+                registerError.textContent = '请填写完整信息'; 
+                return; 
+            }
+            if (username.length < 2) { 
+                registerError.textContent = '账号至少2个字符'; 
+                return; 
+            }
+            if (password.length < 3) { 
+                registerError.textContent = '密码至少3个字符'; 
+                return; 
+            }
+            if (password !== confirm) { 
+                registerError.textContent = '两次密码不一致'; 
+                return; 
+            }
+            
+            const users = getUsers();
+            if (users[username]) { 
+                registerError.textContent = '账号已存在，请登录'; 
+                return; 
+            }
+            
+            // 创建新玩家数据
+            console.log('🆕 注册新玩家:', username);
+            
+            // 创建初始数据
+            const newData = {
+                inventory: createInitialInventory(),
+                tradeList: [],
+                credits: 0,
+                playerShips: createInitialShips(),
+                blueprints: [],
+                constructionQueue: [],
+                maxShips: { front: 2, mid: 1, rear: 2 },
+                upgradeLevel: { front: 0, mid: 0, rear: 0 },
+                statBattles: 0,
+                statWins: 0,
+                statLosses: 0,
+                statDrops: 0,
+                playerLevel: 1,
+                playerExp: 0,
+                maxExp: 100,
+                currentGalaxyIdx: 0,
+                currentSystemIdx: 0,
+                alphaSquadDefeated: {},
+                redeemedCodes: {},
+                lastOnline: Date.now()
+            };
+            
+            console.log('📦 初始数据已创建');
+            console.log('  - 战舰数量:', newData.playerShips.length);
+            console.log('  - 物资:', Object.keys(newData.inventory));
+            
+            // 先保存用户
+            users[username] = password;
+            saveUsers(users);
+            
+            // 临时设置当前用户，以便保存
+            const tempUser = currentUser;
+            currentUser = username;
+            
+            // 应用到全局变量
+            inventory = newData.inventory;
+            tradeList = newData.tradeList;
+            credits = newData.credits;
+            playerShips = newData.playerShips;
+            blueprints = newData.blueprints;
+            constructionQueue = newData.constructionQueue;
+            maxShips = newData.maxShips;
+            upgradeLevel = newData.upgradeLevel;
+            statBattles = newData.statBattles;
+            statWins = newData.statWins;
+            statLosses = newData.statLosses;
+            statDrops = newData.statDrops;
+            playerLevel = newData.playerLevel;
+            playerExp = newData.playerExp;
+            maxExp = newData.maxExp;
+            currentGalaxyIdx = newData.currentGalaxyIdx;
+            currentSystemIdx = newData.currentSystemIdx;
+            alphaSquadDefeated = newData.alphaSquadDefeated;
+            redeemedCodes = newData.redeemedCodes;
+            
+            // 保存到云端
+            const saved = await saveGameImmediate();
+            if (saved) {
+                console.log('✅ 新玩家数据已保存到云端');
+                registerError.textContent = '';
+                registerSuccess.textContent = '注册成功！正在登录...';
+                
+                // 恢复当前用户
+                currentUser = tempUser;
+                
+                // 登录
+                loginUsername.value = username;
+                loginPassword.value = password;
+                setTimeout(() => { 
+                    showLogin(); 
+                    doLogin(); 
+                }, 500);
+            } else {
+                console.error('❌ 保存到云端失败');
+                registerError.textContent = '注册失败，请检查网络后重试';
+                currentUser = tempUser;
+            }
+        }
+
+        // ===== 登录 =====
         async function doLogin() {
             const username = loginUsername.value.trim();
             const password = loginPassword.value.trim();
@@ -1098,11 +1290,18 @@
             loginOverlay.classList.add('hidden');
             app.style.display = 'flex';
 
+            console.log('🔐 登录用户:', username);
+            console.log('📡 从云端加载数据...');
+            
             const loaded = await loadGame();
             if (!loaded) {
-                inventory = {}; tradeList = []; credits = 0;
-                playerShips = initPlayerShips();
-                blueprints = []; constructionQueue = [];
+                console.log('⚠️ 云端无数据，创建新数据');
+                inventory = createInitialInventory();
+                tradeList = [];
+                credits = 0;
+                playerShips = createInitialShips();
+                blueprints = [];
+                constructionQueue = [];
                 maxShips = { front: 2, mid: 1, rear: 2 };
                 upgradeLevel = { front: 0, mid: 0, rear: 0 };
                 statBattles = 0; statWins = 0; statLosses = 0; statDrops = 0;
@@ -1113,6 +1312,9 @@
                 await saveGameImmediate();
                 addLog('🆕 新玩家已初始化，数据已保存到云端', 'sys');
             } else {
+                console.log('✅ 云端数据加载成功');
+                console.log('  - 战舰数量:', playerShips.length);
+                console.log('  - 物资:', Object.keys(inventory));
                 addLog('☁️ 从云端加载数据成功', 'sys');
             }
 
@@ -1125,25 +1327,6 @@
 
         loginBtn.addEventListener('click', doLogin);
         loginPassword.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-
-        async function doRegister() {
-            const username = registerUsername.value.trim();
-            const password = registerPassword.value.trim();
-            const confirm = registerConfirm.value.trim();
-            if (!username || !password || !confirm) { registerError.textContent = '请填写完整信息'; return; }
-            if (username.length < 2) { registerError.textContent = '账号至少2个字符'; return; }
-            if (password.length < 3) { registerError.textContent = '密码至少3个字符'; return; }
-            if (password !== confirm) { registerError.textContent = '两次密码不一致'; return; }
-            const users = getUsers();
-            if (users[username]) { registerError.textContent = '账号已存在，请登录'; return; }
-            users[username] = password;
-            saveUsers(users);
-            registerError.textContent = '';
-            registerSuccess.textContent = '注册成功！请登录';
-            loginUsername.value = username;
-            loginPassword.value = password;
-            setTimeout(() => { showLogin(); doLogin(); }, 500);
-        }
         registerBtn.addEventListener('click', doRegister);
         registerConfirm.addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
 
@@ -1288,7 +1471,11 @@
         }
 
         function updateFleetUI() {
-            if (!playerShips || playerShips.length === 0) playerShips = initPlayerShips();
+            if (!playerShips || playerShips.length === 0) {
+                console.log('⚠️ 没有战舰，重新创建');
+                playerShips = createInitialShips();
+                saveGameImmediate();
+            }
             const deployed = playerShips.filter(s => s.deployed);
             const front = deployed.filter(s => s.pos === 'front').length;
             const mid = deployed.filter(s => s.pos === 'mid').length;
@@ -1548,7 +1735,7 @@
         }
 
         // ============================================================
-        //  仓库 & 蓝图 & 交易市场（完整可用）
+        //  仓库 & 蓝图 & 交易市场
         // ============================================================
         function renderWarehouse() {
             warehouseGrid.innerHTML = '';
@@ -1648,7 +1835,6 @@
             if (idx > -1) { blueprints.splice(idx, 1); addLog('🗑️ 蓝图已丢弃', 'dmg'); renderWarehouse(); renderFactory(); saveGameImmediate(); }
         };
 
-        // ===== 交易市场功能（完整可用） =====
         window.quickSell = function(name) {
             if (!inventory[name] || inventory[name].count <= 0) { addLog('❌ 没有 ' + name, 'dmg'); return; }
             const qty = 1;
@@ -1878,7 +2064,7 @@
         }, 2000);
 
         // ============================================================
-        //  矿物星球（完整）
+        //  矿物星球
         // ============================================================
         function checkMineralSpawn() {
             GALAXY_DATA.forEach((g, idx) => {
@@ -2398,7 +2584,10 @@
         // ---- 渲染全部 ----
         function renderAll() {
             try {
-                if (!playerShips || playerShips.length === 0) playerShips = initPlayerShips();
+                if (!playerShips || playerShips.length === 0) {
+                    console.log('⚠️ renderAll 发现没有战舰，重新创建');
+                    playerShips = createInitialShips();
+                }
                 const anyDeployed = playerShips.some(s => s.deployed);
                 if (!anyDeployed && playerShips.length > 0) {
                     const toDeploy = Math.min(4, playerShips.length);
@@ -2433,9 +2622,10 @@
         app.style.display = 'none';
         console.log('🚀 星际征途');
         console.log('☁️ 每次操作立即同步到: ' + CF_WORKER_URL);
-        console.log('💡 兑换码: Star Trek, BDGOnb');
+        console.log('💡 兑换码');
         console.log('✅ 新手赠送: 2随机先锋 + 1随机中间 + 2随机后勤 + 10电路板 + 20螺丝 + 1护盾发生器');
         console.log('✅ 所有数据仅存储在云端，无本地缓存');
+        console.log('✅ 注册时必定生成5艘战舰');
     </script>
 </body>
 </html>
