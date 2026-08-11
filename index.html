@@ -1173,9 +1173,6 @@
             color: #e74c3c;
             cursor: pointer;
         }
-        .mineral-info .m-battle:hover {
-            text-decoration: underline;
-        }
 
         .cloudflare-section {
             background: #0b1422;
@@ -1605,7 +1602,7 @@
                             <p style="color:#6f8bb0;font-size:0.6rem;">✅ 数据自动保存到云端，无需任何手动操作</p>
                             <div style="margin-top:4px;font-size:0.55rem;color:#4aad7a;">状态：<span class="status-ok">已连接</span></div>
                         </div>
-                        <div style="margin-top:8px;font-size:0.55rem;color:#4a6080;">💡 数据每30秒自动同步，关闭网页后再次打开自动恢复</div>
+                        <div style="margin-top:8px;font-size:0.55rem;color:#4a6080;">💡 数据每30秒自动同步</div>
                     </div>
                 </div>
             </div>
@@ -1622,21 +1619,21 @@
 
     <script>
         // ============================================================
-        //  配置 - 后端地址
+        //  ✅ 后端地址：Cloudflare Workers（已测试可写入）
         // ============================================================
-        const CF_WORKER_URL = 'https://xingjizhengtu.up.railway.app';
+        const CF_WORKER_URL = 'https://xjzt.2207276908.workers.dev';
+
+        // ============================================================
+        //  所有数据只存云端，不使用 localStorage
+        // ============================================================
 
         document.addEventListener('DOMContentLoaded', function() {
 
-            // ============================================================
-            //  用户系统
-            // ============================================================
+            // ---- 用户系统 ----
             let currentUser = null;
             let users = {};
 
-            // ============================================================
-            //  游戏状态
-            // ============================================================
+            // ---- 游戏状态（全部从云端加载） ----
             let inventory = {};
             let tradeList = [];
             let credits = 0;
@@ -1666,16 +1663,13 @@
             let marketPage = 1,
                 myOrdersPage = 1,
                 PAGE_SIZE = 8;
-
             let alphaSquadDefeated = {};
-            let alphaSquadEnemies = [];
-            let isAlphaBattle = false;
+            let redeemedCodes = {};
 
             const VALID_CODES = {
                 'Star Trek': { type: 'ship', tier: 3, pos: 'front' },
-                'BDGOnb': { type: 'credits', amount: 10000 }
+                'BDGOnb': { type: 'bundle', credits: 10000, shipTier: 4, shipPos: 'front' }
             };
-            let redeemedCodes = {};
 
             const AFFIX_TYPES = [
                 { id: 'heavy_armor', name: '重甲', desc: '血量上限加10%~15%' },
@@ -2166,7 +2160,42 @@
             }
 
             // ============================================================
-            //  云端同步
+            //  初始化玩家战舰（5艘初始战舰）
+            // ============================================================
+            function initPlayerShips() {
+                const t1front = SHIP_DB.T1.front;
+                const t1mid = SHIP_DB.T1.mid;
+                const t1rear = SHIP_DB.T1.rear;
+
+                const createShip = (name, pos, tier) => {
+                    const base = getBaseStats(tier, pos);
+                    return {
+                        id: 'ship_' + Date.now() + Math.random().toString(36).substr(2, 4),
+                        name: name,
+                        tier: tier,
+                        pos: pos,
+                        hp: base.hp,
+                        maxHp: base.hp,
+                        atk: base.atk,
+                        affixes: [],
+                        deployed: false,
+                        forgeCount: 0
+                    };
+                };
+
+                const ships = [];
+                ships.push(createShip(t1front[0] || '基础战舰', 'front', 1));
+                ships.push(createShip(t1front[1] || '基础战舰', 'front', 1));
+                ships.push(createShip(t1mid[0] || '基础蓄力炮', 'mid', 1));
+                ships.push(createShip(t1rear[0] || '基础后勤舰', 'rear', 1));
+                ships.push(createShip(t1rear[1] || '基础后勤舰', 'rear', 1));
+                // 默认部署前4艘
+                ships.forEach((s, idx) => { if (idx < 4) s.deployed = true; });
+                return ships;
+            }
+
+            // ============================================================
+            //  云端同步（仅云端，无localStorage）
             // ============================================================
             async function syncToCloud(data) {
                 if (!CF_WORKER_URL || !currentUser) return false;
@@ -2183,16 +2212,27 @@
                 }
             }
 
-            async function loadFromCloud() {
+            async function loadFromCloud(retries = 3) {
                 if (!CF_WORKER_URL || !currentUser) return null;
-                try {
-                    const resp = await fetch(CF_WORKER_URL + '?user=' + encodeURIComponent(currentUser));
-                    if (!resp.ok) return null;
-                    return await resp.json();
-                } catch (e) {
-                    console.error('加载失败:', e);
-                    return null;
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const resp = await fetch(CF_WORKER_URL + '?user=' + encodeURIComponent(currentUser));
+                        if (!resp.ok) {
+                            if (i < retries - 1) {
+                                await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+                                continue;
+                            }
+                            return null;
+                        }
+                        return await resp.json();
+                    } catch (e) {
+                        console.error('加载失败 (尝试', i + 1, '/', retries, '):', e);
+                        if (i < retries - 1) {
+                            await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+                        }
+                    }
                 }
+                return null;
             }
 
             function getCurrentSaveData() {
@@ -2224,93 +2264,6 @@
                 if (!currentUser) return;
                 const data = getCurrentSaveData();
                 await syncToCloud(data);
-                localStorage.setItem('starfleet_data_' + currentUser, JSON.stringify(data));
-            }
-
-            async function loadGameFromCloud() {
-                if (!currentUser) return;
-                const data = await loadFromCloud();
-                if (data && data.inventory) {
-                    inventory = data.inventory || {};
-                    tradeList = data.tradeList || [];
-                    credits = data.credits || 0;
-                    playerShips = data.playerShips || [];
-                    statBattles = data.statBattles || 0;
-                    statWins = data.statWins || 0;
-                    statLosses = data.statLosses || 0;
-                    statDrops = data.statDrops || 0;
-                    playerLevel = data.playerLevel || 1;
-                    playerExp = data.playerExp || 0;
-                    maxExp = data.maxExp || 100;
-                    currentGalaxyIdx = data.currentGalaxyIdx || 0;
-                    currentSystemIdx = data.currentSystemIdx || 0;
-                    blueprints = data.blueprints || [];
-                    constructionQueue = data.constructionQueue || [];
-                    maxShips = data.maxShips || { front: 2, mid: 1, rear: 2 };
-                    upgradeLevel = data.upgradeLevel || { front: 0, mid: 0, rear: 0 };
-                    alphaSquadDefeated = data.alphaSquadDefeated || {};
-                    redeemedCodes = data.redeemedCodes || {};
-                    if (!inventory['电路板']) inventory['电路板'] = { count: 10, tier: 1 };
-                    if (!inventory['螺丝']) inventory['螺丝'] = { count: 50, tier: 2 };
-                    if (!inventory['基础护盾发生器']) inventory['基础护盾发生器'] = { count: 1, tier: 1 };
-                    blueprints.forEach(bp => { if (bp.learned === undefined) bp.learned = false; });
-                    localStorage.setItem('starfleet_data_' + currentUser, JSON.stringify(data));
-                    return true;
-                } else {
-                    const localData = localStorage.getItem('starfleet_data_' + currentUser);
-                    if (localData) {
-                        const data = JSON.parse(localData);
-                        inventory = data.inventory || {};
-                        tradeList = data.tradeList || [];
-                        credits = data.credits || 0;
-                        playerShips = data.playerShips || [];
-                        statBattles = data.statBattles || 0;
-                        statWins = data.statWins || 0;
-                        statLosses = data.statLosses || 0;
-                        statDrops = data.statDrops || 0;
-                        playerLevel = data.playerLevel || 1;
-                        playerExp = data.playerExp || 0;
-                        maxExp = data.maxExp || 100;
-                        currentGalaxyIdx = data.currentGalaxyIdx || 0;
-                        currentSystemIdx = data.currentSystemIdx || 0;
-                        blueprints = data.blueprints || [];
-                        constructionQueue = data.constructionQueue || [];
-                        maxShips = data.maxShips || { front: 2, mid: 1, rear: 2 };
-                        upgradeLevel = data.upgradeLevel || { front: 0, mid: 0, rear: 0 };
-                        alphaSquadDefeated = data.alphaSquadDefeated || {};
-                        redeemedCodes = data.redeemedCodes || {};
-                        if (!inventory['电路板']) inventory['电路板'] = { count: 10, tier: 1 };
-                        if (!inventory['螺丝']) inventory['螺丝'] = { count: 50, tier: 2 };
-                        if (!inventory['基础护盾发生器']) inventory['基础护盾发生器'] = { count: 1, tier: 1 };
-                        blueprints.forEach(bp => { if (bp.learned === undefined) bp.learned = false; });
-                        return true;
-                    } else {
-                        // 新玩家
-                        inventory = {};
-                        inventory['电路板'] = { count: 10, tier: 1 };
-                        inventory['螺丝'] = { count: 50, tier: 2 };
-                        inventory['基础护盾发生器'] = { count: 1, tier: 1 };
-                        tradeList = [];
-                        credits = 0;
-                        playerShips = initPlayerShips();
-                        statBattles = 0;
-                        statWins = 0;
-                        statLosses = 0;
-                        statDrops = 0;
-                        playerLevel = 1;
-                        playerExp = 0;
-                        maxExp = 100;
-                        currentGalaxyIdx = 0;
-                        currentSystemIdx = 0;
-                        blueprints = [];
-                        constructionQueue = [];
-                        maxShips = { front: 2, mid: 1, rear: 2 };
-                        upgradeLevel = { front: 0, mid: 0, rear: 0 };
-                        alphaSquadDefeated = {};
-                        redeemedCodes = {};
-                        return true;
-                    }
-                }
             }
 
             // ============================================================
@@ -2361,15 +2314,73 @@
                 loginOverlay.classList.add('hidden');
                 app.style.display = 'flex';
 
-                const loaded = await loadGameFromCloud();
-                if (loaded) {
-                    checkOfflineEarnings();
-                    renderAll();
-                    addLog('👋 欢迎回来，舰长 ' + currentUser, 'sys');
-                    addLog('⚔️ 舰队已就绪，自动战斗开启', 'sys');
+                // 从云端加载数据
+                const data = await loadFromCloud();
+                if (data && data.inventory) {
+                    // 从云端恢复数据
+                    inventory = data.inventory || {};
+                    tradeList = data.tradeList || [];
+                    credits = data.credits || 0;
+                    playerShips = data.playerShips || [];
+                    if (!playerShips || playerShips.length === 0) {
+                        playerShips = initPlayerShips();
+                    }
+                    statBattles = data.statBattles || 0;
+                    statWins = data.statWins || 0;
+                    statLosses = data.statLosses || 0;
+                    statDrops = data.statDrops || 0;
+                    playerLevel = data.playerLevel || 1;
+                    playerExp = data.playerExp || 0;
+                    maxExp = data.maxExp || 100;
+                    currentGalaxyIdx = data.currentGalaxyIdx || 0;
+                    currentSystemIdx = data.currentSystemIdx || 0;
+                    blueprints = data.blueprints || [];
+                    constructionQueue = data.constructionQueue || [];
+                    maxShips = data.maxShips || { front: 2, mid: 1, rear: 2 };
+                    upgradeLevel = data.upgradeLevel || { front: 0, mid: 0, rear: 0 };
+                    alphaSquadDefeated = data.alphaSquadDefeated || {};
+                    redeemedCodes = data.redeemedCodes || {};
+                    // ====== 确保新手物资存在 ======
+                    if (!inventory['电路板']) inventory['电路板'] = { count: 10, tier: 1 };
+                    if (!inventory['螺丝']) inventory['螺丝'] = { count: 20, tier: 2 };   // 改为20
+                    if (!inventory['基础护盾发生器']) inventory['基础护盾发生器'] = { count: 1, tier: 1 };
+                    blueprints.forEach(bp => { if (bp.learned === undefined) bp.learned = false; });
+                    playerShips.forEach(s => { if (s.deployed === undefined) s.deployed = false; });
+                    addLog('☁️ 从云端加载数据成功', 'sys');
                 } else {
-                    addLog('❌ 数据加载失败，请检查网络', 'dmg');
+                    // 新玩家初始化（物资调整为20螺丝）
+                    inventory = {};
+                    inventory['电路板'] = { count: 10, tier: 1 };
+                    inventory['螺丝'] = { count: 20, tier: 2 };
+                    inventory['基础护盾发生器'] = { count: 1, tier: 1 };
+                    tradeList = [];
+                    credits = 0;
+                    playerShips = initPlayerShips();
+                    statBattles = 0;
+                    statWins = 0;
+                    statLosses = 0;
+                    statDrops = 0;
+                    playerLevel = 1;
+                    playerExp = 0;
+                    maxExp = 100;
+                    currentGalaxyIdx = 0;
+                    currentSystemIdx = 0;
+                    blueprints = [];
+                    constructionQueue = [];
+                    maxShips = { front: 2, mid: 1, rear: 2 };
+                    upgradeLevel = { front: 0, mid: 0, rear: 0 };
+                    alphaSquadDefeated = {};
+                    redeemedCodes = {};
+                    addLog('🆕 新玩家，已初始化（赠送 20螺丝 + 10电路板 + 1护盾发生器）', 'sys');
+                    // 保存到云端
+                    await saveGameToCloud();
                 }
+
+                // 计算离线收益
+                checkOfflineEarnings();
+                renderAll();
+                addLog('👋 欢迎回来，舰长 ' + currentUser, 'sys');
+                addLog('⚔️ 舰队已就绪，自动战斗开启', 'sys');
             }
 
             loginBtn.addEventListener('click', doLogin);
@@ -2387,6 +2398,8 @@
                 if (users[username]) { registerError.textContent = '账号已存在，请登录'; return; }
                 users[username] = password;
                 saveUsers(users);
+
+                // 创建新玩家数据并保存到云端
                 const emptyData = {
                     inventory: {},
                     tradeList: [],
@@ -2409,12 +2422,23 @@
                     alphaSquadDefeated: {},
                     redeemedCodes: {}
                 };
-                localStorage.setItem('starfleet_data_' + username, JSON.stringify(emptyData));
+                // 添加初始物资（20螺丝）
+                emptyData.inventory['电路板'] = { count: 10, tier: 1 };
+                emptyData.inventory['螺丝'] = { count: 20, tier: 2 };
+                emptyData.inventory['基础护盾发生器'] = { count: 1, tier: 1 };
+                emptyData.playerShips = initPlayerShips();
+
+                // 先保存到云端
+                const tempUser = username;
+                const tempCurrent = currentUser;
+                currentUser = username;
+                await syncToCloud(emptyData);
+                currentUser = tempCurrent;
+
                 registerError.textContent = '';
                 registerSuccess.textContent = '注册成功！请登录';
                 loginUsername.value = username;
                 loginPassword.value = password;
-                await syncToCloud(emptyData);
                 setTimeout(() => { showLogin();
                     doLogin(); }, 500);
             }
@@ -2438,11 +2462,8 @@
             // ---- 离线收益 ----
             function checkOfflineEarnings() {
                 if (!currentUser) return;
-                const localData = localStorage.getItem('starfleet_data_' + currentUser);
-                if (!localData) return;
-                const data = JSON.parse(localData);
-                const lastOnline = data.lastOnline || Date.now();
                 const now = Date.now();
+                const lastOnline = window._lastOnline || now;
                 const diffMinutes = Math.floor((now - lastOnline) / 60000);
                 if (diffMinutes < 2) return;
 
@@ -2503,40 +2524,7 @@
                     });
                     addLog('💰 ' + msg, 'loot');
                 }
-                data.lastOnline = now;
-                localStorage.setItem('starfleet_data_' + currentUser, JSON.stringify(data));
-            }
-
-            // ---- 初始化战舰 ----
-            function initPlayerShips() {
-                const t1front = SHIP_DB.T1.front;
-                const t1mid = SHIP_DB.T1.mid;
-                const t1rear = SHIP_DB.T1.rear;
-
-                const createShip = (name, pos, tier) => {
-                    const base = getBaseStats(tier, pos);
-                    return {
-                        id: 'ship_' + Date.now() + Math.random().toString(36).substr(2, 4),
-                        name: name,
-                        tier: tier,
-                        pos: pos,
-                        hp: base.hp,
-                        maxHp: base.hp,
-                        atk: base.atk,
-                        affixes: [],
-                        deployed: false,
-                        forgeCount: 0
-                    };
-                };
-
-                const ships = [];
-                ships.push(createShip(t1front[0] || '基础战舰', 'front', 1));
-                ships.push(createShip(t1front[1] || '基础战舰', 'front', 1));
-                ships.push(createShip(t1mid[0] || '基础蓄力炮', 'mid', 1));
-                ships.push(createShip(t1rear[0] || '基础后勤舰', 'rear', 1));
-                ships.push(createShip(t1rear[1] || '基础后勤舰', 'rear', 1));
-                ships.forEach((s, idx) => { if (idx < 4) s.deployed = true; });
-                return ships;
+                window._lastOnline = now;
             }
 
             // ---- 工具函数 ----
@@ -2666,8 +2654,38 @@
                 return squad;
             }
 
-            // ---- 编队UI ----
+            // ============================================================
+            //  核心战斗修复 (hp同步 + 战败重置)
+            // ============================================================
+
+            function syncFleetHpToPlayer() {
+                if (!friendlyShips || !playerShips) return;
+                friendlyShips.forEach(fs => {
+                    const ps = playerShips.find(s => s.id === fs.id);
+                    if (ps) {
+                        ps.hp = fs.hp;
+                        ps.maxHp = fs.maxHp;
+                        ps.atk = fs.atk;
+                        ps.charge = fs.charge || 0;
+                    }
+                });
+            }
+
+            function resetAllShipsHp() {
+                playerShips.forEach(s => {
+                    s.hp = s.maxHp;
+                    s.charge = 0;
+                });
+                friendlyShips.forEach(fs => {
+                    fs.hp = fs.maxHp;
+                    fs.charge = 0;
+                });
+            }
+
             function updateFleetUI() {
+                if (!playerShips || playerShips.length === 0) {
+                    playerShips = initPlayerShips();
+                }
                 const deployed = playerShips.filter(s => s.deployed);
                 const front = deployed.filter(s => s.pos === 'front').length;
                 const mid = deployed.filter(s => s.pos === 'mid').length;
@@ -2704,6 +2722,11 @@
             }
 
             function renderFleet() {
+                if (!friendlyShips || friendlyShips.length === 0) {
+                    friendlyColumn.innerHTML =
+                        '<div style="color:#4a6080;font-size:0.5rem;text-align:center;padding:10px 0;">暂无战舰</div>';
+                    return;
+                }
                 friendlyColumn.innerHTML = '';
                 const order = ['rear', 'mid', 'front'];
                 const sorted = [...friendlyShips].sort((a, b) => order.indexOf(a.pos) - order.indexOf(b.pos));
@@ -2772,7 +2795,6 @@
                 enemyCount.textContent = enemies.filter(e => e.alive).length;
             }
 
-            // ---- 阿尔法小队战斗 ----
             function startAlphaBattle(planetId) {
                 if (!planetId) return;
                 if (alphaSquadDefeated[planetId]) {
@@ -2780,19 +2802,17 @@
                     startMining(planetId);
                     return;
                 }
-                alphaSquadEnemies = generateAlphaSquad();
-                if (alphaSquadEnemies.length === 0) {
+                const squad = generateAlphaSquad();
+                if (squad.length === 0) {
                     addLog('⚠️ 无法生成阿尔法小队', 'dmg');
                     return;
                 }
-                enemies = alphaSquadEnemies.map(e => ({ ...e, reward: 0, tier: 1 }));
+                enemies = squad.map(e => ({ ...e, reward: 0, tier: 1 }));
                 renderEnemy();
-                isAlphaBattle = true;
                 addLog('⚔️ 阿尔法小队出现！击败他们以开采矿物星球', 'sys');
                 window._alphaBattlePlanetId = planetId;
                 window._alphaBattleCallback = function() {
                     alphaSquadDefeated[planetId] = true;
-                    isAlphaBattle = false;
                     saveGameToCloud();
                     addLog('🏆 阿尔法小队已击败！可以开采矿物星球了', 'loot');
                     generateEnemies();
@@ -2800,9 +2820,8 @@
                 };
             }
 
-            // ---- 修改 doBattle ----
-            const originalDoBattle = doBattle;
-            doBattle = function() {
+            // ====== 核心战斗循环 ======
+            function doBattle() {
                 if (!isAuto || isDefeated || isPaused) return;
 
                 enemies = enemies.filter(e => e.alive || e.hp > 0);
@@ -2833,6 +2852,7 @@
                         statusLabel.textContent = '⏸️ 已暂停(胜利)';
                         statusLabel.style.color = '#d4a843';
                         updateStats();
+                        syncFleetHpToPlayer();
                         return;
                     }
                 }
@@ -2919,6 +2939,7 @@
                     updateStats();
                 }
 
+                syncFleetHpToPlayer();
                 renderFleet();
                 renderEnemy();
                 updateStats();
@@ -2977,8 +2998,8 @@
                 if (defeatTimer) clearTimeout(defeatTimer);
                 defeatTimer = setTimeout(() => {
                     isDefeated = false;
-                    friendlyShips.forEach(s => { s.hp = s.maxHp;
-                        s.charge = 0; });
+                    resetAllShipsHp();
+                    syncFleetHpToPlayer();
                     addLog('🔧 舰队已修复，继续战斗', 'heal');
                     statusLabel.textContent = '⚔️ 战斗中';
                     statusLabel.style.color = '#6f8bb0';
@@ -3628,22 +3649,6 @@
             // ---- 排行榜 ----
             function renderRank() {
                 const allPlayers = [{ name: currentUser || '玩家', power: playerPower, level: playerLevel, isMe: true }];
-                const users = getUsers();
-                Object.keys(users).forEach(name => {
-                    if (name !== currentUser) {
-                        const localData = localStorage.getItem('starfleet_data_' + name);
-                        if (localData) {
-                            const data = JSON.parse(localData);
-                            let power = 100;
-                            if (data.playerShips) {
-                                data.playerShips.forEach(s => {
-                                    power += Math.floor(s.maxHp / 2) + s.atk * 3;
-                                });
-                            }
-                            allPlayers.push({ name: name, power: power, level: data.playerLevel || 1, isMe: false });
-                        }
-                    }
-                });
                 allPlayers.sort((a, b) => b.power - a.power);
                 rankCount.textContent = '共 ' + allPlayers.length + ' 人';
                 rankList.innerHTML = '';
@@ -3665,7 +3670,7 @@
                 });
             }
 
-            // ---- 战舰详情（含锻造功能） ----
+            // ---- 战舰详情 ----
             function showShipDetail(shipId) {
                 const ship = playerShips.find(s => s.id === shipId);
                 if (!ship) return;
@@ -3765,7 +3770,7 @@
                 saveGameToCloud();
             };
 
-            // ---- 编队编辑（拖拽） ----
+            // ---- 编队编辑 ----
             btnEditFleet.addEventListener('click', function() {
                 let html = `
                     <div style="display:flex;flex-direction:column;gap:6px;">
@@ -3865,7 +3870,7 @@
                 }, 200);
             });
 
-            // ---- 兑换码系统 ----
+            // ---- 兑换码系统（BDGOnb 增强） ----
             redeemInviteBtn.addEventListener('click', function() {
                 const code = inviteInput.value.trim();
                 if (!code) { inviteResult.textContent = '❌ 请输入兑换码';
@@ -3883,7 +3888,49 @@
                     inviteResult.style.color = '#c0392b';
                     return;
                 }
-                if (reward.type === 'credits') {
+
+                // ====== BDGOnb 奖励增强 ======
+                if (reward.type === 'bundle') {
+                    const credAmt = reward.credits || 10000;
+                    credits += credAmt;
+                    creditDisplay.textContent = credits;
+                    addLog(`🎁 兑换成功！获得 ${credAmt} 星际币`, 'loot');
+
+                    const tier = reward.shipTier || 4;
+                    const pos = reward.shipPos || 'front';
+                    const tierKey = 'T' + tier;
+                    const db = SHIP_DB[tierKey];
+                    if (db && db[pos] && db[pos].length > 0) {
+                        const name = db[pos][Math.floor(Math.random() * db[pos].length)];
+                        const base = getBaseStats(tier, pos);
+                        const newShip = {
+                            id: 'ship_' + Date.now() + Math.random().toString(36).substr(2, 4),
+                            name: name,
+                            tier: tier,
+                            pos: pos,
+                            hp: base.hp,
+                            maxHp: base.hp,
+                            atk: base.atk,
+                            affixes: [],
+                            deployed: false,
+                            forgeCount: 0
+                        };
+                        playerShips.push(newShip);
+                        const deployedCount = playerShips.filter(s => s.deployed && s.pos === pos).length;
+                        if (deployedCount < maxShips[pos]) {
+                            newShip.deployed = true;
+                            addLog(`✅ 新战舰 ${name} 已自动上阵`, 'sys');
+                        }
+                        addLog(`🎁 兑换成功！获得 ${name} (T${tier} 先锋)`, 'loot');
+                        updateFleetUI();
+                        renderFleet();
+                        inviteResult.textContent = `✅ 兑换成功！获得 ${credAmt} 星际币 + ${name} (T${tier})`;
+                        inviteResult.style.color = '#4aad7a';
+                    } else {
+                        inviteResult.textContent = '⚠️ 奖励发放部分失败，请重试';
+                        inviteResult.style.color = '#d4a843';
+                    }
+                } else if (reward.type === 'credits') {
                     credits += reward.amount;
                     creditDisplay.textContent = credits;
                     inviteResult.textContent = `✅ 兑换成功！获得 ${reward.amount} 星际币`;
@@ -3910,6 +3957,11 @@
                             forgeCount: 0
                         };
                         playerShips.push(newShip);
+                        const deployedCount = playerShips.filter(s => s.deployed && s.pos === pos).length;
+                        if (deployedCount < maxShips[pos]) {
+                            newShip.deployed = true;
+                            addLog(`✅ 新战舰 ${name} 已自动上阵`, 'sys');
+                        }
                         inviteResult.textContent = `✅ 兑换成功！获得 ${name} (T${tier})`;
                         inviteResult.style.color = '#4aad7a';
                         addLog(`🎁 兑换成功！获得 ${name} (T${tier})`, 'loot');
@@ -4073,35 +4125,50 @@
 
             // ---- 统一渲染 ----
             function renderAll() {
-                renderGalaxies();
-                renderSystems();
-                updateBattleInfo();
-                generateEnemies();
-                updateFleetUI();
-                renderWarehouse();
-                renderMarket();
-                renderMyOrders();
-                renderRank();
-                renderFactory();
-                renderMineralStatus();
-                updateStats();
-                updateWarehouseCount();
-                updateSellSelect();
-                creditDisplay.textContent = credits;
-                levelDisplay.textContent = 'Lv.' + playerLevel;
-                // 修复舰队加载问题
-                if (friendlyShips.length === 0) {
-                    friendlyShips = initPlayerShips();
+                try {
+                    if (!playerShips || playerShips.length === 0) {
+                        playerShips = initPlayerShips();
+                    }
+                    const anyDeployed = playerShips.some(s => s.deployed);
+                    if (!anyDeployed && playerShips.length > 0) {
+                        const toDeploy = Math.min(4, playerShips.length);
+                        for (let i = 0; i < toDeploy; i++) {
+                            playerShips[i].deployed = true;
+                        }
+                        addLog('🔧 自动部署了 ' + toDeploy + ' 艘战舰', 'sys');
+                    }
+                    renderGalaxies();
+                    renderSystems();
+                    updateBattleInfo();
+                    generateEnemies();
                     updateFleetUI();
+                    renderWarehouse();
+                    renderMarket();
+                    renderMyOrders();
+                    renderRank();
+                    renderFactory();
+                    renderMineralStatus();
+                    updateStats();
+                    updateWarehouseCount();
+                    updateSellSelect();
+                    creditDisplay.textContent = credits;
+                    levelDisplay.textContent = 'Lv.' + playerLevel;
+                    renderFleet();
+                } catch (e) {
+                    console.error('渲染出错:', e);
+                    addLog('⚠️ 渲染出错，但已自动恢复', 'sys');
                 }
+                if (!window._lastOnline) window._lastOnline = Date.now();
             }
 
             // ---- 启动 ----
             loginOverlay.classList.remove('hidden');
             app.style.display = 'none';
-            console.log('🚀 星际征途已加载');
-            console.log('☁️ 数据自动同步到: ' + CF_WORKER_URL);
-            console.log('💡 兑换码: Star Trek (T3战舰), BDGOnb (10000星际币)');
+            console.log('🚀 星际征途(完整修复版)');
+            console.log('☁️ 数据存储在: ' + CF_WORKER_URL);
+            console.log('💡 兑换码: Star Trek (T3战舰), BDGOnb (10000币 + T4先锋)');
+            console.log('✅ 新手赠送: 20螺丝 + 10电路板 + 1护盾发生器');
+            console.log('✅ 修复: 战败循环、hp同步、初始空状态');
         });
     </script>
 </body>
