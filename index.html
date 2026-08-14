@@ -1,28 +1,25 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>星际征途</title>
-      <script>
+    
+    <script>
+        // 防F12和右键
         (function() {
             function blockDevTools(e) {
                 const key = e.key || '';
                 const ctrl = e.ctrlKey || e.metaKey;
                 const shift = e.shiftKey;
-                
-                if (key === 'F12' || 
-                    (ctrl && shift && (key === 'I' || key === 'i')) ||
-                    (ctrl && (key === 'U' || key === 'u')) ||
-                    (ctrl && (key === 'S' || key === 's'))) {
-                    
+                if (key === 'F12' || (ctrl && shift && (key === 'I' || key === 'i')) ||
+                    (ctrl && (key === 'U' || key === 'u')) || (ctrl && (key === 'S' || key === 's'))) {
                     e.preventDefault();
                     e.stopPropagation();
                     return false;
                 }
                 return true;
             }
-            
             document.addEventListener('keydown', blockDevTools, true);
             document.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
@@ -37,254 +34,1425 @@
                 e.preventDefault();
                 return false;
             }, true);
-            
-            console.log('🛡️ 防调试已启用（加强版）');
+            console.log('🛡️ 防调试已启用');
         })();
     </script>
     
     <style>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Segoe UI', system-ui, sans-serif; }
-        html, body { width: 100%; height: 100%; background: #080c1a; color: #c8d6e5; overflow: hidden; }
-        #app { width: 100vw; height: 100vh; display: flex; flex-direction: column; background: #0a1022; overflow: hidden; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: #080c1a;
+            color: #c8d6e5;
+            overflow: hidden;
+        }
+        #app {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #0a1022;
+            overflow: hidden;
+        }
 
-        .login-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(8,12,26,0.96); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index:2000; transition: opacity 0.5s; }
-        .login-overlay.hidden { opacity:0; pointer-events:none; }
-        .login-box { background:#141e32; border-radius:20px; padding:36px 44px; max-width:440px; width:90%; border:1px solid #2a4065; box-shadow:0 30px 60px rgba(0,0,0,0.9); }
-        .login-box h1 { font-size:2rem; color:#d4a843; margin-bottom:4px; letter-spacing:2px; text-align:center; }
-        .login-box .sub { color:#6f8bb0; font-size:0.85rem; margin-bottom:20px; text-align:center; }
-        .login-box .field { margin-bottom:12px; }
-        .login-box .field label { display:block; font-size:0.7rem; color:#6f8bb0; margin-bottom:3px; }
-        .login-box .field input { width:100%; padding:10px 14px; background:#0b1422; border:1px solid #1a2842; border-radius:8px; color:#d6e4ff; font-size:0.95rem; outline:none; transition:0.2s; }
-        .login-box .field input:focus { border-color:#4a7aad; }
-        .login-box .login-btn { width:100%; padding:11px; margin-top:6px; background:#2a5a7a; border:none; border-radius:8px; color:#fff; font-size:1rem; font-weight:600; cursor:pointer; transition:0.2s; }
-        .login-box .login-btn:hover { background:#3a6a8a; }
-        .login-box .error { color:#c0392b; font-size:0.75rem; margin-top:6px; min-height:20px; text-align:center; }
-        .login-box .success { color:#4aad7a; font-size:0.75rem; margin-top:6px; min-height:20px; text-align:center; }
-        .login-box .toggle-mode { text-align:center; margin-top:12px; font-size:0.75rem; color:#6f8bb0; cursor:pointer; }
-        .login-box .toggle-mode span { color:#4a8aaa; text-decoration:underline; }
-        .login-box .divider { border-top:1px solid #1a2842; margin:14px 0 10px; }
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(8, 12, 26, 0.96);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.5s;
+        }
+        .login-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .login-box {
+            background: #141e32;
+            border-radius: 20px;
+            padding: 36px 44px;
+            max-width: 440px;
+            width: 90%;
+            border: 1px solid #2a4065;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
+        }
+        .login-box h1 {
+            font-size: 2rem;
+            color: #d4a843;
+            margin-bottom: 4px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        .login-box .sub {
+            color: #6f8bb0;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .login-box .field {
+            margin-bottom: 12px;
+        }
+        .login-box .field label {
+            display: block;
+            font-size: 0.7rem;
+            color: #6f8bb0;
+            margin-bottom: 3px;
+        }
+        .login-box .field input {
+            width: 100%;
+            padding: 10px 14px;
+            background: #0b1422;
+            border: 1px solid #1a2842;
+            border-radius: 8px;
+            color: #d6e4ff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+        .login-box .field input:focus {
+            border-color: #4a7aad;
+        }
+        .login-box .login-btn {
+            width: 100%;
+            padding: 11px;
+            margin-top: 6px;
+            background: #2a5a7a;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .login-box .login-btn:hover {
+            background: #3a6a8a;
+        }
+        .login-box .error {
+            color: #c0392b;
+            font-size: 0.75rem;
+            margin-top: 6px;
+            min-height: 20px;
+            text-align: center;
+        }
+        .login-box .success {
+            color: #4aad7a;
+            font-size: 0.75rem;
+            margin-top: 6px;
+            min-height: 20px;
+            text-align: center;
+        }
+        .login-box .toggle-mode {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 0.75rem;
+            color: #6f8bb0;
+            cursor: pointer;
+        }
+        .login-box .toggle-mode span {
+            color: #4a8aaa;
+            text-decoration: underline;
+        }
+        .login-box .divider {
+            border-top: 1px solid #1a2842;
+            margin: 14px 0 10px;
+        }
 
-        .top-bar { display:flex; justify-content:space-between; align-items:center; background:#0b1422; padding:4px 18px; border-bottom:1px solid #1a2842; flex-shrink:0; height:46px; z-index:10; }
-        .user-info { display:flex; align-items:center; gap:10px; }
-        .user-avatar { width:30px; height:30px; border-radius:50%; background:#2e6b9e; border:2px solid #4a7aad; flex-shrink:0; }
-        .user-name { font-weight:700; font-size:0.9rem; color:#e8f0ff; }
-        .user-level { font-size:0.6rem; color:#d4a843; background:rgba(212,168,67,0.12); padding:0 12px; border-radius:30px; border:1px solid rgba(212,168,67,0.2); }
-        .resources { display:flex; gap:14px; font-size:0.7rem; align-items:center; }
-        .resources span { display:flex; align-items:center; gap:4px; color:#6f8bb0; }
-        .resources .val { color:#e8f0ff; font-weight:600; }
-        .resources .val.gold { color:#d4a843; }
-        #syncStatus { font-size:0.5rem; padding:2px 8px; border-radius:10px; cursor:default; background:#0f182a; }
-        #syncStatus.ok { color:#4aad7a; border:1px solid #2a6a4a; }
-        #syncStatus.sync { color:#d4a843; border:1px solid #7a6a2a; animation: pulse 0.8s infinite; }
-        #syncStatus.fail { color:#c0392b; border:1px solid #6a2a2a; }
-        @keyframes pulse { 0%, 100% { opacity:1; } 50% { opacity:0.4; } }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0b1422;
+            padding: 4px 18px;
+            border-bottom: 1px solid #1a2842;
+            flex-shrink: 0;
+            height: 46px;
+            z-index: 10;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #2e6b9e;
+            border: 2px solid #4a7aad;
+            flex-shrink: 0;
+        }
+        .user-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #e8f0ff;
+        }
+        .user-level {
+            font-size: 0.6rem;
+            color: #d4a843;
+            background: rgba(212, 168, 67, 0.12);
+            padding: 0 12px;
+            border-radius: 30px;
+            border: 1px solid rgba(212, 168, 67, 0.2);
+        }
+        .resources {
+            display: flex;
+            gap: 14px;
+            font-size: 0.7rem;
+            align-items: center;
+        }
+        .resources span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #6f8bb0;
+        }
+        .resources .val {
+            color: #e8f0ff;
+            font-weight: 600;
+        }
+        .resources .val.gold {
+            color: #d4a843;
+        }
+        #syncStatus {
+            font-size: 0.5rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            cursor: default;
+            background: #0f182a;
+        }
+        #syncStatus.ok {
+            color: #4aad7a;
+            border: 1px solid #2a6a4a;
+        }
+        #syncStatus.sync {
+            color: #d4a843;
+            border: 1px solid #7a6a2a;
+            animation: pulse 0.8s infinite;
+        }
+        #syncStatus.fail {
+            color: #c0392b;
+            border: 1px solid #6a2a2a;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+        }
 
-        .main-body { display:flex; flex:1; overflow:hidden; }
-        .left-panel { width:220px; min-width:160px; background:#0b1422; border-right:1px solid #1a2842; padding:6px 10px; overflow-y:auto; flex-shrink:0; display:flex; flex-direction:column; gap:5px; }
-        .left-panel::-webkit-scrollbar { width:3px; }
-        .left-panel::-webkit-scrollbar-thumb { background:#2a4065; border-radius:10px; }
-        .panel-section { background:rgba(15,24,42,0.5); border-radius:6px; padding:6px 10px; border:1px solid #1a2842; }
-        .panel-section .section-title { font-size:0.55rem; color:#6f8bb0; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; display:flex; justify-content:space-between; }
-        .galaxy-list { display:flex; flex-wrap:wrap; gap:3px; }
-        .galaxy-item { padding:2px 8px; border-radius:5px; font-size:0.55rem; cursor:pointer; color:#6f8bb0; transition:0.1s; border:1px solid #1a2842; background:#0f182a; }
-        .galaxy-item:hover { background:rgba(42,64,101,0.3); }
-        .galaxy-item.active { background:rgba(212,168,67,0.15); color:#e8f0ff; border-color:#d4a843; }
-        .galaxy-item .g-tier { font-size:0.4rem; color:#4a6080; margin-left:2px; }
-        .system-list { display:flex; flex-wrap:wrap; gap:2px; max-height:80px; overflow-y:auto; }
-        .system-list::-webkit-scrollbar { width:2px; }
-        .system-list::-webkit-scrollbar-thumb { background:#2a4065; border-radius:10px; }
-        .system-chip { font-size:0.45rem; padding:1px 8px; border-radius:30px; background:#0f182a; border:1px solid #1a2842; color:#6f8bb0; cursor:pointer; transition:0.1s; }
-        .system-chip:hover { border-color:#3a5380; }
-        .system-chip.active { border-color:#4a7aad; color:#d6e4ff; background:#1a2842; }
-        .system-chip .s-lvl { font-size:0.35rem; color:#4a6080; }
-        .warehouse-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:2px; max-height:120px; overflow-y:auto; }
-        .warehouse-grid::-webkit-scrollbar { width:2px; }
-        .warehouse-grid::-webkit-scrollbar-thumb { background:#2a4065; border-radius:10px; }
-        .warehouse-slot { background:#0b1422; border:1px solid #1a2842; border-radius:3px; padding:2px; text-align:center; font-size:0.4rem; min-height:24px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:0.1s; color:#6f8bb0; line-height:1.1; }
-        .warehouse-slot:hover { border-color:#3a5380; }
-        .warehouse-slot .name { font-size:0.4rem; font-weight:500; }
-        .warehouse-slot .info-row { display:flex; gap:2px; font-size:0.35rem; color:#4a6080; }
-        .warehouse-slot.has-item { border-color:#3a5380; }
-        .warehouse-slot.blueprint { border-color:#d4a843; background:rgba(212,168,67,0.08); }
-        .q-1 { color:#8fa5c9; border-color:#3a4a5a; } .q-1 .name { color:#8fa5c9; }
-        .q-2 { color:#4aad7a; border-color:#2a6a4a; } .q-2 .name { color:#4aad7a; }
-        .q-3 { color:#4a8aaa; border-color:#2a5a7a; } .q-3 .name { color:#4a8aaa; }
-        .q-4 { color:#8e44ad; border-color:#5a2a7a; } .q-4 .name { color:#8e44ad; }
-        .q-5 { color:#d4a843; border-color:#7a6a2a; } .q-5 .name { color:#d4a843; }
-        .q-6 { color:#d4853a; border-color:#7a4a2a; } .q-6 .name { color:#d4853a; }
-        .q-7 { color:#c06a9a; border-color:#7a3a5a; } .q-7 .name { color:#c06a9a; }
+        .main-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        .left-panel {
+            width: 220px;
+            min-width: 160px;
+            background: #0b1422;
+            border-right: 1px solid #1a2842;
+            padding: 6px 10px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .left-panel::-webkit-scrollbar {
+            width: 3px;
+        }
+        .left-panel::-webkit-scrollbar-thumb {
+            background: #2a4065;
+            border-radius: 10px;
+        }
+        .panel-section {
+            background: rgba(15, 24, 42, 0.5);
+            border-radius: 6px;
+            padding: 6px 10px;
+            border: 1px solid #1a2842;
+        }
+        .panel-section .section-title {
+            font-size: 0.55rem;
+            color: #6f8bb0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .galaxy-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+        .galaxy-item {
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.55rem;
+            cursor: pointer;
+            color: #6f8bb0;
+            transition: 0.1s;
+            border: 1px solid #1a2842;
+            background: #0f182a;
+        }
+        .galaxy-item:hover {
+            background: rgba(42, 64, 101, 0.3);
+        }
+        .galaxy-item.active {
+            background: rgba(212, 168, 67, 0.15);
+            color: #e8f0ff;
+            border-color: #d4a843;
+        }
+        .galaxy-item .g-tier {
+            font-size: 0.4rem;
+            color: #4a6080;
+            margin-left: 2px;
+        }
+        .system-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+        .system-list::-webkit-scrollbar {
+            width: 2px;
+        }
+        .system-list::-webkit-scrollbar-thumb {
+            background: #2a4065;
+            border-radius: 10px;
+        }
+        .system-chip {
+            font-size: 0.45rem;
+            padding: 1px 8px;
+            border-radius: 30px;
+            background: #0f182a;
+            border: 1px solid #1a2842;
+            color: #6f8bb0;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .system-chip:hover {
+            border-color: #3a5380;
+        }
+        .system-chip.active {
+            border-color: #4a7aad;
+            color: #d6e4ff;
+            background: #1a2842;
+        }
+        .system-chip .s-lvl {
+            font-size: 0.35rem;
+            color: #4a6080;
+        }
+        .warehouse-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .warehouse-grid::-webkit-scrollbar {
+            width: 2px;
+        }
+        .warehouse-grid::-webkit-scrollbar-thumb {
+            background: #2a4065;
+            border-radius: 10px;
+        }
+        .warehouse-slot {
+            background: #0b1422;
+            border: 1px solid #1a2842;
+            border-radius: 3px;
+            padding: 2px;
+            text-align: center;
+            font-size: 0.4rem;
+            min-height: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.1s;
+            color: #6f8bb0;
+            line-height: 1.1;
+        }
+        .warehouse-slot:hover {
+            border-color: #3a5380;
+        }
+        .warehouse-slot .name {
+            font-size: 0.4rem;
+            font-weight: 500;
+        }
+        .warehouse-slot .info-row {
+            display: flex;
+            gap: 2px;
+            font-size: 0.35rem;
+            color: #4a6080;
+        }
+        .warehouse-slot.has-item {
+            border-color: #3a5380;
+        }
+        .warehouse-slot.blueprint {
+            border-color: #d4a843;
+            background: rgba(212, 168, 67, 0.08);
+        }
+        .q-1 {
+            color: #8fa5c9;
+            border-color: #3a4a5a;
+        }
+        .q-1 .name {
+            color: #8fa5c9;
+        }
+        .q-2 {
+            color: #4aad7a;
+            border-color: #2a6a4a;
+        }
+        .q-2 .name {
+            color: #4aad7a;
+        }
+        .q-3 {
+            color: #4a8aaa;
+            border-color: #2a5a7a;
+        }
+        .q-3 .name {
+            color: #4a8aaa;
+        }
+        .q-4 {
+            color: #8e44ad;
+            border-color: #5a2a7a;
+        }
+        .q-4 .name {
+            color: #8e44ad;
+        }
+        .q-5 {
+            color: #d4a843;
+            border-color: #7a6a2a;
+        }
+        .q-5 .name {
+            color: #d4a843;
+        }
+        .q-6 {
+            color: #d4853a;
+            border-color: #7a4a2a;
+        }
+        .q-6 .name {
+            color: #d4853a;
+        }
+        .q-7 {
+            color: #c06a9a;
+            border-color: #7a3a5a;
+        }
+        .q-7 .name {
+            color: #c06a9a;
+        }
 
-        .fleet-summary { display:flex; gap:3px; flex-wrap:wrap; }
-        .fleet-tag { font-size:0.45rem; padding:1px 6px; border-radius:8px; border:1px solid #1a2842; color:#6f8bb0; }
-        .fleet-tag.front { border-color:#c0392b; color:#e67a6a; }
-        .fleet-tag.mid { border-color:#d4a843; color:#e8c84a; }
-        .fleet-tag.rear { border-color:#27ae60; color:#5dcc8a; }
-        .btn-sm { font-size:0.45rem; padding:1px 8px; background:#1a2842; border:1px solid #3a5380; border-radius:30px; color:#d6e4ff; cursor:pointer; transition:0.1s; }
-        .btn-sm:hover { border-color:#4a7aad; }
-        .btn-large { font-size:0.6rem; padding:4px 12px; background:#1a2842; border:1px solid #4a7aad; border-radius:30px; color:#d6e4ff; cursor:pointer; transition:0.1s; width:100%; text-align:center; font-weight:600; }
-        .btn-large:hover { background:#2a3a5a; border-color:#5a8fc9; }
+        .fleet-summary {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+        }
+        .fleet-tag {
+            font-size: 0.45rem;
+            padding: 1px 6px;
+            border-radius: 8px;
+            border: 1px solid #1a2842;
+            color: #6f8bb0;
+        }
+        .fleet-tag.front {
+            border-color: #c0392b;
+            color: #e67a6a;
+        }
+        .fleet-tag.mid {
+            border-color: #d4a843;
+            color: #e8c84a;
+        }
+        .fleet-tag.rear {
+            border-color: #27ae60;
+            color: #5dcc8a;
+        }
+        .btn-sm {
+            font-size: 0.45rem;
+            padding: 1px 8px;
+            background: #1a2842;
+            border: 1px solid #3a5380;
+            border-radius: 30px;
+            color: #d6e4ff;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .btn-sm:hover {
+            border-color: #4a7aad;
+        }
+        .btn-large {
+            font-size: 0.6rem;
+            padding: 4px 12px;
+            background: #1a2842;
+            border: 1px solid #4a7aad;
+            border-radius: 30px;
+            color: #d6e4ff;
+            cursor: pointer;
+            transition: 0.1s;
+            width: 100%;
+            text-align: center;
+            font-weight: 600;
+        }
+        .btn-large:hover {
+            background: #2a3a5a;
+            border-color: #5a8fc9;
+        }
 
-        .center-panel { flex:1; display:flex; flex-direction:column; padding:6px 14px 6px; overflow:hidden; min-width:0; background:radial-gradient(ellipse at center, rgba(20,40,80,0.1), transparent 70%); }
-        .battle-header { display:flex; justify-content:space-between; align-items:center; font-size:0.65rem; color:#6f8bb0; flex-shrink:0; margin-bottom:3px; flex-wrap:wrap; gap:2px; }
-        .battle-header .location { color:#e8f0ff; font-weight:600; }
-        .battle-header .enemy-info { color:#4a8aaa; font-size:0.55rem; }
-        .battlefield { flex:1; display:flex; flex-direction:row; justify-content:center; align-items:stretch; gap:10px; min-height:0; padding:3px 0; }
-        .friendly-column { display:flex; flex-direction:column-reverse; justify-content:center; gap:5px; width:150px; flex-shrink:0; padding:3px 0; }
-        .friendly-unit { display:flex; align-items:center; gap:4px; background:rgba(10,20,40,0.5); border-radius:4px; padding:3px 6px; border:1px solid #1a2a4a; height:34px; transition:0.2s; cursor:pointer; font-size:0.5rem; }
-        .friendly-unit .pos-tag { font-size:0.35rem; padding:0 3px; border-radius:4px; background:#1a2842; color:#6f8bb0; flex-shrink:0; min-width:18px; text-align:center; }
-        .friendly-unit .pos-tag.front { background:#3a1a1a; color:#e67a6a; }
-        .friendly-unit .pos-tag.mid { background:#3a3a1a; color:#e8c84a; }
-        .friendly-unit .pos-tag.rear { background:#1a3a2a; color:#5dcc8a; }
-        .friendly-unit .ship-icon { font-size:0.8rem; flex-shrink:0; color:#9bb3d9; }
-        .friendly-unit .ship-info { flex:1; min-width:0; }
-        .friendly-unit .ship-name { font-size:0.45rem; color:#9bb3d9; white-space:nowrap; }
-        .friendly-unit .hp-wrap { display:flex; align-items:center; gap:3px; }
-        .friendly-unit .hp-bar { flex:1; height:3px; background:#1a2a3a; border-radius:4px; overflow:hidden; min-width:24px; }
-        .friendly-unit .hp-bar .fill { height:100%; background:#4aad7a; border-radius:4px; transition:width 0.15s; }
-        .friendly-unit .hp-text { font-size:0.35rem; color:#6a8aaa; min-width:24px; text-align:right; }
-        .friendly-unit .charge-wrap { display:flex; align-items:center; gap:2px; margin-top:1px; }
-        .friendly-unit .charge-bar { flex:1; height:2px; background:#1a1a2a; border-radius:4px; overflow:hidden; min-width:14px; }
-        .friendly-unit .charge-bar .fill { height:100%; background:linear-gradient(90deg, #d4a843, #c0392b); border-radius:4px; transition:width 0.15s; }
-        .friendly-unit .charge-text { font-size:0.3rem; color:#d4a843; min-width:16px; text-align:right; }
+        .center-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 6px 14px 6px;
+            overflow: hidden;
+            min-width: 0;
+            background: radial-gradient(ellipse at center, rgba(20, 40, 80, 0.1), transparent 70%);
+        }
+        .battle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.65rem;
+            color: #6f8bb0;
+            flex-shrink: 0;
+            margin-bottom: 3px;
+            flex-wrap: wrap;
+            gap: 2px;
+        }
+        .battle-header .location {
+            color: #e8f0ff;
+            font-weight: 600;
+        }
+        .battle-header .enemy-info {
+            color: #4a8aaa;
+            font-size: 0.55rem;
+        }
+        .battlefield {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: stretch;
+            gap: 10px;
+            min-height: 0;
+            padding: 3px 0;
+        }
+        .friendly-column {
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: center;
+            gap: 5px;
+            width: 150px;
+            flex-shrink: 0;
+            padding: 3px 0;
+        }
+        .friendly-unit {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(10, 20, 40, 0.5);
+            border-radius: 4px;
+            padding: 3px 6px;
+            border: 1px solid #1a2a4a;
+            height: 34px;
+            transition: 0.2s;
+            cursor: pointer;
+            font-size: 0.5rem;
+        }
+        .friendly-unit .pos-tag {
+            font-size: 0.35rem;
+            padding: 0 3px;
+            border-radius: 4px;
+            background: #1a2842;
+            color: #6f8bb0;
+            flex-shrink: 0;
+            min-width: 18px;
+            text-align: center;
+        }
+        .friendly-unit .pos-tag.front {
+            background: #3a1a1a;
+            color: #e67a6a;
+        }
+        .friendly-unit .pos-tag.mid {
+            background: #3a3a1a;
+            color: #e8c84a;
+        }
+        .friendly-unit .pos-tag.rear {
+            background: #1a3a2a;
+            color: #5dcc8a;
+        }
+        .friendly-unit .ship-icon {
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            color: #9bb3d9;
+        }
+        .friendly-unit .ship-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .friendly-unit .ship-name {
+            font-size: 0.45rem;
+            color: #9bb3d9;
+            white-space: nowrap;
+        }
+        .friendly-unit .hp-wrap {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .friendly-unit .hp-bar {
+            flex: 1;
+            height: 3px;
+            background: #1a2a3a;
+            border-radius: 4px;
+            overflow: hidden;
+            min-width: 24px;
+        }
+        .friendly-unit .hp-bar .fill {
+            height: 100%;
+            background: #4aad7a;
+            border-radius: 4px;
+            transition: width 0.15s;
+        }
+        .friendly-unit .hp-text {
+            font-size: 0.35rem;
+            color: #6a8aaa;
+            min-width: 24px;
+            text-align: right;
+        }
+        .friendly-unit .charge-wrap {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin-top: 1px;
+        }
+        .friendly-unit .charge-bar {
+            flex: 1;
+            height: 2px;
+            background: #1a1a2a;
+            border-radius: 4px;
+            overflow: hidden;
+            min-width: 14px;
+        }
+        .friendly-unit .charge-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d4a843, #c0392b);
+            border-radius: 4px;
+            transition: width 0.15s;
+        }
+        .friendly-unit .charge-text {
+            font-size: 0.3rem;
+            color: #d4a843;
+            min-width: 16px;
+            text-align: right;
+        }
 
-        .vs-divider { display:flex; flex-direction:column; justify-content:center; align-items:center; padding:0 2px; flex-shrink:0; width:12px; border-left:1px solid rgba(42,64,101,0.15); border-right:1px solid rgba(42,64,101,0.15); }
-        .vs-divider span { font-size:0.5rem; color:#3a5380; writing-mode:vertical-lr; letter-spacing:2px; }
+        .vs-divider {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 2px;
+            flex-shrink: 0;
+            width: 12px;
+            border-left: 1px solid rgba(42, 64, 101, 0.15);
+            border-right: 1px solid rgba(42, 64, 101, 0.15);
+        }
+        .vs-divider span {
+            font-size: 0.5rem;
+            color: #3a5380;
+            writing-mode: vertical-lr;
+            letter-spacing: 2px;
+        }
 
-        .enemy-column { display:flex; flex-direction:column; justify-content:center; gap:5px; width:150px; flex-shrink:0; padding:3px 0; }
-        .enemy-unit { display:flex; align-items:center; gap:4px; background:rgba(20,10,10,0.4); border-radius:4px; padding:3px 6px; border:1px solid #2a1a1a; height:34px; flex-direction:row-reverse; transition:all 0.3s; font-size:0.5rem; }
-        .enemy-unit.dead { opacity:0; height:0; padding:0 6px; margin:0; border:none; overflow:hidden; pointer-events:none; }
-        .enemy-unit .ship-icon { font-size:0.8rem; flex-shrink:0; color:#e6a0a0; }
-        .enemy-unit .ship-info { flex:1; min-width:0; text-align:right; }
-        .enemy-unit .ship-name { font-size:0.45rem; color:#e6a0a0; white-space:nowrap; }
-        .enemy-unit .hp-wrap { display:flex; align-items:center; gap:3px; justify-content:flex-end; }
-        .enemy-unit .hp-bar { flex:1; height:3px; background:#2a1a1a; border-radius:4px; overflow:hidden; min-width:24px; }
-        .enemy-unit .hp-bar .fill { height:100%; background:#c0392b; border-radius:4px; transition:width 0.15s; }
-        .enemy-unit .hp-text { font-size:0.35rem; color:#8a6a6a; min-width:24px; text-align:left; }
+        .enemy-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 150px;
+            flex-shrink: 0;
+            padding: 3px 0;
+        }
+        .enemy-unit {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(20, 10, 10, 0.4);
+            border-radius: 4px;
+            padding: 3px 6px;
+            border: 1px solid #2a1a1a;
+            height: 34px;
+            flex-direction: row-reverse;
+            transition: all 0.3s;
+            font-size: 0.5rem;
+        }
+        .enemy-unit.dead {
+            opacity: 0;
+            height: 0;
+            padding: 0 6px;
+            margin: 0;
+            border: none;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .enemy-unit .ship-icon {
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            color: #e6a0a0;
+        }
+        .enemy-unit .ship-info {
+            flex: 1;
+            min-width: 0;
+            text-align: right;
+        }
+        .enemy-unit .ship-name {
+            font-size: 0.45rem;
+            color: #e6a0a0;
+            white-space: nowrap;
+        }
+        .enemy-unit .hp-wrap {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            justify-content: flex-end;
+        }
+        .enemy-unit .hp-bar {
+            flex: 1;
+            height: 3px;
+            background: #2a1a1a;
+            border-radius: 4px;
+            overflow: hidden;
+            min-width: 24px;
+        }
+        .enemy-unit .hp-bar .fill {
+            height: 100%;
+            background: #c0392b;
+            border-radius: 4px;
+            transition: width 0.15s;
+        }
+        .enemy-unit .hp-text {
+            font-size: 0.35rem;
+            color: #8a6a6a;
+            min-width: 24px;
+            text-align: left;
+        }
 
-        .battle-footer { display:flex; gap:6px; flex-shrink:0; padding-top:4px; border-top:1px solid #1a2842; margin-top:3px; align-items:stretch; flex-wrap:wrap; min-height:50px; }
-        .battle-log-mini { flex:2; font-size:0.55rem; color:#6a8aaa; max-height:50px; overflow-y:auto; background:#080c18; border-radius:4px; padding:3px 10px; border:1px solid #121c2e; min-width:100px; line-height:1.3; }
-        .battle-log-mini::-webkit-scrollbar { width:2px; }
-        .battle-log-mini::-webkit-scrollbar-thumb { background:#2a4065; border-radius:10px; }
-        .battle-log-mini div { padding:1px 0; border-bottom:1px solid #0f182a; }
-        .battle-log-mini .dmg { color:#c0392b; }
-        .battle-log-mini .heal { color:#4aad7a; }
-        .battle-log-mini .sys { color:#4a8aaa; }
-        .battle-log-mini .loot { color:#d4a843; }
-        .battle-log-mini .blueprint { color:#e67e22; font-weight:600; }
-        .battle-log-mini .affix { color:#9b59b6; }
-        .battle-log-mini .exp { color:#4aad7a; }
+        .battle-footer {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+            padding-top: 4px;
+            border-top: 1px solid #1a2842;
+            margin-top: 3px;
+            align-items: stretch;
+            flex-wrap: wrap;
+            min-height: 50px;
+        }
+        .battle-log-mini {
+            flex: 2;
+            font-size: 0.55rem;
+            color: #6a8aaa;
+            max-height: 50px;
+            overflow-y: auto;
+            background: #080c18;
+            border-radius: 4px;
+            padding: 3px 10px;
+            border: 1px solid #121c2e;
+            min-width: 100px;
+            line-height: 1.3;
+        }
+        .battle-log-mini::-webkit-scrollbar {
+            width: 2px;
+        }
+        .battle-log-mini::-webkit-scrollbar-thumb {
+            background: #2a4065;
+            border-radius: 10px;
+        }
+        .battle-log-mini div {
+            padding: 1px 0;
+            border-bottom: 1px solid #0f182a;
+        }
+        .battle-log-mini .dmg {
+            color: #c0392b;
+        }
+        .battle-log-mini .heal {
+            color: #4aad7a;
+        }
+        .battle-log-mini .sys {
+            color: #4a8aaa;
+        }
+        .battle-log-mini .loot {
+            color: #d4a843;
+        }
+        .battle-log-mini .blueprint {
+            color: #e67e22;
+            font-weight: 600;
+        }
+        .battle-log-mini .affix {
+            color: #9b59b6;
+        }
+        .battle-log-mini .exp {
+            color: #4aad7a;
+        }
 
-        .action-buttons { display:flex; gap:3px; flex-wrap:wrap; flex-shrink:0; align-items:center; }
-        .btn { background:#1a2842; border:none; border-radius:30px; padding:3px 12px; color:#d6e4ff; font-size:0.55rem; font-weight:600; cursor:pointer; border:1px solid #3a5380; transition:0.1s; }
-        .btn:active { transform:scale(0.96); }
-        .btn-success { background:#1f6a3a; border-color:#3a8a5a; }
-        .btn-success:hover { background:#2a7a4a; }
-        .btn-danger { background:#6a2a2a; border-color:#8a3a3a; }
-        .btn-danger:hover { background:#7a3a3a; }
-        .btn-gold { background:#6a5a2a; border-color:#8a7a3a; }
-        .btn-gold:hover { background:#7a6a3a; }
-        .btn-purple { background:#4a2a6a; border-color:#6a3a8a; }
-        .btn-purple:hover { background:#5a3a7a; }
+        .action-buttons {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            align-items: center;
+        }
+        .btn {
+            background: #1a2842;
+            border: none;
+            border-radius: 30px;
+            padding: 3px 12px;
+            color: #d6e4ff;
+            font-size: 0.55rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid #3a5380;
+            transition: 0.1s;
+        }
+        .btn:active {
+            transform: scale(0.96);
+        }
+        .btn-success {
+            background: #1f6a3a;
+            border-color: #3a8a5a;
+        }
+        .btn-success:hover {
+            background: #2a7a4a;
+        }
+        .btn-danger {
+            background: #6a2a2a;
+            border-color: #8a3a3a;
+        }
+        .btn-danger:hover {
+            background: #7a3a3a;
+        }
+        .btn-gold {
+            background: #6a5a2a;
+            border-color: #8a7a3a;
+        }
+        .btn-gold:hover {
+            background: #7a6a3a;
+        }
+        .btn-purple {
+            background: #4a2a6a;
+            border-color: #6a3a8a;
+        }
+        .btn-purple:hover {
+            background: #5a3a7a;
+        }
 
-        .right-panel { width:260px; min-width:200px; background:#0b1422; border-left:1px solid #1a2842; padding:6px 10px; overflow:hidden; flex-shrink:0; display:flex; flex-direction:column; }
-        .right-panel .panel-section { flex-shrink:0; }
-        .nav-tabs { display:flex; gap:2px; margin-bottom:3px; flex-wrap:wrap; }
-        .nav-tab { padding:2px 10px; font-size:0.5rem; border-radius:4px 4px 0 0; cursor:pointer; background:#0f182a; color:#6f8bb0; border:1px solid #1a2842; border-bottom:none; transition:0.1s; }
-        .nav-tab.active { background:#1a2842; color:#e8f0ff; border-color:#3a5380; }
-        .nav-tab:hover { color:#d6e4ff; }
-        .tab-content { display:none; flex-direction:column; flex:1; overflow:hidden; }
-        .tab-content.active { display:flex; }
-        .page-container { flex:1; overflow:hidden; display:flex; flex-direction:column; margin-top:3px; }
-        .page-tabs { display:flex; gap:2px; border-bottom:1px solid #1a2842; flex-shrink:0; }
-        .page-tab { padding:3px 12px; font-size:0.6rem; cursor:pointer; color:#6f8bb0; border-bottom:2px solid transparent; transition:0.1s; }
-        .page-tab.active { color:#e8f0ff; border-bottom-color:#d4a843; }
-        .page-tab:hover { color:#d6e4ff; }
-        .page-body { flex:1; overflow:hidden; padding-top:4px; }
-        .page-body .page-content { display:none; height:100%; flex-direction:column; overflow:hidden; }
-        .page-body .page-content.active { display:flex; }
-        .trade-search { display:flex; gap:4px; flex-shrink:0; margin-bottom:4px; }
-        .trade-search input { flex:1; background:#0b1422; border:1px solid #1a2842; border-radius:4px; padding:3px 8px; color:#d6e4ff; font-size:0.55rem; outline:none; }
-        .trade-search input:focus { border-color:#3a5380; }
-        .trade-search select { background:#0b1422; border:1px solid #1a2842; border-radius:4px; padding:3px 6px; color:#d6e4ff; font-size:0.5rem; outline:none; }
+        .right-panel {
+            width: 260px;
+            min-width: 200px;
+            background: #0b1422;
+            border-left: 1px solid #1a2842;
+            padding: 6px 10px;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .right-panel .panel-section {
+            flex-shrink: 0;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 3px;
+            flex-wrap: wrap;
+        }
+        .nav-tab {
+            padding: 2px 10px;
+            font-size: 0.5rem;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            background: #0f182a;
+            color: #6f8bb0;
+            border: 1px solid #1a2842;
+            border-bottom: none;
+            transition: 0.1s;
+        }
+        .nav-tab.active {
+            background: #1a2842;
+            color: #e8f0ff;
+            border-color: #3a5380;
+        }
+        .nav-tab:hover {
+            color: #d6e4ff;
+        }
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+        .tab-content.active {
+            display: flex;
+        }
+        .page-container {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-top: 3px;
+        }
+        .page-tabs {
+            display: flex;
+            gap: 2px;
+            border-bottom: 1px solid #1a2842;
+            flex-shrink: 0;
+        }
+        .page-tab {
+            padding: 3px 12px;
+            font-size: 0.6rem;
+            cursor: pointer;
+            color: #6f8bb0;
+            border-bottom: 2px solid transparent;
+            transition: 0.1s;
+        }
+        .page-tab.active {
+            color: #e8f0ff;
+            border-bottom-color: #d4a843;
+        }
+        .page-tab:hover {
+            color: #d6e4ff;
+        }
+        .page-body {
+            flex: 1;
+            overflow: hidden;
+            padding-top: 4px;
+        }
+        .page-body .page-content {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .page-body .page-content.active {
+            display: flex;
+        }
+        .trade-search {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+            margin-bottom: 4px;
+        }
+        .trade-search input {
+            flex: 1;
+            background: #0b1422;
+            border: 1px solid #1a2842;
+            border-radius: 4px;
+            padding: 3px 8px;
+            color: #d6e4ff;
+            font-size: 0.55rem;
+            outline: none;
+        }
+        .trade-search input:focus {
+            border-color: #3a5380;
+        }
+        .trade-search select {
+            background: #0b1422;
+            border: 1px solid #1a2842;
+            border-radius: 4px;
+            padding: 3px 6px;
+            color: #d6e4ff;
+            font-size: 0.5rem;
+            outline: none;
+        }
 
-        .trade-list-page { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:2px; padding-right:3px; }
-        .trade-list-page::-webkit-scrollbar { width:2px; }
-        .trade-list-page::-webkit-scrollbar-thumb { background:#2a4065; border-radius:10px; }
-        .trade-item-page { display:flex; justify-content:space-between; align-items:center; background:#0b1422; border-radius:3px; padding:3px 8px; border:1px solid #1a2842; font-size:0.55rem; flex-shrink:0; }
-        .trade-item-page .info { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-        .trade-item-page .info .name { color:#d6e4ff; font-weight:500; }
-        .trade-item-page .info .tier-tag { font-size:0.4rem; color:#4a6080; }
-        .trade-item-page .info .seller { font-size:0.4rem; color:#4a6080; }
-        .trade-item-page .actions { display:flex; gap:3px; align-items:center; }
-        .trade-item-page .price { color:#d4a843; font-weight:600; margin-right:3px; }
-        .trade-item-page .btn-page { padding:1px 10px; font-size:0.45rem; border-radius:20px; border:none; cursor:pointer; background:#2a5a7a; color:#fff; height:18px; }
-        .trade-item-page .btn-page.delist { background:#5a3a3a; }
-        .trade-item-page .btn-page:hover { opacity:0.8; }
-        .trade-empty-page { color:#4a6080; text-align:center; padding:20px 0; font-size:0.6rem; }
-        .trade-pagination { display:flex; gap:4px; justify-content:center; padding:4px 0; flex-shrink:0; }
-        .trade-pagination button { background:#0b1422; border:1px solid #1a2842; border-radius:3px; padding:1px 10px; color:#6f8bb0; cursor:pointer; font-size:0.45rem; }
-        .trade-pagination button:hover { border-color:#3a5380; }
-        .trade-pagination .page-info { font-size:0.45rem; color:#4a6080; padding:1px 6px; }
+        .trade-list-page {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-right: 3px;
+        }
+        .trade-list-page::-webkit-scrollbar {
+            width: 2px;
+        }
+        .trade-list-page::-webkit-scrollbar-thumb {
+            background: #2a4065;
+            border-radius: 10px;
+        }
+        .trade-item-page {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0b1422;
+            border-radius: 3px;
+            padding: 3px 8px;
+            border: 1px solid #1a2842;
+            font-size: 0.55rem;
+            flex-shrink: 0;
+        }
+        .trade-item-page .info {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .trade-item-page .info .name {
+            color: #d6e4ff;
+            font-weight: 500;
+        }
+        .trade-item-page .info .tier-tag {
+            font-size: 0.4rem;
+            color: #4a6080;
+        }
+        .trade-item-page .info .seller {
+            font-size: 0.4rem;
+            color: #4a6080;
+        }
+        .trade-item-page .actions {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+        }
+        .trade-item-page .price {
+            color: #d4a843;
+            font-weight: 600;
+            margin-right: 3px;
+        }
+        .trade-item-page .btn-page {
+            padding: 1px 10px;
+            font-size: 0.45rem;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            background: #2a5a7a;
+            color: #fff;
+            height: 18px;
+        }
+        .trade-item-page .btn-page.delist {
+            background: #5a3a3a;
+        }
+        .trade-item-page .btn-page:hover {
+            opacity: 0.8;
+        }
+        .trade-empty-page {
+            color: #4a6080;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.6rem;
+        }
+        .trade-pagination {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            padding: 4px 0;
+            flex-shrink: 0;
+        }
+        .trade-pagination button {
+            background: #0b1422;
+            border: 1px solid #1a2842;
+            border-radius: 3px;
+            padding: 1px 10px;
+            color: #6f8bb0;
+            cursor: pointer;
+            font-size: 0.45rem;
+        }
+        .trade-pagination button:hover {
+            border-color: #3a5380;
+        }
+        .trade-pagination .page-info {
+            font-size: 0.45rem;
+            color: #4a6080;
+            padding: 1px 6px;
+        }
 
-        .rank-list { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:2px; padding-right:3px; }
-        .rank-list::-webkit-scrollbar { width:2px; }
-        .rank-list::-webkit-scrollbar-thumb { background:#2a4065; border-radius:10px; }
-        .rank-item { display:flex; align-items:center; gap:8px; padding:3px 8px; background:#0b1422; border-radius:3px; border:1px solid #1a2842; font-size:0.55rem; flex-shrink:0; }
-        .rank-item .rank-num { width:24px; color:#4a6080; font-weight:600; text-align:center; font-size:0.5rem; }
-        .rank-item .rank-num.top1 { color:#d4a843; }
-        .rank-item .rank-num.top2 { color:#8fa5c9; }
-        .rank-item .rank-num.top3 { color:#d4853a; }
-        .rank-item .rank-avatar { width:22px; height:22px; border-radius:50%; background:#1a2842; border:1px solid #3a5380; flex-shrink:0; }
-        .rank-item .rank-name { flex:1; color:#d6e4ff; }
-        .rank-item .rank-name .me-tag { font-size:0.35rem; color:#d4a843; margin-left:3px; }
-        .rank-item .rank-level { font-size:0.4rem; color:#4a6080; }
-        .rank-item .rank-score { color:#d4a843; font-weight:600; }
+        .rank-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding-right: 3px;
+        }
+        .rank-list::-webkit-scrollbar {
+            width: 2px;
+        }
+        .rank-list::-webkit-scrollbar-thumb {
+            background: #2a4065;
+            border-radius: 10px;
+        }
+        .rank-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 3px 8px;
+            background: #0b1422;
+            border-radius: 3px;
+            border: 1px solid #1a2842;
+            font-size: 0.55rem;
+            flex-shrink: 0;
+        }
+        .rank-item .rank-num {
+            width: 24px;
+            color: #4a6080;
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.5rem;
+        }
+        .rank-item .rank-num.top1 {
+            color: #d4a843;
+        }
+        .rank-item .rank-num.top2 {
+            color: #8fa5c9;
+        }
+        .rank-item .rank-num.top3 {
+            color: #d4853a;
+        }
+        .rank-item .rank-avatar {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #1a2842;
+            border: 1px solid #3a5380;
+            flex-shrink: 0;
+        }
+        .rank-item .rank-name {
+            flex: 1;
+            color: #d6e4ff;
+        }
+        .rank-item .rank-name .me-tag {
+            font-size: 0.35rem;
+            color: #d4a843;
+            margin-left: 3px;
+        }
+        .rank-item .rank-level {
+            font-size: 0.4rem;
+            color: #4a6080;
+        }
+        .rank-item .rank-score {
+            color: #d4a843;
+            font-weight: 600;
+        }
 
-        .factory-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px; padding:4px 0; }
-        .factory-item { background:#0b1422; border:1px solid #1a2842; border-radius:4px; padding:6px 8px; text-align:center; }
-        .factory-item .fname { color:#d6e4ff; font-weight:600; font-size:0.6rem; }
-        .factory-item .ftier { font-size:0.45rem; color:#4a6080; }
-        .factory-item .fstatus { font-size:0.45rem; margin-top:2px; }
-        .factory-item .fstatus.building { color:#d4a843; }
-        .factory-item .fstatus.done { color:#4aad7a; }
-        .factory-item .fprogress { height:4px; background:#1a2842; border-radius:4px; margin:4px 0; overflow:hidden; }
-        .factory-item .fprogress .fill { height:100%; background:linear-gradient(90deg, #d4a843, #e67e22); border-radius:4px; transition:width 0.5s; }
+        .factory-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            padding: 4px 0;
+        }
+        .factory-item {
+            background: #0b1422;
+            border: 1px solid #1a2842;
+            border-radius: 4px;
+            padding: 6px 8px;
+            text-align: center;
+        }
+        .factory-item .fname {
+            color: #d6e4ff;
+            font-weight: 600;
+            font-size: 0.6rem;
+        }
+        .factory-item .ftier {
+            font-size: 0.45rem;
+            color: #4a6080;
+        }
+        .factory-item .fstatus {
+            font-size: 0.45rem;
+            margin-top: 2px;
+        }
+        .factory-item .fstatus.building {
+            color: #d4a843;
+        }
+        .factory-item .fstatus.done {
+            color: #4aad7a;
+        }
+        .factory-item .fprogress {
+            height: 4px;
+            background: #1a2842;
+            border-radius: 4px;
+            margin: 4px 0;
+            overflow: hidden;
+        }
+        .factory-item .fprogress .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d4a843, #e67e22);
+            border-radius: 4px;
+            transition: width 0.5s;
+        }
 
-        .mineral-info { background:#0b1422; border-radius:4px; padding:4px 8px; border:1px solid #1a2842; margin-bottom:3px; font-size:0.55rem; }
-        .mineral-info .m-title { color:#d4a843; font-weight:600; }
-        .mineral-info .m-status { color:#6f8bb0; }
-        .mineral-info .m-player { color:#4aad7a; }
-        .mineral-info .m-battle { color:#e74c3c; cursor:pointer; }
+        .mineral-info {
+            background: #0b1422;
+            border-radius: 4px;
+            padding: 4px 8px;
+            border: 1px solid #1a2842;
+            margin-bottom: 3px;
+            font-size: 0.55rem;
+        }
+        .mineral-info .m-title {
+            color: #d4a843;
+            font-weight: 600;
+        }
+        .mineral-info .m-status {
+            color: #6f8bb0;
+        }
+        .mineral-info .m-player {
+            color: #4aad7a;
+        }
+        .mineral-info .m-battle {
+            color: #e74c3c;
+            cursor: pointer;
+        }
 
-        .cloudflare-section { background:#0b1422; border:1px solid #1a2842; border-radius:5px; padding:8px 10px; margin-top:6px; font-size:0.65rem; }
-        .cloudflare-section .status-ok { color:#4aad7a; font-weight:600; }
+        .cloudflare-section {
+            background: #0b1422;
+            border: 1px solid #1a2842;
+            border-radius: 5px;
+            padding: 8px 10px;
+            margin-top: 6px;
+            font-size: 0.65rem;
+        }
+        .cloudflare-section .status-ok {
+            color: #4aad7a;
+            font-weight: 600;
+        }
 
-        .modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); display:none; justify-content:center; align-items:center; z-index:1000; }
-        .modal-overlay.show { display:flex; }
-        .modal-box { background:#141e32; border-radius:14px; padding:20px 24px; max-width:580px; width:92%; border:1px solid #2a4065; box-shadow:0 30px 60px rgba(0,0,0,0.9); max-height:85vh; overflow-y:auto; }
-        .modal-box h2 { color:#e8f0ff; font-size:1rem; margin-bottom:10px; border-bottom:1px solid #1a2842; padding-bottom:6px; }
-        .modal-box .content { color:#9bb3d9; font-size:0.8rem; line-height:1.5; }
-        .modal-box .content .item { display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px solid #0f182a; font-size:0.7rem; }
-        .modal-box .close-btn { margin-top:14px; background:#2a5a7a; border:none; border-radius:30px; padding:6px 20px; color:#fff; font-weight:600; cursor:pointer; width:100%; font-size:0.8rem; }
-        .modal-box .close-btn:hover { background:#3a6a8a; }
-        .modal-box .ship-card { background:#0b1422; border-radius:5px; padding:6px 10px; border:1px solid #1a2842; margin-bottom:4px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; transition:0.1s; }
-        .modal-box .ship-card:hover { border-color:#3a5380; }
-        .modal-box .ship-card .ship-info { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-        .modal-box .ship-card .ship-info .sname { font-weight:500; font-size:0.7rem; }
-        .modal-box .ship-card .ship-info .slvl { font-size:0.55rem; color:#4a6080; }
-        .modal-box .ship-card .ship-info .sstats { font-size:0.55rem; color:#6a8aaa; }
-        .modal-box .ship-card .ship-actions { display:flex; gap:4px; }
-        .modal-box .ship-card .ship-actions .btn-mini { font-size:0.45rem; padding:1px 8px; border-radius:20px; border:none; cursor:pointer; color:#fff; height:18px; }
-        .modal-box .ship-card .ship-actions .btn-mini.deploy { background:#1f6a3a; }
-        .modal-box .ship-card .ship-actions .btn-mini.undeploy { background:#6a2a2a; }
-        .modal-box .ship-card .ship-actions .btn-mini.detail { background:#2a5a7a; }
-        .ship-card.dragging { opacity:0.4; border-color:#d4a843; }
-        .ship-card.drag-over { border-color:#4aad7a; background:rgba(74,173,122,0.1); }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-box {
+            background: #141e32;
+            border-radius: 14px;
+            padding: 20px 24px;
+            max-width: 580px;
+            width: 92%;
+            border: 1px solid #2a4065;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-box h2 {
+            color: #e8f0ff;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #1a2842;
+            padding-bottom: 6px;
+        }
+        .modal-box .content {
+            color: #9bb3d9;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+        .modal-box .content .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            border-bottom: 1px solid #0f182a;
+            font-size: 0.7rem;
+        }
+        .modal-box .close-btn {
+            margin-top: 14px;
+            background: #2a5a7a;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 20px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.8rem;
+        }
+        .modal-box .close-btn:hover {
+            background: #3a6a8a;
+        }
+        .modal-box .ship-card {
+            background: #0b1422;
+            border-radius: 5px;
+            padding: 6px 10px;
+            border: 1px solid #1a2842;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .modal-box .ship-card:hover {
+            border-color: #3a5380;
+        }
+        .modal-box .ship-card .ship-info {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .modal-box .ship-card .ship-info .sname {
+            font-weight: 500;
+            font-size: 0.7rem;
+        }
+        .modal-box .ship-card .ship-info .slvl {
+            font-size: 0.55rem;
+            color: #4a6080;
+        }
+        .modal-box .ship-card .ship-info .sstats {
+            font-size: 0.55rem;
+            color: #6a8aaa;
+        }
+        .modal-box .ship-card .ship-actions {
+            display: flex;
+            gap: 4px;
+        }
+        .modal-box .ship-card .ship-actions .btn-mini {
+            font-size: 0.45rem;
+            padding: 1px 8px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+            height: 18px;
+        }
+        .modal-box .ship-card .ship-actions .btn-mini.deploy {
+            background: #1f6a3a;
+        }
+        .modal-box .ship-card .ship-actions .btn-mini.undeploy {
+            background: #6a2a2a;
+        }
+        .modal-box .ship-card .ship-actions .btn-mini.detail {
+            background: #2a5a7a;
+        }
+        .ship-card.dragging {
+            opacity: 0.4;
+            border-color: #d4a843;
+        }
+        .ship-card.drag-over {
+            border-color: #4aad7a;
+            background: rgba(74, 173, 122, 0.1);
+        }
 
-        @media (max-width:1024px) { .left-panel { width:180px; min-width:130px; } .right-panel { width:210px; min-width:150px; } .friendly-column,.enemy-column { width:120px; } }
-        @media (max-width:768px) { .left-panel,.right-panel { display:none; } .friendly-column,.enemy-column { width:90px; } .friendly-unit,.enemy-unit { height:30px; padding:2px 4px; } .friendly-unit .ship-name,.enemy-unit .ship-name { font-size:0.4rem; } .battle-footer { flex-direction:column; align-items:stretch; min-height:40px; } .battle-log-mini { max-height:40px; } .action-buttons { justify-content:center; } .top-bar { flex-wrap:wrap; height:auto; padding:3px 10px; gap:2px; } .resources { font-size:0.55rem; gap:4px; } .login-box { padding:20px 16px; } .warehouse-grid { grid-template-columns:repeat(3,1fr); } .factory-grid { grid-template-columns:1fr; } }
-        @media (max-width:480px) { .friendly-column,.enemy-column { width:60px; } .friendly-unit .hp-text,.enemy-unit .hp-text { min-width:16px; font-size:0.3rem; } .friendly-unit .hp-bar,.enemy-unit .hp-bar { min-width:14px; } .vs-divider { width:8px; } .center-panel { padding:3px 4px; } .friendly-unit .charge-text { font-size:0.25rem; min-width:12px; } .modal-box { padding:14px 16px; max-width:100%; width:96%; } }
+        @media (max-width:1024px) {
+            .left-panel {
+                width: 180px;
+                min-width: 130px;
+            }
+            .right-panel {
+                width: 210px;
+                min-width: 150px;
+            }
+            .friendly-column,
+            .enemy-column {
+                width: 120px;
+            }
+        }
+        @media (max-width:768px) {
+            .left-panel,
+            .right-panel {
+                display: none;
+            }
+            .friendly-column,
+            .enemy-column {
+                width: 90px;
+            }
+            .friendly-unit,
+            .enemy-unit {
+                height: 30px;
+                padding: 2px 4px;
+            }
+            .friendly-unit .ship-name,
+            .enemy-unit .ship-name {
+                font-size: 0.4rem;
+            }
+            .battle-footer {
+                flex-direction: column;
+                align-items: stretch;
+                min-height: 40px;
+            }
+            .battle-log-mini {
+                max-height: 40px;
+            }
+            .action-buttons {
+                justify-content: center;
+            }
+            .top-bar {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 3px 10px;
+                gap: 2px;
+            }
+            .resources {
+                font-size: 0.55rem;
+                gap: 4px;
+            }
+            .login-box {
+                padding: 20px 16px;
+            }
+            .warehouse-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .factory-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width:480px) {
+            .friendly-column,
+            .enemy-column {
+                width: 60px;
+            }
+            .friendly-unit .hp-text,
+            .enemy-unit .hp-text {
+                min-width: 16px;
+                font-size: 0.3rem;
+            }
+            .friendly-unit .hp-bar,
+            .enemy-unit .hp-bar {
+                min-width: 14px;
+            }
+            .vs-divider {
+                width: 8px;
+            }
+            .center-panel {
+                padding: 3px 4px;
+            }
+            .friendly-unit .charge-text {
+                font-size: 0.25rem;
+                min-width: 12px;
+            }
+            .modal-box {
+                padding: 14px 16px;
+                max-width: 100%;
+                width: 96%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -500,7 +1668,7 @@
 
     <script>
         // ============================================================
-        //  配置 - 纯云端存储
+        //  配置 - Cloudflare Worker
         // ============================================================
         const CF_WORKER_URL = 'https://xjzt.2207276908.workers.dev';
 
@@ -518,20 +1686,31 @@
         let upgradeLevel = { front: 0, mid: 0, rear: 0 };
         let currentGalaxyIdx = 0;
         let currentSystemIdx = 0;
-        let statBattles = 0, statWins = 0, statLosses = 0, statDrops = 0;
-        let playerLevel = 1, playerExp = 0, maxExp = 100;
+        let statBattles = 0,
+            statWins = 0,
+            statLosses = 0,
+            statDrops = 0;
+        let playerLevel = 1,
+            playerExp = 0,
+            maxExp = 100;
         let friendlyShips = [];
         let enemies = [];
-        let isAuto = true, isPaused = false, battleTimer = 0, isDefeated = false, defeatTimer = null;
+        let isAuto = true,
+            isPaused = false,
+            battleTimer = 0,
+            isDefeated = false,
+            defeatTimer = null;
         let mineralPlanets = [];
         let mineralTimer = 0;
-        let marketPage = 1, myOrdersPage = 1, PAGE_SIZE = 8;
+        let marketPage = 1,
+            myOrdersPage = 1,
+            PAGE_SIZE = 8;
         let alphaSquadDefeated = {};
         let redeemedCodes = {};
         let _saveInProgress = false;
 
         // ============================================================
-        //  数据定义（完整）
+        //  数据定义
         // ============================================================
         const GALAXY_DATA = [
             { name: '银河系', tier: 1, levelBase: 1, dropTier: 1, systems: ['太阳系', '泰尔斯达', '奥维尔', '诺瓦里斯', '艾德隆', '赛伦迪斯', '维拉克斯', '卡佩尔', '达米安', '雷克萨'] },
@@ -546,95 +1725,49 @@
             { name: '室女座', tier: 7, levelBase: 900, dropTier: 7, systems: ['维雅', '卡兰', '索拉', '梅里安', '奥德赛', '维斯塔', '艾瑞斯', '泰兰', '洛恩', '赛伦'] }
         ];
 
+        // ===== 材料数据 =====
+        const ALL_MATERIALS = [];
         const MATERIALS = {
-            T1: [
-                { name: '电路板', tier: 1, desc: '基础电子元件' },
-                { name: '铜线', tier: 1, desc: '导电材料' },
-                { name: '电阻', tier: 1, desc: '控制电流' },
-                { name: '焊料', tier: 1, desc: '焊接元件' },
-                { name: '电容', tier: 1, desc: '储能元件' },
-                { name: '二极管', tier: 1, desc: '单向导通' },
-                { name: '晶振', tier: 1, desc: '频率基准' },
-                { name: '继电器', tier: 1, desc: '电路控制' },
-                { name: '保险丝', tier: 1, desc: '过载保护' },
-                { name: '接线端子', tier: 1, desc: '连接接口' }
+            T1: [{ name: '电路板', tier: 1 }, { name: '铜线', tier: 1 }, { name: '电阻', tier: 1 }, { name: '焊料', tier: 1 },
+                { name: '电容', tier: 1 }, { name: '二极管', tier: 1 }, { name: '晶振', tier: 1 }, { name: '继电器',
+                    tier: 1 },
+                { name: '保险丝', tier: 1 }, { name: '接线端子', tier: 1 }
             ],
-            T2: [
-                { name: '螺丝', tier: 2, desc: '标准紧固件' },
-                { name: '齿轮', tier: 2, desc: '传动部件' },
-                { name: '弹簧', tier: 2, desc: '储能元件' },
-                { name: '轴承', tier: 2, desc: '精密部件' },
-                { name: '连杆', tier: 2, desc: '连接机构' },
-                { name: '凸轮', tier: 2, desc: '驱动部件' },
-                { name: '棘轮', tier: 2, desc: '单向驱动' },
-                { name: '皮带轮', tier: 2, desc: '传动轮' },
-                { name: '链条', tier: 2, desc: '传动链' },
-                { name: '销钉', tier: 2, desc: '固定件' }
+            T2: [{ name: '螺丝', tier: 2 }, { name: '齿轮', tier: 2 }, { name: '弹簧', tier: 2 }, { name: '轴承', tier: 2 },
+                { name: '连杆', tier: 2 }, { name: '凸轮', tier: 2 }, { name: '棘轮', tier: 2 }, { name: '皮带轮',
+                    tier: 2 },
+                { name: '链条', tier: 2 }, { name: '销钉', tier: 2 }
             ],
-            T3: [
-                { name: '合金板', tier: 3, desc: '高强度材料' },
-                { name: '散热片', tier: 3, desc: '散热装置' },
-                { name: '电容组', tier: 3, desc: '储能阵列' },
-                { name: '继电器组', tier: 3, desc: '控制阵列' },
-                { name: '电机', tier: 3, desc: '动力源' },
-                { name: '泵体', tier: 3, desc: '流体输送' },
-                { name: '阀门', tier: 3, desc: '流体控制' },
-                { name: '密封圈', tier: 3, desc: '密封件' },
-                { name: '过滤器', tier: 3, desc: '过滤装置' },
-                { name: '热交换器', tier: 3, desc: '热管理' }
+            T3: [{ name: '合金板', tier: 3 }, { name: '散热片', tier: 3 }, { name: '电容组', tier: 3 }, { name: '继电器组',
+                    tier: 3 },
+                { name: '电机', tier: 3 }, { name: '泵体', tier: 3 }, { name: '阀门', tier: 3 }, { name: '密封圈',
+                    tier: 3 },
+                { name: '过滤器', tier: 3 }, { name: '热交换器', tier: 3 }
             ],
-            T4: [
-                { name: '聚变核心', tier: 4, desc: '聚变反应' },
-                { name: '离子引擎', tier: 4, desc: '推进系统' },
-                { name: '能量晶体', tier: 4, desc: '能量存储' },
-                { name: '相位调节器', tier: 4, desc: '相位调节' },
-                { name: '磁场发生器', tier: 4, desc: '磁场控制' },
-                { name: '等离子导管', tier: 4, desc: '能量传导' },
-                { name: '冷却系统', tier: 4, desc: '热管理' },
-                { name: '燃料棒', tier: 4, desc: '核燃料' },
-                { name: '控制棒', tier: 4, desc: '反应控制' },
-                { name: '中子源', tier: 4, desc: '中子发生器' }
+            T4: [{ name: '聚变核心', tier: 4 }, { name: '离子引擎', tier: 4 }, { name: '能量晶体', tier: 4 },
+                { name: '相位调节器', tier: 4 }, { name: '磁场发生器', tier: 4 }, { name: '等离子导管', tier: 4 },
+                { name: '冷却系统', tier: 4 }, { name: '燃料棒', tier: 4 }, { name: '控制棒', tier: 4 }, { name: '中子源',
+                    tier: 4 }
             ],
-            T5: [
-                { name: '暗物质', tier: 5, desc: '神秘物质' },
-                { name: '量子芯片', tier: 5, desc: '量子计算' },
-                { name: '纳米装甲', tier: 5, desc: '分子装甲' },
-                { name: '曲速线圈', tier: 5, desc: '曲速引擎' },
-                { name: '引力子束', tier: 5, desc: '引力操控' },
-                { name: '弦论振子', tier: 5, desc: '弦理论' },
-                { name: '多维透镜', tier: 5, desc: '维度操控' },
-                { name: '熵能电池', tier: 5, desc: '熵能存储' },
-                { name: '量子纠缠器', tier: 5, desc: '量子通信' },
-                { name: '真空能提取器', tier: 5, desc: '真空能' }
+            T5: [{ name: '暗物质', tier: 5 }, { name: '量子芯片', tier: 5 }, { name: '纳米装甲', tier: 5 },
+                { name: '曲速线圈', tier: 5 }, { name: '引力子束', tier: 5 }, { name: '弦论振子', tier: 5 },
+                { name: '多维透镜', tier: 5 }, { name: '熵能电池', tier: 5 }, { name: '量子纠缠器', tier: 5 },
+                { name: '真空能提取器', tier: 5 }
             ],
-            T6: [
-                { name: '星核碎片', tier: 6, desc: '恒星核心' },
-                { name: '重力发生器', tier: 6, desc: '重力场' },
-                { name: '时空透镜', tier: 6, desc: '时空扭曲' },
-                { name: '零点模块', tier: 6, desc: '零点能量' },
-                { name: '奇点束缚器', tier: 6, desc: '奇点控制' },
-                { name: '超空间引擎', tier: 6, desc: '超空间' },
-                { name: '相位转移器', tier: 6, desc: '相位转移' },
-                { name: '因果律稳定器', tier: 6, desc: '因果稳定' },
-                { name: '维度之门', tier: 6, desc: '维度通道' },
-                { name: '宇宙常数调节器', tier: 6, desc: '常数调节' }
+            T6: [{ name: '星核碎片', tier: 6 }, { name: '重力发生器', tier: 6 }, { name: '时空透镜', tier: 6 },
+                { name: '零点模块', tier: 6 }, { name: '奇点束缚器', tier: 6 }, { name: '超空间引擎', tier: 6 },
+                { name: '相位转移器', tier: 6 }, { name: '因果律稳定器', tier: 6 }, { name: '维度之门', tier: 6 },
+                { name: '宇宙常数调节器', tier: 6 }
             ],
-            T7: [
-                { name: '创世结晶', tier: 7, desc: '宇宙初开' },
-                { name: '宇宙之核', tier: 7, desc: '核心物质' },
-                { name: '奇点碎片', tier: 7, desc: '奇点爆炸' },
-                { name: '永恒合金', tier: 7, desc: '永不磨损' },
-                { name: '造物主之眼', tier: 7, desc: '全知视角' },
-                { name: '宇宙弦', tier: 7, desc: '宇宙结构' },
-                { name: '大爆炸回响', tier: 7, desc: '创世回响' },
-                { name: '暗能量核心', tier: 7, desc: '暗能量' },
-                { name: '多元宇宙之心', tier: 7, desc: '多元宇宙' },
-                { name: '终焉之尘', tier: 7, desc: '终焉之物' }
+            T7: [{ name: '创世结晶', tier: 7 }, { name: '宇宙之核', tier: 7 }, { name: '奇点碎片', tier: 7 },
+                { name: '永恒合金', tier: 7 }, { name: '造物主之眼', tier: 7 }, { name: '宇宙弦', tier: 7 },
+                { name: '大爆炸回响', tier: 7 }, { name: '暗能量核心', tier: 7 }, { name: '多元宇宙之心', tier: 7 },
+                { name: '终焉之尘', tier: 7 }
             ]
         };
-        const ALL_MATERIALS = [];
         Object.values(MATERIALS).forEach(list => list.forEach(m => ALL_MATERIALS.push(m)));
 
+        // ===== 战舰数据库 =====
         const SHIP_DB = {
             T1: {
                 front: ['基础战舰', '临时部署单元 T-01', '废弃协议执行舰', '低优先级巡逻器', '备用节点护卫船', '民用巡洋舰', 'Z-9 零状态守卫'],
@@ -642,34 +1775,77 @@
                 rear: ['后勤供应链末端节点 LS-09', '基础后勤舰', '勤务综合支援系统 SS-07', 'Rep-12 结构修复代理']
             },
             T2: {
-                front: ['战术扫描前驱舰 TS-09', '短程光学侦察艇 SR-11', '信号采集先锋平台 SP-07', '地形扫描前导机 TM-08', '先制打击试行舰 PS-05', '先行接战护卫舰 EN-07'],
-                mid: ['二级蓄力协议执行舰 SL-07', '渐进式能量堆叠器 PE-09', '破盾型炮舰 SS-04', '二级穿甲试行机 PA-10', '二级发射协议执行体 LP-05'],
-                rear: ['二级物资调度舰 MS-12', '二级供应链中继舰 CS-08', '二级战场修补舰 FR-09', '结构加固施作舰 SR-06', '二级医疗扩展模块 ME-06', '二级勤务支援系统 SS-11']
+                front: ['战术扫描前驱舰 TS-09', '短程光学侦察艇 SR-11', '信号采集先锋平台 SP-07', '地形扫描前导机 TM-08',
+                    '先制打击试行舰 PS-05', '先行接战护卫舰 EN-07'
+                ],
+                mid: ['二级蓄力协议执行舰 SL-07', '渐进式能量堆叠器 PE-09', '破盾型炮舰 SS-04', '二级穿甲试行机 PA-10',
+                    '二级发射协议执行体 LP-05'
+                ],
+                rear: ['二级物资调度舰 MS-12', '二级供应链中继舰 CS-08', '二级战场修补舰 FR-09', '结构加固施作舰 SR-06',
+                    '二级医疗扩展模块 ME-06', '二级勤务支援系统 SS-11'
+                ]
             },
             T3: {
-                front: ['三级侦察突入舰 SR-09', '短程交火侦察艇 ER-11', '三级轻装突击舰 LA-08', '战术突入改进型 TI-12', '快速部署战斗单元 RD-09', '三级战斗信号舰 BS-04'],
-                mid: ['三级高效聚能舰 HE-08', '三级蓄力协议执行舰 SP-12', '改良穿甲蓄力炮 AP-14', '三级瞄准锁定舰 AL-08', '蓄力效率实用平台 EP-05', 'AB-07 蓄力-爆发双态舰', '三级火力持续性舰 FP-04'],
-                rear: ['三级快速物资调度舰 QS-09', '三级供应链枢纽舰 CS-11', '优先级保障补给舰 PS-06', '三级战场修复舰 FR-11', '三级舰体检修舰 HV-10', '三级医疗扩展模块 ME-1', '三级战场综合服务舰 BS-09']
+                front: ['三级侦察突入舰 SR-09', '短程交火侦察艇 ER-11', '三级轻装突击舰 LA-08', '战术突入改进型 TI-12',
+                    '快速部署战斗单元 RD-09', '三级战斗信号舰 BS-04'
+                ],
+                mid: ['三级高效聚能舰 HE-08', '三级蓄力协议执行舰 SP-12', '改良穿甲蓄力炮 AP-14', '三级瞄准锁定舰 AL-08',
+                    '蓄力效率实用平台 EP-05', 'AB-07 蓄力-爆发双态舰', '三级火力持续性舰 FP-04'
+                ],
+                rear: ['三级快速物资调度舰 QS-09', '三级供应链枢纽舰 CS-11', '优先级保障补给舰 PS-06', '三级战场修复舰 FR-11',
+                    '三级舰体检修舰 HV-10', '三级医疗扩展模块 ME-1', '三级战场综合服务舰 BS-09'
+                ]
             },
             T4: {
-                front: ['战术侦察打击舰 TR-11', '前沿火力引导舰 FG-07', '重型突击舰 HA-08', '高速破阵舰 HB-12', '先锋压制平台 SP-09', '战术突入主力舰 TI-14', '高机动突击舰 HM-07'],
-                mid: ['主炮级蓄力舰 MC-09', '重型聚能炮舰 HP-13', '要塞穿透者 FP-05', '蓄力稳定平台 SP-07', '高速蓄力舰 HC-08', '重型穿甲蓄力舰 HP-06', '高爆蓄力炮舰 HE-11', 'CD-13 T4 延迟补偿主炮舰'],
-                rear: ['后勤编队指挥舰 LC-09', '战场资源调度中心 RC-13', '后勤枢纽指挥舰 HC-11', '弹药供应链舰 AS-14', '模块化补给平台 MP-12', '战地维修工厂 RF-08', '工程作业主力舰 EO-06', '舰队医疗中心 MC-08']
+                front: ['战术侦察打击舰 TR-11', '前沿火力引导舰 FG-07', '重型突击舰 HA-08', '高速破阵舰 HB-12',
+                    '先锋压制平台 SP-09', '战术突入主力舰 TI-14', '高机动突击舰 HM-07'
+                ],
+                mid: ['主炮级蓄力舰 MC-09', '重型聚能炮舰 HP-13', '要塞穿透者 FP-05', '蓄力稳定平台 SP-07',
+                    '高速蓄力舰 HC-08', '重型穿甲蓄力舰 HP-06', '高爆蓄力炮舰 HE-11', 'CD-13 T4 延迟补偿主炮舰'
+                ],
+                rear: ['后勤编队指挥舰 LC-09', '战场资源调度中心 RC-13', '后勤枢纽指挥舰 HC-11', '弹药供应链舰 AS-14',
+                    '模块化补给平台 MP-12', '战地维修工厂 RF-08', '工程作业主力舰 EO-06', '舰队医疗中心 MC-08'
+                ]
             },
             T5: {
-                front: ['幽灵刃突击舰 GS-01', '先锋旗舰 PF-00', '战线粉碎者 FL-07', '影子突入舰 SI-03', '猎杀者前哨舰 HP-09', '暴风突击舰 ST-12', '量子闪烁舰 QF-12', '壁垒击穿者 BW-04', '钢铁洪流突破舰 IB-08', '前锋旗手 BS-12', '刺杀者之刃 AB-11'],
-                mid: ['歼星炮原型舰 SP-00', '碎星者 SS-09', '行星裁决者 PD-04', '星核熔炉 CF-11', '末日审判舰 JD-03', '终焉宣告者 AD-08', '永恒沉寂舰 ES-09', '天谴降临舰 WR-06', '最后低语 LW-12', '虚空吞噬者 VE-09'],
-                rear: ['移动星港 MS-00', '可部署基地舰 DB-11', '无限补给舰 IS-09', '战场再生平台 RB-07', '废墟重建者 RU-11', '纳米修复母舰 NR-06', '生命守护舰 LS-07', '星际工程舰 SE-08', '星际铺路舰 SP-03', '行星工程平台 PE-07']
+                front: ['幽灵刃突击舰 GS-01', '先锋旗舰 PF-00', '战线粉碎者 FL-07', '影子突入舰 SI-03',
+                    '猎杀者前哨舰 HP-09', '暴风突击舰 ST-12', '量子闪烁舰 QF-12', '壁垒击穿者 BW-04',
+                    '钢铁洪流突破舰 IB-08', '前锋旗手 BS-12', '刺杀者之刃 AB-11'
+                ],
+                mid: ['歼星炮原型舰 SP-00', '碎星者 SS-09', '行星裁决者 PD-04', '星核熔炉 CF-11',
+                    '末日审判舰 JD-03', '终焉宣告者 AD-08', '永恒沉寂舰 ES-09', '天谴降临舰 WR-06',
+                    '最后低语 LW-12', '虚空吞噬者 VE-09'
+                ],
+                rear: ['移动星港 MS-00', '可部署基地舰 DB-11', '无限补给舰 IS-09', '战场再生平台 RB-07',
+                    '废墟重建者 RU-11', '纳米修复母舰 NR-06', '生命守护舰 LS-07', '星际工程舰 SE-08',
+                    '星际铺路舰 SP-03', '行星工程平台 PE-07'
+                ]
             },
             T6: {
-                front: ['永恒之刃 EB-01', '星界穿梭者 AV-07', '幻影神舰 PG-00', '虚无漫步者 NW-09', '世界粉碎者 WS-01', '诸神黄昏 RR-07', '帝国终结者 EH-03', '创世裂痕 CF-09', '永恒先锋 ET-11', '弑王者 KS-02', '终结之牙 FT-08', '不朽冲锋舰 IC-01', '灵魂舰 SS-11'],
-                mid: ['奇点引擎 SE-00', '恒星熄灭者 SS-04', '宇宙撕裂者 UT-09', '创世之炮 CB-00', '原初之火 PF-07', '万力之源 SW-09', '终焉之焰 EF-11', '高维穿刺炮 HP-01', '维度坍缩器 DC-07', 'FE-00 T6 命运之眼'],
-                rear: ['火种舰 TK-07', '诺亚级生存舰 NA-03', '生命库舰 LS-09', '记忆之舟 MV-05', '虚空提取者 VE-11', '重铸者 RS-01', '再生者 RX-03', '万物重塑者 AR-11', '生命之树 LT-01', 'RS-00 T6 重铸者原型']
+                front: ['永恒之刃 EB-01', '星界穿梭者 AV-07', '幻影神舰 PG-00', '虚无漫步者 NW-09',
+                    '世界粉碎者 WS-01', '诸神黄昏 RR-07', '帝国终结者 EH-03', '创世裂痕 CF-09',
+                    '永恒先锋 ET-11', '弑王者 KS-02', '终结之牙 FT-08', '不朽冲锋舰 IC-01', '灵魂舰 SS-11'
+                ],
+                mid: ['奇点引擎 SE-00', '恒星熄灭者 SS-04', '宇宙撕裂者 UT-09', '创世之炮 CB-00',
+                    '原初之火 PF-07', '万力之源 SW-09', '终焉之焰 EF-11', '高维穿刺炮 HP-01',
+                    '维度坍缩器 DC-07', 'FE-00 T6 命运之眼'
+                ],
+                rear: ['火种舰 TK-07', '诺亚级生存舰 NA-03', '生命库舰 LS-09', '记忆之舟 MV-05',
+                    '虚空提取者 VE-11', '重铸者 RS-01', '再生者 RX-03', '万物重塑者 AR-11',
+                    '生命之树 LT-01', 'RS-00 T6 重铸者原型'
+                ]
             },
             T7: {
-                front: ['战争原型 WP-00', '前锋定义者 FD-03', '终焉宣告者 AE-01', '先驱回响舰 PR-01', '沉默方尖碑 SO-11', '熵逆引擎 EE-01', '反物理前哨 AP-03', '灵魂牵引者 ST-09', '夹缝穿行者 CV-01', '铭文舰 IR-01', '光铸舰 LC-01'],
-                mid: ['虚空吸气舰 VS-01', '碎片蓄力舰 FS-09', '凝视反噬炮 GR-11', '禁忌公式舰 TF-09', '量子冻结舰 QF-07'],
-                rear: ['稳定协议执行舰 SP-09', '战场缝合舰 BF-01', '噩梦清除者 NC-03', '虚空园艺师 VG-07', '寂静回响者 SE-09', '意志力配送舰 WD-07', '恐惧吸收舰 FA-01']
+                front: ['战争原型 WP-00', '前锋定义者 FD-03', '终焉宣告者 AE-01', '先驱回响舰 PR-01',
+                    '沉默方尖碑 SO-11', '熵逆引擎 EE-01', '反物理前哨 AP-03', '灵魂牵引者 ST-09',
+                    '夹缝穿行者 CV-01', '铭文舰 IR-01', '光铸舰 LC-01'
+                ],
+                mid: ['虚空吸气舰 VS-01', '碎片蓄力舰 FS-09', '凝视反噬炮 GR-11', '禁忌公式舰 TF-09',
+                    '量子冻结舰 QF-07'
+                ],
+                rear: ['稳定协议执行舰 SP-09', '战场缝合舰 BF-01', '噩梦清除者 NC-03', '虚空园艺师 VG-07',
+                    '寂静回响者 SE-09', '意志力配送舰 WD-07', '恐惧吸收舰 FA-01'
+                ]
             }
         };
 
@@ -843,6 +2019,7 @@
             'Star Trek': { type: 'ship', tier: 3, pos: 'front' },
             'BDGOnb': { type: 'bundle', credits: 10000, shipTier: 4, shipPos: 'front' }
         };
+
         const AFFIX_TYPES = [
             { id: 'heavy_armor', name: '重甲', desc: '血量上限加10%~15%' },
             { id: 'burst', name: '连发', desc: '攻击降低20%~35%，每次攻击两次' },
@@ -860,20 +2037,29 @@
             6: { name: '传说', color: '#d4853a' },
             7: { name: '神话', color: '#c06a9a' }
         };
+
         function getQualityClass(tier) { return 'q-' + tier; }
+
         function getQualityName(tier) { return QUALITY_COLORS[tier]?.name || '普通'; }
+
         function getQualityColor(tier) { return QUALITY_COLORS[tier]?.color || '#8fa5c9'; }
+
         function getShipRecipe(name) { return SHIP_RECIPES[name] || null; }
+
         function getBaseStats(tier, pos) {
             const hpMap = { 1: 20, 2: 200, 3: 2000, 4: 20000, 5: 200000, 6: 2000000, 7: 20000000 };
             const atkMap = { 1: 5, 2: 30, 3: 200, 4: 1500, 5: 10000, 6: 70000, 7: 500000 };
             let hp = hpMap[tier] || 20;
             let atk = atkMap[tier] || 5;
-            if (pos === 'front') { hp *= 1.2; atk *= 0.9; }
-            if (pos === 'mid') { hp *= 0.8; atk *= 1.5; }
-            if (pos === 'rear') { hp *= 0.7; atk *= 0.4; }
+            if (pos === 'front') { hp *= 1.2;
+                atk *= 0.9; }
+            if (pos === 'mid') { hp *= 0.8;
+                atk *= 1.5; }
+            if (pos === 'rear') { hp *= 0.7;
+                atk *= 0.4; }
             return { hp: Math.floor(hp), atk: Math.floor(atk) };
         }
+
         function randomAffix() {
             const idx = Math.floor(Math.random() * AFFIX_TYPES.length);
             const type = AFFIX_TYPES[idx];
@@ -882,21 +2068,16 @@
         }
 
         // ============================================================
-        //  重写：初始化玩家战舰（必定生成5艘）
+        //  初始化玩家战舰（必定生成5艘）
         // ============================================================
         function createInitialShips() {
             const t1f = SHIP_DB.T1.front;
             const t1m = SHIP_DB.T1.mid;
             const t1r = SHIP_DB.T1.rear;
-            
-            console.log('🔧 创建初始战舰...');
-            console.log('T1先锋池:', t1f);
-            console.log('T1中间池:', t1m);
-            console.log('T1后勤池:', t1r);
-            
+
             const createShip = (name, pos, tier) => {
                 const base = getBaseStats(tier, pos);
-                const ship = {
+                return {
                     id: 'ship_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                     name: name,
                     tier: tier,
@@ -909,42 +2090,23 @@
                     forgeCount: 0,
                     charge: 0
                 };
-                console.log('  ✅ 创建战舰:', ship.name, '位置:', ship.pos);
-                return ship;
             };
 
             const ships = [];
-            
-            // 2艘随机先锋
             for (let i = 0; i < 2; i++) {
                 const name = t1f[Math.floor(Math.random() * t1f.length)];
                 ships.push(createShip(name, 'front', 1));
             }
-            
-            // 1艘随机中间
             const midName = t1m[Math.floor(Math.random() * t1m.length)];
             ships.push(createShip(midName, 'mid', 1));
-            
-            // 2艘随机后勤
             for (let i = 0; i < 2; i++) {
                 const name = t1r[Math.floor(Math.random() * t1r.length)];
                 ships.push(createShip(name, 'rear', 1));
             }
-            
-            // 默认部署前4艘（2先锋+1中间+1后勤）
-            ships.forEach((s, idx) => { 
-                if (idx < 4) s.deployed = true; 
-            });
-            
-            console.log('✅ 初始战舰创建完成，共', ships.length, '艘');
-            ships.forEach(s => console.log('  -', s.name, s.pos, '部署:', s.deployed));
-            
+            ships.forEach((s, idx) => { if (idx < 4) s.deployed = true; });
             return ships;
         }
 
-        // ============================================================
-        //  初始化物资（必定包含）
-        // ============================================================
         function createInitialInventory() {
             const inv = {};
             inv['电路板'] = { count: 10, tier: 1 };
@@ -953,83 +2115,179 @@
             return inv;
         }
 
-        // ============================================================
-        //  确保数据完整（修复函数）
-        // ============================================================
         function ensurePlayerData() {
             let changed = false;
-            
-            // 检查并修复战舰
             if (!playerShips || playerShips.length === 0) {
-                console.log('⚠️ 玩家没有战舰，重新创建');
                 playerShips = createInitialShips();
                 changed = true;
-            } else {
-                // 检查每艘战舰的必要字段
-                playerShips.forEach(s => {
-                    if (s.deployed === undefined) { s.deployed = false; changed = true; }
-                    if (s.affixes === undefined) { s.affixes = []; changed = true; }
-                    if (s.forgeCount === undefined) { s.forgeCount = 0; changed = true; }
-                    if (s.charge === undefined) { s.charge = 0; changed = true; }
-                    if (s.hp === undefined || s.maxHp === undefined || s.atk === undefined) {
-                        const base = getBaseStats(s.tier || 1, s.pos || 'front');
-                        s.hp = base.hp;
-                        s.maxHp = base.hp;
-                        s.atk = base.atk;
-                        changed = true;
-                    }
-                });
-                
-                // 检查是否至少有一艘部署
-                if (!playerShips.some(s => s.deployed)) {
-                    const toDeploy = Math.min(4, playerShips.length);
-                    for (let i = 0; i < toDeploy; i++) {
-                        playerShips[i].deployed = true;
-                    }
-                    changed = true;
-                    console.log('🔧 自动部署了', toDeploy, '艘战舰');
-                }
             }
-            
-            // 检查并修复物资
+            playerShips.forEach(s => {
+                if (s.deployed === undefined) { s.deployed = false;
+                    changed = true; }
+                if (s.affixes === undefined) { s.affixes = [];
+                    changed = true; }
+                if (s.forgeCount === undefined) { s.forgeCount = 0;
+                    changed = true; }
+                if (s.charge === undefined) { s.charge = 0;
+                    changed = true; }
+                if (s.hp === undefined || s.maxHp === undefined || s.atk === undefined) {
+                    const base = getBaseStats(s.tier || 1, s.pos || 'front');
+                    s.hp = base.hp;
+                    s.maxHp = base.hp;
+                    s.atk = base.atk;
+                    changed = true;
+                }
+            });
+            if (!playerShips.some(s => s.deployed)) {
+                const toDeploy = Math.min(4, playerShips.length);
+                for (let i = 0; i < toDeploy; i++) {
+                    playerShips[i].deployed = true;
+                }
+                changed = true;
+            }
             if (!inventory || Object.keys(inventory).length === 0) {
-                console.log('⚠️ 玩家没有物资，重新创建');
                 inventory = createInitialInventory();
                 changed = true;
             } else {
-                // 确保三种基础物资存在
-                if (!inventory['电路板']) { inventory['电路板'] = { count: 10, tier: 1 }; changed = true; }
-                if (!inventory['螺丝']) { inventory['螺丝'] = { count: 20, tier: 2 }; changed = true; }
-                if (!inventory['基础护盾发生器']) { inventory['基础护盾发生器'] = { count: 1, tier: 1 }; changed = true; }
+                if (!inventory['电路板']) { inventory['电路板'] = { count: 10, tier: 1 };
+                    changed = true; }
+                if (!inventory['螺丝']) { inventory['螺丝'] = { count: 20, tier: 2 };
+                    changed = true; }
+                if (!inventory['基础护盾发生器']) { inventory['基础护盾发生器'] = { count: 1, tier: 1 };
+                    changed = true; }
             }
-            
-            // 检查其他必要字段
-            if (!maxShips) { maxShips = { front: 2, mid: 1, rear: 2 }; changed = true; }
-            if (!upgradeLevel) { upgradeLevel = { front: 0, mid: 0, rear: 0 }; changed = true; }
-            if (!blueprints) { blueprints = []; changed = true; }
-            if (!constructionQueue) { constructionQueue = []; changed = true; }
-            if (!alphaSquadDefeated) { alphaSquadDefeated = {}; changed = true; }
-            if (!redeemedCodes) { redeemedCodes = {}; changed = true; }
-            if (!tradeList) { tradeList = []; changed = true; }
-            if (credits === undefined) { credits = 0; changed = true; }
-            if (statBattles === undefined) { statBattles = 0; changed = true; }
-            if (statWins === undefined) { statWins = 0; changed = true; }
-            if (statLosses === undefined) { statLosses = 0; changed = true; }
-            if (statDrops === undefined) { statDrops = 0; changed = true; }
-            if (playerLevel === undefined) { playerLevel = 1; changed = true; }
-            if (playerExp === undefined) { playerExp = 0; changed = true; }
-            if (maxExp === undefined) { maxExp = 100; changed = true; }
-            if (currentGalaxyIdx === undefined) { currentGalaxyIdx = 0; changed = true; }
-            if (currentSystemIdx === undefined) { currentSystemIdx = 0; changed = true; }
-            
-            if (changed) {
-                console.log('📝 数据已修复，变更内容已保存');
-            }
+            if (!maxShips) { maxShips = { front: 2, mid: 1, rear: 2 };
+                changed = true; }
+            if (!upgradeLevel) { upgradeLevel = { front: 0, mid: 0, rear: 0 };
+                changed = true; }
+            if (!blueprints) { blueprints = [];
+                changed = true; }
+            if (!constructionQueue) { constructionQueue = [];
+                changed = true; }
+            if (!alphaSquadDefeated) { alphaSquadDefeated = {};
+                changed = true; }
+            if (!redeemedCodes) { redeemedCodes = {};
+                changed = true; }
+            if (!tradeList) { tradeList = [];
+                changed = true; }
+            if (credits === undefined) { credits = 0;
+                changed = true; }
+            if (statBattles === undefined) { statBattles = 0;
+                changed = true; }
+            if (statWins === undefined) { statWins = 0;
+                changed = true; }
+            if (statLosses === undefined) { statLosses = 0;
+                changed = true; }
+            if (statDrops === undefined) { statDrops = 0;
+                changed = true; }
+            if (playerLevel === undefined) { playerLevel = 1;
+                changed = true; }
+            if (playerExp === undefined) { playerExp = 0;
+                changed = true; }
+            if (maxExp === undefined) { maxExp = 100;
+                changed = true; }
+            if (currentGalaxyIdx === undefined) { currentGalaxyIdx = 0;
+                changed = true; }
+            if (currentSystemIdx === undefined) { currentSystemIdx = 0;
+                changed = true; }
             return changed;
         }
 
         // ============================================================
-        //  纯云端存储
+        //  DOM 引用
+        // ============================================================
+        const $ = id => document.getElementById(id);
+        const loginOverlay = $('loginOverlay');
+        const loginFields = $('loginFields');
+        const registerFields = $('registerFields');
+        const loginUsername = $('loginUsername');
+        const loginPassword = $('loginPassword');
+        const loginBtn = $('loginBtn');
+        const loginError = $('loginError');
+        const loginSuccess = $('loginSuccess');
+        const registerUsername = $('registerUsername');
+        const registerPassword = $('registerPassword');
+        const registerConfirm = $('registerConfirm');
+        const registerBtn = $('registerBtn');
+        const registerError = $('registerError');
+        const registerSuccess = $('registerSuccess');
+        const toggleMode = $('toggleMode');
+        const toggleModeBack = $('toggleModeBack');
+        const logoutBtn = $('logoutBtn');
+        const app = $('app');
+        const playerName = $('playerName');
+        const levelDisplay = $('levelDisplay');
+        const powerDisplay = $('powerDisplay');
+        const creditDisplay = $('creditDisplay');
+        const itemCount = $('itemCount');
+        const warehouseGrid = $('warehouseGrid');
+        const friendlyColumn = $('friendlyColumn');
+        const enemyColumn = $('enemyColumn');
+        const battleLog = $('battleLog');
+        const battleLocation = $('battleLocation');
+        const enemyInfo = $('enemyInfo');
+        const enemyCount = $('enemyCount');
+        const battleTimerEl = $('battleTimer');
+        const statusLabel = $('statusLabel');
+        const galaxyList = $('galaxyList');
+        const systemList = $('systemList');
+        const fleetSummary = $('fleetSummary');
+        const fleetCountLabel = $('fleetCountLabel');
+        const warehouseCount = $('warehouseCount');
+        const marketList = $('marketList');
+        const myOrdersList = $('myOrdersList');
+        const rankList = $('rankList');
+        const rankCount = $('rankCount');
+        const mineralStatus = $('mineralStatus');
+        const factoryList = $('factoryList');
+        const btnAuto = $('btnAutoBattle');
+        const btnRefreshMarket = $('btnRefreshMarket');
+        const btnViewBlueprints = $('btnViewBlueprints');
+        const btnEditFleet = $('btnEditFleet');
+        const modalOverlay = $('modalOverlay');
+        const modalTitle = $('modalTitle');
+        const modalContent = $('modalContent');
+        const modalClose = $('modalClose');
+        const inviteInput = $('inviteInput');
+        const redeemInviteBtn = $('redeemInviteBtn');
+        const inviteResult = $('inviteResult');
+        const tradeSearchInput = $('tradeSearchInput');
+        const tradeTierFilter = $('tradeTierFilter');
+        const sellSelectPage = $('sellSelectPage');
+        const sellPricePage = $('sellPricePage');
+        const sellQtyPage = $('sellQtyPage');
+
+        // ============================================================
+        //  用户系统
+        // ============================================================
+        function getUsers() { try { return JSON.parse(localStorage.getItem('starfleet_users')) || {}; } catch { return {}; } }
+
+        function saveUsers(u) { localStorage.setItem('starfleet_users', JSON.stringify(u)); }
+
+        function showLogin() {
+            loginFields.style.display = 'block';
+            registerFields.style.display = 'none';
+            loginSub.textContent = '登录你的星际账号';
+            loginError.textContent = '';
+            loginSuccess.textContent = '';
+            registerError.textContent = '';
+            registerSuccess.textContent = '';
+        }
+
+        function showRegister() {
+            loginFields.style.display = 'none';
+            registerFields.style.display = 'block';
+            loginSub.textContent = '注册新的星际账号';
+            loginError.textContent = '';
+            loginSuccess.textContent = '';
+            registerError.textContent = '';
+            registerSuccess.textContent = '';
+        }
+        toggleMode.addEventListener('click', showRegister);
+        toggleModeBack.addEventListener('click', showLogin);
+
+        // ============================================================
+        //  云同步
         // ============================================================
         function updateSyncStatus(state) {
             const el = document.getElementById('syncStatus');
@@ -1115,125 +2373,38 @@
             return null;
         }
 
-        async function loadGame() {
-            if (!currentUser) return false;
-            const cloudData = await loadFromCloud();
-            if (cloudData && Object.keys(cloudData).length > 0) {
-                Object.assign(this, cloudData);
-                // 修复数据
-                ensurePlayerData();
-                return true;
-            }
-            return false;
-        }
-
         // ============================================================
-        //  DOM 引用
+        //  注册和登录
         // ============================================================
-        const $ = id => document.getElementById(id);
-        const loginOverlay = $('loginOverlay');
-        const loginFields = $('loginFields');
-        const registerFields = $('registerFields');
-        const loginUsername = $('loginUsername');
-        const loginPassword = $('loginPassword');
-        const loginBtn = $('loginBtn');
-        const loginError = $('loginError');
-        const loginSuccess = $('loginSuccess');
-        const registerUsername = $('registerUsername');
-        const registerPassword = $('registerPassword');
-        const registerConfirm = $('registerConfirm');
-        const registerBtn = $('registerBtn');
-        const registerError = $('registerError');
-        const registerSuccess = $('registerSuccess');
-        const toggleMode = $('toggleMode');
-        const toggleModeBack = $('toggleModeBack');
-        const logoutBtn = $('logoutBtn');
-        const app = $('app');
-        const playerName = $('playerName');
-        const levelDisplay = $('levelDisplay');
-        const powerDisplay = $('powerDisplay');
-        const creditDisplay = $('creditDisplay');
-        const itemCount = $('itemCount');
-        const warehouseGrid = $('warehouseGrid');
-        const friendlyColumn = $('friendlyColumn');
-        const enemyColumn = $('enemyColumn');
-        const battleLog = $('battleLog');
-        const battleLocation = $('battleLocation');
-        const enemyInfo = $('enemyInfo');
-        const enemyCount = $('enemyCount');
-        const battleTimerEl = $('battleTimer');
-        const statusLabel = $('statusLabel');
-        const galaxyList = $('galaxyList');
-        const systemList = $('systemList');
-        const fleetSummary = $('fleetSummary');
-        const fleetCountLabel = $('fleetCountLabel');
-        const warehouseCount = $('warehouseCount');
-        const marketList = $('marketList');
-        const myOrdersList = $('myOrdersList');
-        const rankList = $('rankList');
-        const rankCount = $('rankCount');
-        const mineralStatus = $('mineralStatus');
-        const factoryList = $('factoryList');
-        const btnAuto = $('btnAutoBattle');
-        const btnRefreshMarket = $('btnRefreshMarket');
-        const btnViewBlueprints = $('btnViewBlueprints');
-        const btnEditFleet = $('btnEditFleet');
-        const modalOverlay = $('modalOverlay');
-        const modalTitle = $('modalTitle');
-        const modalContent = $('modalContent');
-        const modalClose = $('modalClose');
-        const inviteInput = $('inviteInput');
-        const redeemInviteBtn = $('redeemInviteBtn');
-        const inviteResult = $('inviteResult');
-        const tradeSearchInput = $('tradeSearchInput');
-        const tradeTierFilter = $('tradeTierFilter');
-        const sellSelectPage = $('sellSelectPage');
-        const sellPricePage = $('sellPricePage');
-        const sellQtyPage = $('sellQtyPage');
-
-        // ============================================================
-        //  用户系统（重写注册逻辑）
-        // ============================================================
-        function getUsers() { try { return JSON.parse(localStorage.getItem('starfleet_users')) || {}; } catch { return {}; } }
-        function saveUsers(u) { localStorage.setItem('starfleet_users', JSON.stringify(u)); }
-        function showLogin() { loginFields.style.display = 'block'; registerFields.style.display = 'none'; loginSub.textContent = '登录你的星际账号'; loginError.textContent = ''; loginSuccess.textContent = ''; registerError.textContent = ''; registerSuccess.textContent = ''; }
-        function showRegister() { loginFields.style.display = 'none'; registerFields.style.display = 'block'; loginSub.textContent = '注册新的星际账号'; loginError.textContent = ''; loginSuccess.textContent = ''; registerError.textContent = ''; registerSuccess.textContent = ''; }
-        toggleMode.addEventListener('click', showRegister);
-        toggleModeBack.addEventListener('click', showLogin);
-
-        // ===== 重写：注册 =====
         async function doRegister() {
             const username = registerUsername.value.trim();
             const password = registerPassword.value.trim();
             const confirm = registerConfirm.value.trim();
-            
-            if (!username || !password || !confirm) { 
-                registerError.textContent = '请填写完整信息'; 
-                return; 
+
+            if (!username || !password || !confirm) {
+                registerError.textContent = '请填写完整信息';
+                return;
             }
-            if (username.length < 2) { 
-                registerError.textContent = '账号至少2个字符'; 
-                return; 
+            if (username.length < 2) {
+                registerError.textContent = '账号至少2个字符';
+                return;
             }
-            if (password.length < 3) { 
-                registerError.textContent = '密码至少3个字符'; 
-                return; 
+            if (password.length < 3) {
+                registerError.textContent = '密码至少3个字符';
+                return;
             }
-            if (password !== confirm) { 
-                registerError.textContent = '两次密码不一致'; 
-                return; 
+            if (password !== confirm) {
+                registerError.textContent = '两次密码不一致';
+                return;
             }
-            
+
             const users = getUsers();
-            if (users[username]) { 
-                registerError.textContent = '账号已存在，请登录'; 
-                return; 
+            if (users[username]) {
+                registerError.textContent = '账号已存在，请登录';
+                return;
             }
-            
+
             // 创建新玩家数据
-            console.log('🆕 注册新玩家:', username);
-            
-            // 创建初始数据
             const newData = {
                 inventory: createInitialInventory(),
                 tradeList: [],
@@ -1256,20 +2427,13 @@
                 redeemedCodes: {},
                 lastOnline: Date.now()
             };
-            
-            console.log('📦 初始数据已创建');
-            console.log('  - 战舰数量:', newData.playerShips.length);
-            console.log('  - 物资:', Object.keys(newData.inventory));
-            
-            // 先保存用户
+
             users[username] = password;
             saveUsers(users);
-            
-            // 临时设置当前用户，以便保存
+
             const tempUser = currentUser;
             currentUser = username;
-            
-            // 应用到全局变量
+
             inventory = newData.inventory;
             tradeList = newData.tradeList;
             credits = newData.credits;
@@ -1289,32 +2453,22 @@
             currentSystemIdx = newData.currentSystemIdx;
             alphaSquadDefeated = newData.alphaSquadDefeated;
             redeemedCodes = newData.redeemedCodes;
-            
-            // 保存到云端
+
             const saved = await saveGameImmediate();
             if (saved) {
-                console.log('✅ 新玩家数据已保存到云端');
                 registerError.textContent = '';
                 registerSuccess.textContent = '注册成功！正在登录...';
-                
-                // 恢复当前用户
                 currentUser = tempUser;
-                
-                // 登录
                 loginUsername.value = username;
                 loginPassword.value = password;
-                setTimeout(() => { 
-                    showLogin(); 
-                    doLogin(); 
-                }, 500);
+                setTimeout(() => { showLogin();
+                    doLogin(); }, 500);
             } else {
-                console.error('❌ 保存到云端失败');
                 registerError.textContent = '注册失败，请检查网络后重试';
                 currentUser = tempUser;
             }
         }
 
-        // ===== 登录 =====
         async function doLogin() {
             const username = loginUsername.value.trim();
             const password = loginPassword.value.trim();
@@ -1329,12 +2483,11 @@
             loginOverlay.classList.add('hidden');
             app.style.display = 'flex';
 
-            console.log('🔐 登录用户:', username);
-            console.log('📡 从云端加载数据...');
-            
-            const loaded = await loadGame();
-            if (!loaded) {
-                console.log('⚠️ 云端无数据，创建新数据');
+            const loaded = await loadFromCloud();
+            if (loaded && Object.keys(loaded).length > 0) {
+                Object.assign(window, loaded);
+                ensurePlayerData();
+            } else {
                 inventory = createInitialInventory();
                 tradeList = [];
                 credits = 0;
@@ -1343,24 +2496,21 @@
                 constructionQueue = [];
                 maxShips = { front: 2, mid: 1, rear: 2 };
                 upgradeLevel = { front: 0, mid: 0, rear: 0 };
-                statBattles = 0; statWins = 0; statLosses = 0; statDrops = 0;
-                playerLevel = 1; playerExp = 0; maxExp = 100;
-                currentGalaxyIdx = 0; currentSystemIdx = 0;
-                alphaSquadDefeated = {}; redeemedCodes = {};
+                statBattles = 0;
+                statWins = 0;
+                statLosses = 0;
+                statDrops = 0;
+                playerLevel = 1;
+                playerExp = 0;
+                maxExp = 100;
+                currentGalaxyIdx = 0;
+                currentSystemIdx = 0;
+                alphaSquadDefeated = {};
+                redeemedCodes = {};
                 ensurePlayerData();
                 await saveGameImmediate();
-                addLog('🆕 新玩家已初始化，数据已保存到云端', 'sys');
-            } else {
-                console.log('✅ 云端数据加载成功');
-                console.log('  - 战舰数量:', playerShips.length);
-                console.log('  - 物资:', Object.keys(inventory));
-                addLog('☁️ 从云端加载数据成功', 'sys');
             }
-
-            checkOfflineEarnings();
             renderAll();
-            addLog('👋 欢迎回来，舰长 ' + currentUser, 'sys');
-            addLog('⚔️ 舰队已就绪，自动战斗开启', 'sys');
             updateSyncStatus('ok');
         }
 
@@ -1405,8 +2555,12 @@
         }
 
         function getCurrentGalaxy() { return GALAXY_DATA[currentGalaxyIdx] || GALAXY_DATA[0]; }
+
         function getCurrentSystemName() { const g = getCurrentGalaxy(); return g.systems[currentSystemIdx] || g.systems[0]; }
-        function getSystemLevel() { const g = getCurrentGalaxy(); const base = g.levelBase || 1; return { min: base + currentSystemIdx * 2, max: base + currentSystemIdx * 2 + 3 }; }
+
+        function getSystemLevel() { const g = getCurrentGalaxy(); const base = g.levelBase || 1; return { min: base +
+                currentSystemIdx * 2, max: base + currentSystemIdx * 2 + 3 }; }
+
         function getGalaxyTier() { return getCurrentGalaxy().tier || 1; }
 
         function addExp(amount) {
@@ -1421,52 +2575,52 @@
             levelDisplay.textContent = 'Lv.' + playerLevel;
         }
 
-        function checkOfflineEarnings() {
-            if (!currentUser) return;
-            const now = Date.now();
-            const last = window._lastOnline || now;
-            const diff = Math.floor((now - last) / 60000);
-            if (diff < 2) return;
-            const minutes = Math.min(diff, 180);
-            const battles = minutes;
-            let exp = 0, cred = 0, mat = {};
-            const g = getCurrentGalaxy();
-            const baseLv = g.levelBase || 1;
-            for (let i = 0; i < battles; i++) {
-                const lv = baseLv + Math.floor(Math.random() * 5);
-                exp += Math.floor(lv * 0.8);
-                cred += 5 + lv * 2 + Math.floor(Math.random() * 5);
-                if (Math.random() < 0.05) {
-                    const tier = Math.min(g.tier || 1, 7);
-                    const pool = ALL_MATERIALS.filter(m => m.tier === tier);
-                    if (pool.length) {
-                        const m = pool[Math.floor(Math.random() * pool.length)];
-                        mat[m.name] = (mat[m.name] || 0) + 1 + Math.floor(Math.random() * 2);
-                    }
-                }
-            }
-            if (exp > 0 || cred > 0 || Object.keys(mat).length) {
-                let e = playerExp, lv = playerLevel, m = maxExp;
-                e += exp;
-                while (e >= m) { e -= m; lv++; m = Math.floor(m * 1.3) + 50; }
-                playerExp = e; playerLevel = lv; maxExp = m;
-                credits += cred;
-                Object.keys(mat).forEach(name => {
-                    if (inventory[name]) inventory[name].count += mat[name];
-                    else inventory[name] = { count: mat[name], tier: ALL_MATERIALS.find(mm => mm.name === name)?.tier || 1 };
+        // ============================================================
+        //  星系导航（核心修复）
+        // ============================================================
+        function renderGalaxies() {
+            galaxyList.innerHTML = '';
+            GALAXY_DATA.forEach((g, idx) => {
+                const div = document.createElement('div');
+                div.className = 'galaxy-item' + (idx === currentGalaxyIdx ? ' active' : '');
+                div.innerHTML = `${g.name} <span class="g-tier">T${g.tier}</span>`;
+                div.addEventListener('click', function() {
+                    currentGalaxyIdx = idx;
+                    currentSystemIdx = 0;
+                    renderGalaxies();
+                    renderSystems();
+                    updateBattleInfo();
+                    generateEnemies();
+                    saveGameImmediate();
+                    addLog('🔄 跃迁至 ' + g.name, 'sys');
                 });
-                let msg = `⏰ 离线 ${minutes} 分钟，获得：`;
-                if (exp > 0) msg += ` ${exp}经验`;
-                if (cred > 0) msg += ` ${cred}星际币`;
-                Object.keys(mat).forEach(name => { msg += ` ${name}x${mat[name]}`; });
-                addLog('💰 ' + msg, 'loot');
-                saveGameImmediate();
-            }
-            window._lastOnline = now;
+                galaxyList.appendChild(div);
+            });
+        }
+
+        function renderSystems() {
+            systemList.innerHTML = '';
+            const galaxy = getCurrentGalaxy();
+            galaxy.systems.forEach((name, idx) => {
+                const lv = { min: galaxy.levelBase + idx * 2, max: galaxy.levelBase + idx * 2 + 3 };
+                const div = document.createElement('div');
+                div.className = 'system-chip' + (idx === currentSystemIdx ? ' active' : '');
+                div.innerHTML = `${name} <span class="s-lvl">(${lv.min}-${lv.max})</span>`;
+                div.addEventListener('click', function() {
+                    currentSystemIdx = idx;
+                    renderSystems();
+                    updateBattleInfo();
+                    generateEnemies();
+                    saveGameImmediate();
+                    addLog('🪐 进入 ' + name, 'sys');
+                });
+                systemList.appendChild(div);
+            });
+            document.getElementById('currentSystemLabel').textContent = getCurrentSystemName() || '太阳系';
         }
 
         // ============================================================
-        //  战斗系统（完整）
+        //  战斗系统
         // ============================================================
         function generateEnemies() {
             const lv = getSystemLevel();
@@ -1500,18 +2654,22 @@
             if (!friendlyShips || !playerShips) return;
             friendlyShips.forEach(fs => {
                 const ps = playerShips.find(s => s.id === fs.id);
-                if (ps) { ps.hp = fs.hp; ps.maxHp = fs.maxHp; ps.atk = fs.atk; ps.charge = fs.charge || 0; }
+                if (ps) { ps.hp = fs.hp;
+                    ps.maxHp = fs.maxHp;
+                    ps.atk = fs.atk;
+                    ps.charge = fs.charge || 0; }
             });
         }
 
         function resetAllShipsHp() {
-            playerShips.forEach(s => { s.hp = s.maxHp; s.charge = 0; });
-            friendlyShips.forEach(fs => { fs.hp = fs.maxHp; fs.charge = 0; });
+            playerShips.forEach(s => { s.hp = s.maxHp;
+                s.charge = 0; });
+            friendlyShips.forEach(fs => { fs.hp = fs.maxHp;
+                fs.charge = 0; });
         }
 
         function updateFleetUI() {
             if (!playerShips || playerShips.length === 0) {
-                console.log('⚠️ 没有战舰，重新创建');
                 playerShips = createInitialShips();
                 saveGameImmediate();
             }
@@ -1529,7 +2687,11 @@
             fleetCountLabel.textContent = total + '/' + (maxShips.front + maxShips.mid + maxShips.rear);
             friendlyShips = deployed.map(s => ({
                 ...s,
-                hp: s.hp, maxHp: s.maxHp, atk: s.atk, charge: s.charge || 0, maxCharge: 100,
+                hp: s.hp,
+                maxHp: s.maxHp,
+                atk: s.atk,
+                charge: s.charge || 0,
+                maxCharge: 100,
                 heal: s.pos === 'rear' ? 12 : 0,
                 burst: s.affixes.some(a => a.id === 'burst'),
                 dmgBonus: s.affixes.reduce((sum, a) => sum + (a.id === 'focus' ? a.value / 100 : 0), 0),
@@ -1544,7 +2706,8 @@
         function renderFleet() {
             friendlyColumn.innerHTML = '';
             if (!friendlyShips || friendlyShips.length === 0) {
-                friendlyColumn.innerHTML = '<div style="color:#4a6080;font-size:0.5rem;text-align:center;padding:10px 0;">暂无战舰</div>';
+                friendlyColumn.innerHTML =
+                    '<div style="color:#4a6080;font-size:0.5rem;text-align:center;padding:10px 0;">暂无战舰</div>';
                 return;
             }
             const order = ['rear', 'mid', 'front'];
@@ -1558,9 +2721,11 @@
                 let extra = '';
                 if (ship.pos === 'mid') {
                     const cpct = Math.round((ship.charge || 0) / (ship.maxCharge || 100) * 100);
-                    extra = `<div class="charge-wrap"><div class="charge-bar"><div class="fill" style="width:${cpct}%;"></div></div><span class="charge-text">${cpct}%</span></div>`;
+                    extra =
+                        `<div class="charge-wrap"><div class="charge-bar"><div class="fill" style="width:${cpct}%;"></div></div><span class="charge-text">${cpct}%</span></div>`;
                 }
-                let affixTags = ship.affixes?.map(a => `<span style="font-size:0.3rem;color:#9b59b6;margin-left:2px;">[${a.name}]</span>`).join('') || '';
+                let affixTags = ship.affixes?.map(a =>
+                    `<span style="font-size:0.3rem;color:#9b59b6;margin-left:2px;">[${a.name}]</span>`).join('') || '';
                 div.innerHTML = `
                     <span class="pos-tag ${ship.pos}">${ship.pos==='front'?'先锋':ship.pos==='mid'?'中间':'后勤'}</span>
                     <span class="ship-icon">${ship.pos==='front'?'◈':ship.pos==='mid'?'◆':'◉'}</span>
@@ -1675,7 +2840,10 @@
             if (!isAuto || isDefeated || isPaused) return;
             enemies = enemies.filter(e => e.alive || e.hp > 0);
             enemies.forEach(e => { if (e.hp <= 0) e.alive = false; });
-            if (friendlyShips.filter(s => s.hp > 0).length === 0) { statLosses++; statBattles++; handleDefeat(); updateStats(); return; }
+            if (friendlyShips.filter(s => s.hp > 0).length === 0) { statLosses++;
+                statBattles++;
+                handleDefeat();
+                updateStats(); return; }
             const aliveEnemies = enemies.filter(e => e.alive);
             if (aliveEnemies.length === 0) {
                 if (window._alphaBattlePlanetId && window._alphaBattleCallback) {
@@ -1685,7 +2853,8 @@
                     window._alphaBattleCallback = null;
                     return;
                 } else {
-                    statWins++; statBattles++;
+                    statWins++;
+                    statBattles++;
                     addLog('🎉 战斗胜利！点击"继续"刷下一波', 'loot');
                     isAuto = false;
                     btnAuto.textContent = '▶️ 继续';
@@ -1698,18 +2867,21 @@
                 }
             }
             const order = ['front', 'mid', 'rear'];
-            const sortedShips = [...friendlyShips].filter(s => s.hp > 0).sort((a, b) => order.indexOf(a.pos) - order.indexOf(b.pos));
+            const sortedShips = [...friendlyShips].filter(s => s.hp > 0).sort((a, b) => order.indexOf(a.pos) - order.indexOf(b
+                .pos));
             for (const ship of sortedShips) {
                 const targets = enemies.filter(e => e.alive);
                 if (targets.length === 0) break;
                 const target = targets[Math.floor(Math.random() * targets.length)];
                 let baseDmg = ship.atk + Math.floor(Math.random() * 5) - 2;
                 if (ship.pos === 'mid') {
-                    ship.charge = Math.min(ship.maxCharge || 100, (ship.charge || 0) + 25 + Math.floor(Math.random() * 15));
+                    ship.charge = Math.min(ship.maxCharge || 100, (ship.charge || 0) + 25 + Math.floor(Math.random() *
+                        15));
                     const chargeBonus = 1 + (ship.charge || 0) / 100;
                     baseDmg = Math.floor(baseDmg * chargeBonus);
-                    if (ship.charge >= 100) { addLog(`💥 满蓄力！对 ${target.name} 造成 ${baseDmg} 伤害`, 'dmg'); ship.charge = 0; }
-                    else addLog(`💥 蓄力 ${Math.round(ship.charge)}% 对 ${target.name} 造成 ${baseDmg} 伤害`, 'dmg');
+                    if (ship.charge >= 100) { addLog(`💥 满蓄力！对 ${target.name} 造成 ${baseDmg} 伤害`, 'dmg');
+                        ship.charge = 0; } else
+                        addLog(`💥 蓄力 ${Math.round(ship.charge)}% 对 ${target.name} 造成 ${baseDmg} 伤害`, 'dmg');
                 } else {
                     addLog(`⚔️ ${ship.name} 对 ${target.name} 造成 ${baseDmg} 伤害`, 'dmg');
                 }
@@ -1717,16 +2889,19 @@
                 if (ship.dmgBonus) dmg = Math.floor(dmg * (1 + ship.dmgBonus));
                 if (ship.burst) {
                     target.hp -= dmg;
-                    if (target.hp <= 0) { target.alive = false; handleEnemyDeath(target, ship); }
+                    if (target.hp <= 0) { target.alive = false;
+                        handleEnemyDeath(target, ship); }
                     if (target.alive) {
                         const dmg2 = Math.floor(dmg * 0.8);
                         target.hp -= dmg2;
-                        if (target.hp <= 0) { target.alive = false; handleEnemyDeath(target, ship); }
+                        if (target.hp <= 0) { target.alive = false;
+                            handleEnemyDeath(target, ship); }
                         addLog(`🔁 连发第二次攻击 ${target.name} 造成 ${dmg2} 伤害`, 'dmg');
                     }
                 } else {
                     target.hp -= dmg;
-                    if (target.hp <= 0) { target.alive = false; handleEnemyDeath(target, ship); }
+                    if (target.hp <= 0) { target.alive = false;
+                        handleEnemyDeath(target, ship); }
                 }
             }
             const aliveShips = friendlyShips.filter(s => s.hp > 0);
@@ -1758,7 +2933,10 @@
                 }
             }
             enemies = enemies.filter(e => e.alive);
-            if (friendlyShips.filter(s => s.hp > 0).length === 0) { statLosses++; statBattles++; handleDefeat(); updateStats(); }
+            if (friendlyShips.filter(s => s.hp > 0).length === 0) { statLosses++;
+                statBattles++;
+                handleDefeat();
+                updateStats(); }
             syncFleetHpToPlayer();
             renderFleet();
             renderEnemy();
@@ -1774,7 +2952,7 @@
         }
 
         // ============================================================
-        //  仓库 & 蓝图 & 交易市场
+        //  仓库 & 蓝图
         // ============================================================
         function renderWarehouse() {
             warehouseGrid.innerHTML = '';
@@ -1784,7 +2962,8 @@
                 const qc = getQualityClass(data.tier);
                 const div = document.createElement('div');
                 div.className = 'warehouse-slot has-item ' + qc;
-                div.innerHTML = `<div class="name">${name}</div><div class="info-row"><span>T${data.tier}</span><span>×${data.count}</span></div>`;
+                div.innerHTML =
+                    `<div class="name">${name}</div><div class="info-row"><span>T${data.tier}</span><span>×${data.count}</span></div>`;
                 div.addEventListener('click', () => {
                     const d = inventory[name];
                     const desc = ALL_MATERIALS.find(m => m.name === name)?.desc || '';
@@ -1806,7 +2985,8 @@
             unlearned.forEach(bp => {
                 const div = document.createElement('div');
                 div.className = 'warehouse-slot has-item blueprint';
-                div.innerHTML = `<div class="name">📐 ${bp.name}</div><div class="info-row"><span>T${bp.tier}</span><span>可学习</span></div>`;
+                div.innerHTML =
+                    `<div class="name">📐 ${bp.name}</div><div class="info-row"><span>T${bp.tier}</span><span>可学习</span></div>`;
                 div.addEventListener('click', () => {
                     showModal('📐 ' + bp.name, `
                         <div class="item"><span>名称</span><span style="color:#d4a843;">${bp.name}</span></div>
@@ -1842,7 +3022,8 @@
         function updateSellSelect() {
             const slots = Object.keys(inventory);
             if (slots.length === 0) { sellSelectPage.innerHTML = '<option value="">仓库为空</option>'; return; }
-            sellSelectPage.innerHTML = slots.map(name => `<option value="${name}">${name} x${inventory[name].count} (T${inventory[name].tier})</option>`).join('');
+            sellSelectPage.innerHTML = slots.map(name =>
+                `<option value="${name}">${name} x${inventory[name].count} (T${inventory[name].tier})</option>`).join('');
         }
 
         function addBlueprint(galaxyTier) {
@@ -1853,7 +3034,8 @@
             const list = db[pos];
             if (!list || !list.length) return;
             const name = list[Math.floor(Math.random() * list.length)];
-            const bp = { id: 'bp_' + Date.now() + Math.random().toString(36).substr(2,4), name, tier, pos, desc: '蓝图: ' + name + ' (T' + tier + ')', used: false, learned: false };
+            const bp = { id: 'bp_' + Date.now() + Math.random().toString(36).substr(2, 4), name, tier, pos,
+                desc: '蓝图: ' + name + ' (T' + tier + ')', used: false, learned: false };
             blueprints.push(bp);
             addLog('📐 获得蓝图: ' + name + ' (T' + tier + ')', 'blueprint');
             saveGameImmediate();
@@ -1867,29 +3049,44 @@
             const idx = blueprints.indexOf(bp);
             if (idx > -1) blueprints.splice(idx, 1);
             addLog('📖 学习了蓝图: ' + bp.name + '，已从仓库移除', 'loot');
-            renderWarehouse(); renderFactory(); saveGameImmediate(); modalClose.click();
+            renderWarehouse();
+            renderFactory();
+            saveGameImmediate();
+            modalClose.click();
         };
         window.discardBlueprint = function(bpId) {
             const idx = blueprints.findIndex(b => b.id === bpId);
-            if (idx > -1) { blueprints.splice(idx, 1); addLog('🗑️ 蓝图已丢弃', 'dmg'); renderWarehouse(); renderFactory(); saveGameImmediate(); }
+            if (idx > -1) { blueprints.splice(idx, 1);
+                addLog('🗑️ 蓝图已丢弃', 'dmg');
+                renderWarehouse();
+                renderFactory();
+                saveGameImmediate(); }
         };
 
+        // ============================================================
+        //  交易市场
+        // ============================================================
         window.quickSell = function(name) {
             if (!inventory[name] || inventory[name].count <= 0) { addLog('❌ 没有 ' + name, 'dmg'); return; }
             const qty = 1;
             const price = 10 + inventory[name].tier * 20 + Math.floor(Math.random() * 30);
             inventory[name].count -= qty;
             if (inventory[name].count <= 0) delete inventory[name];
-            tradeList.push({ name, price, qty, tier: inventory[name]?.tier || 1, seller: currentUser || '玩家', time: Date.now() });
+            tradeList.push({ name, price, qty, tier: inventory[name]?.tier || 1, seller: currentUser || '玩家',
+                time: Date.now() });
             addLog(`📤 上架 ${name} x1 单价 ${price}`, 'loot');
-            renderWarehouse(); renderMarket(); renderMyOrders(); saveGameImmediate();
+            renderWarehouse();
+            renderMarket();
+            renderMyOrders();
+            saveGameImmediate();
         };
         window.dropItem = function(name) {
             if (!inventory[name]) return;
             if (inventory[name].count <= 1) delete inventory[name];
             else inventory[name].count--;
             addLog(`🗑️ 丢弃了 ${name}`, 'dmg');
-            renderWarehouse(); saveGameImmediate();
+            renderWarehouse();
+            saveGameImmediate();
         };
         window.confirmSellPage = function() {
             const name = sellSelectPage.value;
@@ -1899,9 +3096,13 @@
             if (inventory[name].count < qty) { addLog('❌ 数量不足', 'dmg'); return; }
             inventory[name].count -= qty;
             if (inventory[name].count <= 0) delete inventory[name];
-            tradeList.push({ name, price, qty, tier: inventory[name]?.tier || 1, seller: currentUser || '玩家', time: Date.now() });
+            tradeList.push({ name, price, qty, tier: inventory[name]?.tier || 1, seller: currentUser || '玩家',
+                time: Date.now() });
             addLog('📤 上架 ' + name + ' x' + qty + ' 单价 ' + price, 'loot');
-            renderWarehouse(); renderMarket(); renderMyOrders(); saveGameImmediate();
+            renderWarehouse();
+            renderMarket();
+            renderMyOrders();
+            saveGameImmediate();
         };
         window.delistItem = function(idx) {
             if (idx < 0 || idx >= tradeList.length) return;
@@ -1912,21 +3113,32 @@
             else inventory[item.name] = { count: qty, tier: item.tier };
             tradeList.splice(idx, 1);
             addLog(`📥 下架 ${item.name} x${qty}，已返还仓库`, 'sys');
-            renderWarehouse(); renderMarket(); renderMyOrders(); saveGameImmediate();
+            renderWarehouse();
+            renderMarket();
+            renderMyOrders();
+            saveGameImmediate();
         };
         window.buyItem = function(idx) {
             if (idx < 0 || idx >= tradeList.length) return;
             const item = tradeList[idx];
             if (item.seller === currentUser || item.seller === '玩家') { addLog('❌ 不能购买自己的物品', 'dmg'); return; }
-            if (item.qty <= 0) { addLog('❌ 已售罄', 'dmg'); tradeList.splice(idx, 1); renderMarket(); renderMyOrders(); return; }
-            if (credits < item.price) { addLog('❌ 星际币不足，需要 ' + item.price, 'dmg'); return; }
-            credits -= item.price; creditDisplay.textContent = credits;
+            if (item.qty <= 0) { addLog('❌ 已售罄', 'dmg');
+                tradeList.splice(idx, 1);
+                renderMarket();
+                renderMyOrders(); return; }
+            if (credits < item.price) { addLog('❌ 星际币不足', 'dmg'); return; }
+            credits -= item.price;
+            creditDisplay.textContent = credits;
             item.qty--;
             if (inventory[item.name]) inventory[item.name].count += 1;
             else inventory[item.name] = { count: 1, tier: item.tier };
-            addLog(`🛒 购买了 ${item.name} (T${item.tier})，花费 ${item.price} 星际币`, 'loot');
-            if (item.qty <= 0) { tradeList.splice(idx, 1); addLog(`📢 ${item.name} 已售罄`, 'sys'); }
-            renderWarehouse(); renderMarket(); renderMyOrders(); saveGameImmediate();
+            addLog(`🛒 购买了 ${item.name} (T${item.tier})`, 'loot');
+            if (item.qty <= 0) { tradeList.splice(idx, 1);
+                addLog(`📢 ${item.name} 已售罄`, 'sys'); }
+            renderWarehouse();
+            renderMarket();
+            renderMyOrders();
+            saveGameImmediate();
         };
 
         function renderMarket() {
@@ -1960,7 +3172,8 @@
                     marketList.appendChild(div);
                 });
             }
-            renderPagination('marketPagination', marketPage, totalPages, p => { marketPage = p; renderMarket(); });
+            renderPagination('marketPagination', marketPage, totalPages, p => { marketPage = p;
+                renderMarket(); });
         }
 
         function renderMyOrders() {
@@ -1986,7 +3199,8 @@
                     myOrdersList.appendChild(div);
                 });
             }
-            renderPagination('myOrdersPagination', myOrdersPage, totalPages, p => { myOrdersPage = p; renderMyOrders(); });
+            renderPagination('myOrdersPagination', myOrdersPage, totalPages, p => { myOrdersPage = p;
+                renderMyOrders(); });
         }
 
         function renderPagination(containerId, current, total, callback) {
@@ -1994,11 +3208,17 @@
             if (!c) return;
             c.innerHTML = '';
             if (total <= 1) return;
-            const prev = document.createElement('button'); prev.textContent = '‹'; prev.onclick = () => { if (current > 1) callback(current - 1); };
+            const prev = document.createElement('button');
+            prev.textContent = '‹';
+            prev.onclick = () => { if (current > 1) callback(current - 1); };
             c.appendChild(prev);
-            const info = document.createElement('span'); info.className = 'page-info'; info.textContent = current + '/' + total;
+            const info = document.createElement('span');
+            info.className = 'page-info';
+            info.textContent = current + '/' + total;
             c.appendChild(info);
-            const next = document.createElement('button'); next.textContent = '›'; next.onclick = () => { if (current < total) callback(current + 1); };
+            const next = document.createElement('button');
+            next.textContent = '›';
+            next.onclick = () => { if (current < total) callback(current + 1); };
             c.appendChild(next);
         }
 
@@ -2010,7 +3230,8 @@
             const building = constructionQueue.filter(c => !c.completed);
             factoryList.innerHTML = '';
             if (learned.length === 0 && building.length === 0) {
-                factoryList.innerHTML = `<div style="color:#4a6080;font-size:0.6rem;text-align:center;padding:20px 0;">暂无可建造蓝图<br>打怪获得蓝图后在仓库学习，然后在此建造</div>`;
+                factoryList.innerHTML =
+                    `<div style="color:#4a6080;font-size:0.6rem;text-align:center;padding:20px 0;">暂无可建造蓝图<br>打怪获得蓝图后在仓库学习，然后在此建造</div>`;
                 return;
             }
             let html = '';
@@ -2040,7 +3261,8 @@
                         }
                         canBuild = hasAll;
                     }
-                    const recipeStr = recipe ? Object.entries(recipe).map(([k,v]) => `${k} x${v}`).join(' ') : '无配方';
+                    const recipeStr = recipe ? Object.entries(recipe).map(([k, v]) => `${k} x${v}`).join(' ') :
+                        '无配方';
                     html += `<div class="factory-item" style="border-color:${color};">
                         <div class="fname" style="color:${color};">${bp.name}</div>
                         <div class="ftier">T${bp.tier} · ${bp.pos}</div>
@@ -2072,10 +3294,13 @@
                 if (inventory[mat].count <= 0) delete inventory[mat];
             }
             bp.used = true;
-            const c = { id: 'c_' + Date.now(), blueprintId: bpId, tier: bp.tier, name: bp.name, pos: bp.pos, elapsed: 0, totalTime: 60, completed: false };
+            const c = { id: 'c_' + Date.now(), blueprintId: bpId, tier: bp.tier, name: bp.name, pos: bp.pos, elapsed: 0,
+                totalTime: 60, completed: false };
             constructionQueue.push(c);
             addLog('🔧 开始建造 ' + bp.name + '，预计60秒', 'sys');
-            renderWarehouse(); renderFactory(); saveGameImmediate();
+            renderWarehouse();
+            renderFactory();
+            saveGameImmediate();
         };
 
         setInterval(() => {
@@ -2087,15 +3312,26 @@
                         c.completed = true;
                         const base = getBaseStats(c.tier, c.pos);
                         const newShip = {
-                            id: 'ship_' + Date.now() + Math.random().toString(36).substr(2,4),
-                            name: c.name, tier: c.tier, pos: c.pos,
-                            hp: base.hp, maxHp: base.hp, atk: base.atk,
-                            affixes: [], deployed: false, forgeCount: 0, charge: 0
+                            id: 'ship_' + Date.now() + Math.random().toString(36).substr(2, 4),
+                            name: c.name,
+                            tier: c.tier,
+                            pos: c.pos,
+                            hp: base.hp,
+                            maxHp: base.hp,
+                            atk: base.atk,
+                            affixes: [],
+                            deployed: false,
+                            forgeCount: 0,
+                            charge: 0
                         };
                         playerShips.push(newShip);
                         addLog('✅ 战舰建造完成！' + c.name + ' (T' + c.tier + ') 已加入舰队', 'loot');
                         changed = true;
-                        updateFleetUI(); updateStats(); renderWarehouse(); renderFactory(); saveGameImmediate();
+                        updateFleetUI();
+                        updateStats();
+                        renderWarehouse();
+                        renderFactory();
+                        saveGameImmediate();
                     }
                 }
             });
@@ -2112,9 +3348,14 @@
                     const system = g.systems[Math.floor(Math.random() * g.systems.length)];
                     const planet = {
                         id: 'min_' + Date.now() + '_' + idx,
-                        galaxyIdx: idx, galaxyName: g.name, systemName: system,
-                        tier, miner: null, startTime: Date.now(),
-                        expireTime: Date.now() + 3600000, active: true
+                        galaxyIdx: idx,
+                        galaxyName: g.name,
+                        systemName: system,
+                        tier: tier,
+                        miner: null,
+                        startTime: Date.now(),
+                        expireTime: Date.now() + 3600000,
+                        active: true
                     };
                     mineralPlanets.push(planet);
                     addLog('💎 矿物星球出现在 ' + g.name + ' · ' + system + ' (T' + tier + ')', 'loot');
@@ -2128,7 +3369,8 @@
             mineralPlanets = mineralPlanets.filter(p => p.active && p.expireTime > now);
             mineralStatus.innerHTML = '';
             if (mineralPlanets.length === 0) {
-                mineralStatus.innerHTML = `<div style="color:#4a6080;font-size:0.55rem;text-align:center;padding:20px 0;">暂无矿物星球</div>`;
+                mineralStatus.innerHTML =
+                    `<div style="color:#4a6080;font-size:0.55rem;text-align:center;padding:20px 0;">暂无矿物星球</div>`;
                 return;
             }
             mineralPlanets.forEach(p => {
@@ -2142,10 +3384,13 @@
                 let minerDisplay = p.miner ? '👤 开采中: ' + p.miner : '⏸️ 无人开采';
                 let actionHtml = '';
                 if (isMining) actionHtml = `<div style="color:#4aad7a;font-size:0.5rem;">✅ 你正在开采</div>`;
-                else if (canBattle) actionHtml = `<div class="m-battle" onclick="challengeMiner('${p.id}')">⚔️ 挑战开采者</div>`;
+                else if (canBattle) actionHtml =
+                    `<div class="m-battle" onclick="challengeMiner('${p.id}')">⚔️ 挑战开采者</div>`;
                 else if (!p.miner) {
-                    if (alphaDefeated) actionHtml = `<div class="m-battle" style="color:#4aad7a;" onclick="startMining('${p.id}')">⛏️ 开始开采</div>`;
-                    else actionHtml = `<div class="m-battle" onclick="startAlphaBattle('${p.id}')">⚔️ 击败阿尔法小队后开采</div>`;
+                    if (alphaDefeated) actionHtml =
+                        `<div class="m-battle" style="color:#4aad7a;" onclick="startMining('${p.id}')">⛏️ 开始开采</div>`;
+                    else actionHtml =
+                        `<div class="m-battle" onclick="startAlphaBattle('${p.id}')">⚔️ 击败阿尔法小队后开采</div>`;
                 }
                 div.innerHTML = `
                     <div class="m-title" style="color:${color};">💎 ${p.galaxyName} · ${p.systemName} (T${p.tier})</div>
@@ -2158,7 +3403,8 @@
         }
 
         function startAlphaBattle(planetId) {
-            if (alphaSquadDefeated[planetId]) { addLog('✅ 阿尔法小队已被击败', 'sys'); startMining(planetId); return; }
+            if (alphaSquadDefeated[planetId]) { addLog('✅ 阿尔法小队已被击败', 'sys');
+                startMining(planetId); return; }
             const squad = generateAlphaSquad();
             if (!squad.length) { addLog('⚠️ 无法生成阿尔法小队', 'dmg'); return; }
             enemies = squad.map(e => ({ ...e, reward: 0, tier: 1 }));
@@ -2186,11 +3432,13 @@
                 const name = all[Math.floor(Math.random() * all.length)];
                 const baseLv = lv.min + Math.floor(Math.random() * (lv.max - lv.min + 1));
                 squad.push({
-                    id: 'alpha_' + i, name: '阿尔法小队 - ' + name,
+                    id: 'alpha_' + i,
+                    name: '阿尔法小队 - ' + name,
                     hp: Math.floor(10 + baseLv * 2 + Math.random() * 10),
                     maxHp: Math.floor(10 + baseLv * 2 + Math.random() * 10),
                     atk: Math.floor(3 + baseLv * 0.8 + Math.random() * 3),
-                    alive: true, level: baseLv
+                    alive: true,
+                    level: baseLv
                 });
             }
             return squad;
@@ -2206,7 +3454,10 @@
             renderMineralStatus();
             const interval = setInterval(() => {
                 const p = mineralPlanets.find(p2 => p2.id === planetId);
-                if (!p || !p.active || p.miner !== currentUser) { clearInterval(interval); return; }
+                if (!p || !p.active || p.miner !== currentUser) {
+                    clearInterval(interval);
+                    return;
+                }
                 if (Math.random() < 0.8) {
                     const pool = ALL_MATERIALS.filter(m => m.tier === p.tier);
                     if (pool.length) {
@@ -2215,7 +3466,8 @@
                         if (inventory[mat.name]) inventory[mat.name].count += qty;
                         else inventory[mat.name] = { count: qty, tier: mat.tier };
                         addLog(`⛏️ 开采到 ${mat.name} x${qty} (T${p.tier})`, 'loot');
-                        renderWarehouse(); saveGameImmediate();
+                        renderWarehouse();
+                        saveGameImmediate();
                     }
                 }
             }, 60000);
@@ -2277,7 +3529,8 @@
         //  排行榜
         // ============================================================
         function renderRank() {
-            const all = [{ name: currentUser || '玩家', power: parseInt(powerDisplay.textContent), level: playerLevel, isMe: true }];
+            const all = [{ name: currentUser || '玩家', power: parseInt(powerDisplay.textContent), level: playerLevel,
+                isMe: true }];
             all.sort((a, b) => b.power - a.power);
             rankCount.textContent = '共 ' + all.length + ' 人';
             rankList.innerHTML = '';
@@ -2300,13 +3553,15 @@
         }
 
         // ============================================================
-        //  战舰详情、锻造、部署
+        //  战舰详情
         // ============================================================
         function showShipDetail(shipId) {
             const ship = playerShips.find(s => s.id === shipId);
             if (!ship) return;
             const color = getQualityColor(ship.tier);
-            const affixHtml = ship.affixes?.length ? ship.affixes.map(a => `<div style="font-size:0.7rem;color:#9b59b6;">${a.name}: ${a.desc}</div>`).join('') : '<div style="color:#4a6080;font-size:0.7rem;">无词条</div>';
+            let affixHtml = ship.affixes.length > 0 ? ship.affixes.map(a =>
+                `<div style="font-size:0.7rem;color:#9b59b6;">${a.name}: ${a.desc}</div>`).join('') :
+                '<div style="color:#4a6080;font-size:0.7rem;">无词条</div>';
             const posLabel = ship.pos === 'front' ? '先锋' : ship.pos === 'mid' ? '中间' : '后勤';
             const html = `
                 <div class="item"><span>名称</span><span style="color:${color};">${ship.name}</span></div>
@@ -2317,7 +3572,7 @@
                 <div class="item"><span>锻造次数</span><span>${ship.forgeCount || 0}/5</span></div>
                 <div class="item"><span>状态</span><span>${ship.deployed ? '✅ 已上阵' : '⏸️ 未上阵'}</span></div>
                 <div style="margin-top:8px;border-top:1px solid #1a2842;padding-top:6px;">
-                    <div style="font-size:0.75rem;color:#6f8bb0;">词条 (${ship.affixes?.length || 0}/5)</div>
+                    <div style="font-size:0.75rem;color:#6f8bb0;">词条 (${ship.affixes.length}/5)</div>
                     ${affixHtml}
                 </div>
                 <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
@@ -2336,7 +3591,7 @@
             const tier = ship.tier;
             if ((ship.forgeCount || 0) >= 5) { addLog('❌ 已达到最大锻造次数', 'dmg'); return; }
             const pool = ALL_MATERIALS.filter(m => m.tier === tier);
-            if (!pool.length) { addLog('❌ 没有T' + tier + '材料', 'dmg'); return; }
+            if (pool.length === 0) { addLog('❌ 没有T' + tier + '材料', 'dmg'); return; }
             let usedMat = null;
             for (const mat of pool) {
                 if (inventory[mat.name] && inventory[mat.name].count >= 10) { usedMat = mat; break; }
@@ -2352,12 +3607,16 @@
                 ship.maxHp = Math.floor(ship.maxHp * (1 + bonus));
                 ship.hp = Math.min(ship.hp, ship.maxHp);
             }
-            if (affix.id === 'burst') { ship.burst = true; ship.atk = Math.floor(ship.atk * (1 - affix.value / 100)); }
+            if (affix.id === 'burst') { ship.burst = true;
+                ship.atk = Math.floor(ship.atk * (1 - affix.value / 100)); }
             if (affix.id === 'focus') { ship.dmgBonus = (ship.dmgBonus || 0) + affix.value / 100; }
             if (affix.id === 'plunder') { ship.plunder = affix.value / 100; }
             if (affix.id === 'self_destruct') { ship.selfDestruct = affix.value / 100; }
             addLog('🔨 锻造成功！' + ship.name + ' 获得词条 [' + affix.name + ']', 'affix');
-            renderWarehouse(); updateFleetUI(); saveGameImmediate(); modalClose.click();
+            renderWarehouse();
+            updateFleetUI();
+            saveGameImmediate();
+            modalClose.click();
             setTimeout(() => showShipDetail(shipId), 300);
         };
 
@@ -2366,7 +3625,10 @@
             if (!ship) return;
             if (deploy) {
                 const deployed = playerShips.filter(s => s.deployed && s.pos === ship.pos);
-                if (deployed.length >= maxShips[ship.pos]) { addLog('❌ ' + ship.pos + ' 位置已满', 'dmg'); return; }
+                if (deployed.length >= maxShips[ship.pos]) {
+                    addLog('❌ ' + ship.pos + ' 位置已满 (上限' + maxShips[ship.pos] + ')', 'dmg');
+                    return;
+                }
                 ship.deployed = true;
                 addLog('✅ ' + ship.name + ' 已上阵', 'sys');
             } else {
@@ -2374,60 +3636,93 @@
                 addLog('📤 ' + ship.name + ' 已撤下', 'sys');
             }
             modalClose.click();
-            updateFleetUI(); saveGameImmediate();
+            updateFleetUI();
+            saveGameImmediate();
         };
 
         // ============================================================
-        //  编队编辑（拖拽）
+        //  编队编辑
         // ============================================================
         btnEditFleet.addEventListener('click', function() {
-            let html = `<div style="display:flex;flex-direction:column;gap:6px;"><div style="color:#6f8bb0;font-size:0.7rem;">💡 拖拽卡片调整位置 · 点击卡片查看详情</div>
-                <div style="max-height:400px;overflow-y:auto;padding:4px 0;" id="fleetEditList">`;
+            let html = `
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                    <div style="color:#6f8bb0;font-size:0.7rem;">💡 拖拽卡片调整位置 · 点击卡片查看详情</div>
+                    <div style="max-height:400px;overflow-y:auto;padding:4px 0;" id="fleetEditList">
+            `;
             const order = ['front', 'mid', 'rear'];
             const labels = { 'front': '⚔️ 先锋', 'mid': '💥 中间', 'rear': '💚 后勤' };
             const colors = { 'front': '#e74c3c', 'mid': '#f1c40f', 'rear': '#2ecc71' };
             order.forEach(pos => {
                 const ships = playerShips.filter(s => s.pos === pos);
                 const deployed = ships.filter(s => s.deployed).length;
-                html += `<div style="margin-top:4px;padding:4px 6px;background:#0f182a;border-radius:4px;border-left:3px solid ${colors[pos]};">
-                    <div style="font-size:0.6rem;color:#6f8bb0;">${labels[pos]} (${deployed}/${maxShips[pos]})</div>
-                    <div style="display:flex;flex-direction:column;gap:3px;margin-top:3px;" id="fleetPos-${pos}">`;
-                ships.forEach(s => {
+                html +=
+                    `<div style="margin-top:4px;padding:4px 6px;background:#0f182a;border-radius:4px;border-left:3px solid ${colors[pos]};">
+                        <div style="font-size:0.6rem;color:#6f8bb0;">${labels[pos]} (${deployed}/${maxShips[pos]})</div>
+                        <div style="display:flex;flex-direction:column;gap:3px;margin-top:3px;" id="fleetPos-${pos}">
+                `;
+                ships.forEach((s) => {
                     const color = getQualityColor(s.tier);
                     const status = s.deployed ? '✅' : '⏸️';
+                    const affixCount = s.affixes ? s.affixes.length : 0;
                     const id = 'shipcard_' + s.id;
-                    html += `<div id="${id}" class="ship-card" draggable="true" data-id="${s.id}" data-pos="${pos}" style="border-color:${color};${s.deployed ? 'border-left:4px solid #4aad7a;' : 'border-left:4px solid #4a6080;'}">
-                        <div class="ship-info"><span class="sname" style="color:${color};">${s.name}</span>
-                        <span class="slvl">T${s.tier}</span><span class="sstats">❤️${s.maxHp} ⚔️${s.atk}</span>
-                        ${s.affixes?.length ? `<span style="font-size:0.5rem;color:#9b59b6;">[${s.affixes.length}词条]</span>` : ''}
-                        <span style="font-size:0.45rem;color:${s.deployed ? '#4aad7a' : '#4a6080'};">${status}</span></div>
-                        <div class="ship-actions">
-                            <button class="btn-mini detail" onclick="event.stopPropagation();showShipDetail('${s.id}')">📋</button>
-                            ${s.deployed ? `<button class="btn-mini undeploy" onclick="event.stopPropagation();deployShip('${s.id}',false)">撤下</button>` :
-                            `<button class="btn-mini deploy" onclick="event.stopPropagation();deployShip('${s.id}',true)">上阵</button>`}
+                    html += `
+                        <div id="${id}" class="ship-card" draggable="true" data-id="${s.id}" data-pos="${pos}" style="border-color:${color};${s.deployed ? 'border-left:4px solid #4aad7a;' : 'border-left:4px solid #4a6080;'}">
+                            <div class="ship-info">
+                                <span class="sname" style="color:${color};">${s.name}</span>
+                                <span class="slvl">T${s.tier}</span>
+                                <span class="sstats">❤️${s.maxHp} ⚔️${s.atk}</span>
+                                ${affixCount > 0 ? `<span style="font-size:0.5rem;color:#9b59b6;">[${affixCount}词条]</span>` : ''}
+                                <span style="font-size:0.45rem;color:${s.deployed ? '#4aad7a' : '#4a6080'};">${status}</span>
+                            </div>
+                            <div class="ship-actions">
+                                <button class="btn-mini detail" onclick="event.stopPropagation();showShipDetail('${s.id}')">📋</button>
+                                ${s.deployed ? 
+                                    `<button class="btn-mini undeploy" onclick="event.stopPropagation();deployShip('${s.id}',false)">撤下</button>` :
+                                    `<button class="btn-mini deploy" onclick="event.stopPropagation();deployShip('${s.id}',true)">上阵</button>`
+                                }
+                            </div>
                         </div>
-                    </div>`;
+                    `;
                 });
                 html += `</div></div>`;
             });
             const totalDeployed = playerShips.filter(s => s.deployed).length;
             const totalMax = maxShips.front + maxShips.mid + maxShips.rear;
-            html += `<div style="color:#4a6080;font-size:0.55rem;margin-top:4px;">空位: ${totalMax - totalDeployed} | 总 ${totalDeployed}/${totalMax}</div></div></div>`;
+            html +=
+                `<div style="color:#4a6080;font-size:0.55rem;margin-top:4px;">空位: ${totalMax - totalDeployed} | 总 ${totalDeployed}/${totalMax}</div>`;
+            html += `</div></div>`;
             showModal('⚔️ 编辑战队 (拖拽排序)', html);
+
             setTimeout(() => {
                 document.querySelectorAll('.ship-card').forEach(card => {
-                    card.addEventListener('dragstart', function(e) { this.classList.add('dragging'); e.dataTransfer.setData('text/plain', this.id); });
-                    card.addEventListener('dragend', function(e) { this.classList.remove('dragging'); document.querySelectorAll('.ship-card').forEach(c => c.classList.remove('drag-over')); });
-                    card.addEventListener('dragover', function(e) { e.preventDefault(); document.querySelectorAll('.ship-card').forEach(c => c.classList.remove('drag-over')); this.classList.add('drag-over'); });
-                    card.addEventListener('dragleave', function(e) { this.classList.remove('drag-over'); });
+                    card.addEventListener('dragstart', function(e) {
+                        this.classList.add('dragging');
+                        e.dataTransfer.setData('text/plain', this.id);
+                    });
+                    card.addEventListener('dragend', function(e) {
+                        this.classList.remove('dragging');
+                        document.querySelectorAll('.ship-card').forEach(c => c.classList.remove(
+                        'drag-over'));
+                    });
+                    card.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        document.querySelectorAll('.ship-card').forEach(c => c.classList.remove(
+                        'drag-over'));
+                        this.classList.add('drag-over');
+                    });
+                    card.addEventListener('dragleave', function(e) {
+                        this.classList.remove('drag-over');
+                    });
                     card.addEventListener('drop', function(e) {
-                        e.preventDefault(); this.classList.remove('drag-over');
+                        e.preventDefault();
+                        this.classList.remove('drag-over');
                         const fromId = e.dataTransfer.getData('text/plain');
                         const fromCard = document.getElementById(fromId);
                         const toCard = this;
                         if (fromCard === toCard) return;
                         const fromShipId = fromCard.dataset.id;
                         const toShipId = toCard.dataset.id;
+                        if (!fromShipId || !toShipId) return;
                         const fromShip = playerShips.find(s => s.id === fromShipId);
                         const toShip = playerShips.find(s => s.id === toShipId);
                         if (!fromShip || !toShip) return;
@@ -2437,7 +3732,10 @@
                         fromShip.deployed = toShip.deployed;
                         toShip.pos = tempPos;
                         toShip.deployed = tempDeployed;
-                        updateFleetUI(); renderFleet(); saveGameImmediate(); modalClose.click();
+                        updateFleetUI();
+                        renderFleet();
+                        saveGameImmediate();
+                        modalClose.click();
                         setTimeout(() => btnEditFleet.click(), 300);
                     });
                 });
@@ -2449,14 +3747,19 @@
         // ============================================================
         redeemInviteBtn.addEventListener('click', function() {
             const code = inviteInput.value.trim();
-            if (!code) { inviteResult.textContent = '❌ 请输入兑换码'; inviteResult.style.color = '#c0392b'; return; }
-            if (!currentUser) { inviteResult.textContent = '❌ 请先登录'; inviteResult.style.color = '#c0392b'; return; }
-            if (redeemedCodes[code]) { inviteResult.textContent = '❌ 该兑换码已兑换过'; inviteResult.style.color = '#c0392b'; return; }
+            if (!code) { inviteResult.textContent = '❌ 请输入兑换码';
+                inviteResult.style.color = '#c0392b'; return; }
+            if (!currentUser) { inviteResult.textContent = '❌ 请先登录';
+                inviteResult.style.color = '#c0392b'; return; }
+            if (redeemedCodes[code]) { inviteResult.textContent = '❌ 该兑换码已兑换过';
+                inviteResult.style.color = '#c0392b'; return; }
             const reward = VALID_CODES[code];
-            if (!reward) { inviteResult.textContent = '❌ 无效兑换码'; inviteResult.style.color = '#c0392b'; return; }
+            if (!reward) { inviteResult.textContent = '❌ 无效兑换码';
+                inviteResult.style.color = '#c0392b'; return; }
             if (reward.type === 'bundle') {
                 const credAmt = reward.credits || 10000;
-                credits += credAmt; creditDisplay.textContent = credits;
+                credits += credAmt;
+                creditDisplay.textContent = credits;
                 addLog(`🎁 兑换成功！获得 ${credAmt} 星际币`, 'loot');
                 const tier = reward.shipTier || 4;
                 const pos = reward.shipPos || 'front';
@@ -2465,16 +3768,25 @@
                     const name = db[pos][Math.floor(Math.random() * db[pos].length)];
                     const base = getBaseStats(tier, pos);
                     const newShip = {
-                        id: 'ship_' + Date.now() + Math.random().toString(36).substr(2,4),
-                        name, tier, pos,
-                        hp: base.hp, maxHp: base.hp, atk: base.atk,
-                        affixes: [], deployed: false, forgeCount: 0, charge: 0
+                        id: 'ship_' + Date.now() + Math.random().toString(36).substr(2, 4),
+                        name: name,
+                        tier: tier,
+                        pos: pos,
+                        hp: base.hp,
+                        maxHp: base.hp,
+                        atk: base.atk,
+                        affixes: [],
+                        deployed: false,
+                        forgeCount: 0,
+                        charge: 0
                     };
                     playerShips.push(newShip);
                     const deployedCount = playerShips.filter(s => s.deployed && s.pos === pos).length;
-                    if (deployedCount < maxShips[pos]) { newShip.deployed = true; addLog(`✅ 新战舰 ${name} 已自动上阵`, 'sys'); }
+                    if (deployedCount < maxShips[pos]) { newShip.deployed = true;
+                        addLog(`✅ 新战舰 ${name} 已自动上阵`, 'sys'); }
                     addLog(`🎁 兑换成功！获得 ${name} (T${tier} 先锋)`, 'loot');
-                    updateFleetUI(); renderFleet();
+                    updateFleetUI();
+                    renderFleet();
                     inviteResult.textContent = `✅ 兑换成功！获得 ${credAmt} 星际币 + ${name} (T${tier})`;
                     inviteResult.style.color = '#4aad7a';
                 } else {
@@ -2482,25 +3794,35 @@
                     inviteResult.style.color = '#d4a843';
                 }
             } else if (reward.type === 'credits') {
-                credits += reward.amount; creditDisplay.textContent = credits;
+                credits += reward.amount;
+                creditDisplay.textContent = credits;
                 inviteResult.textContent = `✅ 兑换成功！获得 ${reward.amount} 星际币`;
                 inviteResult.style.color = '#4aad7a';
                 addLog(`🎁 兑换成功！获得 ${reward.amount} 星际币`, 'loot');
             } else if (reward.type === 'ship') {
-                const tier = reward.tier; const pos = reward.pos;
+                const tier = reward.tier;
+                const pos = reward.pos;
                 const db = SHIP_DB['T' + tier];
                 if (db && db[pos] && db[pos].length) {
                     const name = db[pos][Math.floor(Math.random() * db[pos].length)];
                     const base = getBaseStats(tier, pos);
                     const newShip = {
-                        id: 'ship_' + Date.now() + Math.random().toString(36).substr(2,4),
-                        name, tier, pos,
-                        hp: base.hp, maxHp: base.hp, atk: base.atk,
-                        affixes: [], deployed: false, forgeCount: 0, charge: 0
+                        id: 'ship_' + Date.now() + Math.random().toString(36).substr(2, 4),
+                        name: name,
+                        tier: tier,
+                        pos: pos,
+                        hp: base.hp,
+                        maxHp: base.hp,
+                        atk: base.atk,
+                        affixes: [],
+                        deployed: false,
+                        forgeCount: 0,
+                        charge: 0
                     };
                     playerShips.push(newShip);
                     const deployedCount = playerShips.filter(s => s.deployed && s.pos === pos).length;
-                    if (deployedCount < maxShips[pos]) { newShip.deployed = true; addLog(`✅ 新战舰 ${name} 已自动上阵`, 'sys'); }
+                    if (deployedCount < maxShips[pos]) { newShip.deployed = true;
+                        addLog(`✅ 新战舰 ${name} 已自动上阵`, 'sys'); }
                     inviteResult.textContent = `✅ 兑换成功！获得 ${name} (T${tier})`;
                     inviteResult.style.color = '#4aad7a';
                     addLog(`🎁 兑换成功！获得 ${name} (T${tier})`, 'loot');
@@ -2527,11 +3849,13 @@
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 document.getElementById('tab-' + target)?.classList.add('active');
                 if (target === 'rank') renderRank();
-                if (target === 'trade') { renderMarket(); renderMyOrders(); }
+                if (target === 'trade') { renderMarket();
+                    renderMyOrders(); }
                 if (target === 'mineral') renderMineralStatus();
                 if (target === 'factory') renderFactory();
             });
         });
+
         document.querySelectorAll('.page-tab').forEach(tab => {
             tab.addEventListener('click', function() {
                 document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
@@ -2545,10 +3869,17 @@
             });
         });
 
-        tradeSearchInput?.addEventListener('input', () => { marketPage = 1; renderMarket(); });
-        tradeTierFilter?.addEventListener('change', () => { marketPage = 1; renderMarket(); });
+        tradeSearchInput?.addEventListener('input', () => { marketPage = 1;
+            renderMarket(); });
+        tradeTierFilter?.addEventListener('change', () => { marketPage = 1;
+            renderMarket(); });
 
-        btnRefreshMarket.addEventListener('click', function() { renderMarket(); renderMyOrders(); addLog('🔄 市场已刷新', 'sys'); });
+        btnRefreshMarket.addEventListener('click', function() {
+            renderMarket();
+            renderMyOrders();
+            addLog('🔄 市场已刷新', 'sys');
+        });
+
         btnViewBlueprints.addEventListener('click', function() {
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             document.querySelector('[data-tab="factory"]')?.classList.add('active');
@@ -2561,15 +3892,20 @@
         btnAuto.addEventListener('click', function() {
             if (isDefeated) { addLog('⏳ 战败暂停中，请等待', 'sys'); return; }
             if (!isAuto) {
-                isAuto = true; isPaused = false;
+                isAuto = true;
+                isPaused = false;
                 btnAuto.textContent = '⏸️ 暂停';
                 statusLabel.textContent = '⚔️ 战斗中';
                 statusLabel.style.color = '#6f8bb0';
                 addLog('▶️ 战斗继续', 'sys');
-                if (enemies.filter(e => e.alive).length === 0) { generateEnemies(); addLog('🔄 刷出新的敌人', 'sys'); }
+                if (enemies.filter(e => e.alive).length === 0) {
+                    generateEnemies();
+                    addLog('🔄 刷出新的敌人', 'sys');
+                }
                 doBattle();
             } else {
-                isAuto = false; isPaused = true;
+                isAuto = false;
+                isPaused = true;
                 btnAuto.textContent = '▶️ 继续';
                 statusLabel.textContent = '⏸️ 已暂停';
                 statusLabel.style.color = '#d4a843';
@@ -2577,75 +3913,59 @@
             }
         });
 
-        // ---- 星系导航 ----
-        function renderGalaxies() {
-            galaxyList.innerHTML = '';
-            GALAXY_DATA.forEach((g, idx) => {
-                const div = document.createElement('div');
-                div.className = 'galaxy-item' + (idx === currentGalaxyIdx ? ' active' : '');
-                div.innerHTML = `${g.name} <span class="g-tier">T${g.tier}</span>`;
-                div.addEventListener('click', function() {
-                    currentGalaxyIdx = idx; currentSystemIdx = 0;
-                    renderGalaxies(); renderSystems(); updateBattleInfo(); generateEnemies();
-                    saveGameImmediate(); addLog('🔄 跃迁至 ' + g.name, 'sys');
-                });
-                galaxyList.appendChild(div);
-            });
-        }
-
-        function renderSystems() {
-            systemList.innerHTML = '';
-            const galaxy = getCurrentGalaxy();
-            galaxy.systems.forEach((name, idx) => {
-                const lv = { min: galaxy.levelBase + idx * 2, max: galaxy.levelBase + idx * 2 + 3 };
-                const div = document.createElement('div');
-                div.className = 'system-chip' + (idx === currentSystemIdx ? ' active' : '');
-                div.innerHTML = `${name} <span class="s-lvl">(${lv.min}-${lv.max})</span>`;
-                div.addEventListener('click', function() {
-                    currentSystemIdx = idx;
-                    renderSystems(); updateBattleInfo(); generateEnemies();
-                    saveGameImmediate(); addLog('🪐 进入 ' + name, 'sys');
-                });
-                systemList.appendChild(div);
-            });
-            document.getElementById('currentSystemLabel').textContent = getCurrentSystemName() || '太阳系';
-        }
-
         // ---- 弹窗 ----
         function showModal(title, contentHTML) {
             modalTitle.textContent = title;
             modalContent.innerHTML = contentHTML;
             modalOverlay.classList.add('show');
         }
-        modalClose.addEventListener('click', () => modalOverlay.classList.remove('show'));
-        modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) modalOverlay.classList.remove('show'); });
+
+        function hideModal() {
+            modalOverlay.classList.remove('show');
+        }
+        modalClose.addEventListener('click', hideModal);
+        modalOverlay.addEventListener('click', function(e) { if (e.target === this) hideModal(); });
 
         // ---- 渲染全部 ----
         function renderAll() {
             try {
                 if (!playerShips || playerShips.length === 0) {
-                    console.log('⚠️ renderAll 发现没有战舰，重新创建');
                     playerShips = createInitialShips();
                 }
                 const anyDeployed = playerShips.some(s => s.deployed);
                 if (!anyDeployed && playerShips.length > 0) {
                     const toDeploy = Math.min(4, playerShips.length);
-                    for (let i = 0; i < toDeploy; i++) playerShips[i].deployed = true;
+                    for (let i = 0; i < toDeploy; i++) {
+                        playerShips[i].deployed = true;
+                    }
                     addLog('🔧 自动部署了 ' + toDeploy + ' 艘战舰', 'sys');
                 }
-                renderGalaxies(); renderSystems(); updateBattleInfo(); generateEnemies();
-                updateFleetUI(); renderWarehouse(); renderMarket(); renderMyOrders();
-                renderRank(); renderFactory(); renderMineralStatus();
-                updateStats(); updateWarehouseCount(); updateSellSelect();
+                renderGalaxies();
+                renderSystems();
+                updateBattleInfo();
+                generateEnemies();
+                updateFleetUI();
+                renderWarehouse();
+                renderMarket();
+                renderMyOrders();
+                renderRank();
+                renderFactory();
+                renderMineralStatus();
+                updateStats();
+                updateWarehouseCount();
+                updateSellSelect();
                 creditDisplay.textContent = credits;
                 levelDisplay.textContent = 'Lv.' + playerLevel;
                 renderFleet();
-            } catch (e) { console.error('渲染出错:', e); addLog('⚠️ 渲染出错，但已自动恢复', 'sys'); }
+            } catch (e) {
+                console.error('渲染出错:', e);
+                addLog('⚠️ 渲染出错，但已自动恢复', 'sys');
+            }
             if (!window._lastOnline) window._lastOnline = Date.now();
             updateSyncStatus('ok');
         }
 
-        // ---- 定时器：战斗循环 ----
+        // ---- 定时器 ----
         setInterval(() => {
             if (isAuto && !isDefeated) {
                 doBattle();
@@ -2660,11 +3980,10 @@
         loginOverlay.classList.remove('hidden');
         app.style.display = 'none';
         console.log('🚀 星际征途');
-        console.log('☁️ 每次操作立即同步到: ' + CF_WORKER_URL);
-        console.log('💡 兑换码');
+        console.log('☁️ 数据存储于: ' + CF_WORKER_URL);
+        console.log('💡 兑换码: Star Trek, BDGOnb');
         console.log('✅ 新手赠送: 2随机先锋 + 1随机中间 + 2随机后勤 + 10电路板 + 20螺丝 + 1护盾发生器');
-        console.log('✅ 所有数据仅存储在云端，无本地缓存');
-        console.log('✅ 注册时必定生成5艘战舰');
+        console.log('✅ 星际导航功能已加载（点击大星系→显示小星系）');
     </script>
 </body>
 </html>
