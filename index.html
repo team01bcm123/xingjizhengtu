@@ -17,7 +17,7 @@ body.light{--bg:#e8eef7;--bg2:#f0f4fa;--bgp:#fff;--bgb:#fff;--bgi:#f5f8fc;--bd:#
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;font-family:'Segoe UI',system-ui,sans-serif}
 html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:hidden}
 #app{width:100vw;height:100vh;display:flex;flex-direction:column;background:var(--bg2);overflow:hidden}
-#themeToggle{position:fixed;top:50px;right:10px;z-index:999;background:var(--bgp);border:1px solid var(--bl);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;color:var(--tx)}
+#themeToggle{position:fixed;top:70px;right:10px;z-index:999;background:var(--bgp);border:1px solid var(--bl);border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:.9rem;color:var(--tx)}
 #themeToggle:hover{border-color:var(--gold)}
 
 .login-overlay{position:fixed;inset:0;background:rgba(8,12,26,.96);backdrop-filter:blur(8px);display:flex;justify-content:center;align-items:center;z-index:2000;transition:opacity .5s}
@@ -35,23 +35,33 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .login-box .toggle-mode{text-align:center;margin-top:12px;font-size:.75rem;color:var(--ts);cursor:pointer}
 .login-box .toggle-mode span{color:#4a8aaa;text-decoration:underline}
 
-.top-bar{display:flex;justify-content:space-between;align-items:center;background:var(--bgp);padding:4px 18px;border-bottom:1px solid var(--bd);flex-shrink:0;height:46px;z-index:10}
+/* 顶部栏 - 两行 */
+.top-bar{display:flex;flex-direction:column;background:var(--bgp);border-bottom:1px solid var(--bd);flex-shrink:0;z-index:10}
+.top-row-user{display:flex;justify-content:space-between;align-items:center;padding:4px 18px;height:42px;border-bottom:1px solid var(--bd)}
+.top-row-nav{display:flex;gap:2px;padding:0 10px;height:32px;align-items:center;overflow-x:auto}
+.top-row-nav::-webkit-scrollbar{height:3px}
+.top-row-nav::-webkit-scrollbar-thumb{background:var(--bl);border-radius:10px}
 .user-info{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.user-avatar{width:30px;height:30px;border-radius:50%;background:#2e6b9e;border:2px solid #4a7aad}
-.user-name{font-weight:700;font-size:.9rem;color:var(--th)}
-.user-level{font-size:.6rem;color:var(--gold);background:rgba(212,168,67,.12);padding:0 12px;border-radius:30px;border:1px solid rgba(212,168,67,.2)}
-.resources{display:flex;gap:14px;font-size:.7rem;align-items:center;flex-wrap:wrap}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:#2e6b9e;border:2px solid #4a7aad}
+.user-name{font-weight:700;font-size:.85rem;color:var(--th)}
+.user-level{font-size:.55rem;color:var(--gold);background:rgba(212,168,67,.12);padding:0 10px;border-radius:30px;border:1px solid rgba(212,168,67,.2)}
+.resources{display:flex;gap:12px;font-size:.65rem;align-items:center;flex-wrap:wrap}
 .resources span{display:flex;align-items:center;gap:4px;color:var(--ts)}
 .resources .val{color:var(--th);font-weight:600}
 .resources .val.gold{color:var(--gold)}
 #syncStatus{font-size:.5rem;padding:2px 8px;border-radius:10px;background:#0f182a}
 #syncStatus.ok{color:var(--grn);border:1px solid #2a6a4a}
 #syncStatus.sync{color:var(--gold);border:1px solid #7a6a2a;animation:pulse .8s infinite}
-#syncStatus.fail{color:var(--red);border:1px solid #6a2a2a}
+#syncStatus.fail{color:var(--red);border:1px solid #6a2a2a;font-weight:600}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
+/* 顶部导航标签 - 横向排列 */
+.top-nav-tab{padding:4px 14px;font-size:.6rem;cursor:pointer;color:var(--ts);border-bottom:2px solid transparent;transition:.15s;white-space:nowrap;border-radius:4px 4px 0 0}
+.top-nav-tab:hover{color:var(--th);background:rgba(42,64,101,.3)}
+.top-nav-tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(212,168,67,.08);font-weight:600}
+
 .main-body{display:flex;flex:1;overflow:hidden}
-.left-panel{width:260px;min-width:200px;background:var(--bgp);border-right:1px solid var(--bd);padding:6px 10px;overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column;gap:5px}
+.left-panel{width:240px;min-width:180px;background:var(--bgp);border-right:1px solid var(--bd);padding:6px 10px;overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column;gap:5px}
 .left-panel::-webkit-scrollbar{width:3px}.left-panel::-webkit-scrollbar-thumb{background:var(--bl);border-radius:10px}
 .panel-section{background:rgba(15,24,42,.5);border-radius:6px;padding:6px 10px;border:1px solid var(--bd)}
 .panel-section .section-title{font-size:.55rem;color:var(--ts);text-transform:uppercase;margin-bottom:3px;display:flex;justify-content:space-between}
@@ -126,18 +136,20 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .battle-log-mini div{padding:1px 0;border-bottom:1px solid #0f182a}
 .battle-log-mini .dmg{color:var(--red)}.battle-log-mini .heal{color:var(--grn)}.battle-log-mini .sys{color:#4a8aaa}.battle-log-mini .loot{color:var(--gold)}.battle-log-mini .blueprint{color:#e67e22;font-weight:600}.battle-log-mini .affix{color:#9b59b6}.battle-log-mini .exp{color:var(--grn)}
 
-.action-buttons{display:flex;gap:3px;flex-wrap:wrap}
-.btn{background:var(--bd);border:1px solid #3a5380;border-radius:30px;padding:3px 12px;color:var(--th);font-size:.55rem;font-weight:600;cursor:pointer}
-.btn-success{background:#1f6a3a;border-color:#3a8a5a}.btn-success:hover{background:#2a7a4a}
-.btn-gold{background:#6a5a2a;border-color:#8a7a3a}.btn-gold:hover{background:#7a6a3a}
-.btn-purple{background:#4a2a6a;border-color:#6a3a8a}.btn-purple:hover{background:#5a3a7a}
-.btn-danger{background:#6a2a2a;border-color:#8a3a3a}.btn-danger:hover{background:#7a3a3a}
+.action-buttons{display:flex;gap:3px;flex-wrap:wrap;align-items:center}
+/* 小按钮样式 */
+.btn-xs{background:var(--bd);border:1px solid #3a5380;border-radius:20px;padding:2px 8px;color:var(--th);font-size:.45rem;font-weight:500;cursor:pointer;transition:.1s}
+.btn-xs:hover{border-color:#4a7aad}
+.btn-xs:active{transform:scale(.95)}
+.btn-xs.btn-success{background:#1f6a3a;border-color:#3a8a5a}
+.btn-xs.btn-success:hover{background:#2a7a4a}
+.btn-xs.btn-gold{background:#6a5a2a;border-color:#8a7a3a}
+.btn-xs.btn-gold:hover{background:#7a6a3a}
+.btn-xs.btn-purple{background:#4a2a6a;border-color:#6a3a8a}
+.btn-xs.btn-purple:hover{background:#5a3a7a}
 
 .right-panel{width:280px;min-width:220px;background:var(--bgp);border-left:1px solid var(--bd);padding:6px 10px;overflow:hidden;flex-shrink:0;display:flex;flex-direction:column}
-.nav-tabs{display:flex;gap:2px;margin-bottom:3px;flex-wrap:wrap}
-.nav-tab{padding:2px 10px;font-size:.5rem;border-radius:4px 4px 0 0;cursor:pointer;background:#0f182a;color:var(--ts);border:1px solid var(--bd);border-bottom:none}
-.nav-tab.active{background:var(--bd);color:var(--th);border-color:#3a5380}
-.tab-content{display:none;flex-direction:column;flex:1;overflow:hidden}
+.tab-content{display:none;flex-direction:column;flex:1;overflow:hidden;margin-top:4px}
 .tab-content.active{display:flex}
 .page-container{flex:1;overflow:hidden;display:flex;flex-direction:column}
 .page-tabs{display:flex;gap:2px;border-bottom:1px solid var(--bd);flex-shrink:0}
@@ -195,6 +207,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .modal-box .ship-card .btn-mini.undeploy{background:#6a2a2a}
 .modal-box .ship-card .btn-mini.detail{background:#2a5a7a}
 
+/* 联盟 */
 .alliance-list{display:flex;flex-direction:column;gap:4px;padding:4px 0}
 .alliance-item{background:var(--bgp);border:1px solid var(--bd);border-radius:6px;padding:8px 12px;cursor:pointer;transition:.1s}
 .alliance-item:hover{border-color:var(--gold);background:rgba(212,168,67,.05)}
@@ -208,7 +221,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .task-row .t-btn:disabled{background:#4a6080;cursor:not-allowed}
 
 @media(max-width:1024px){.left-panel{width:200px}.right-panel{width:240px}}
-@media(max-width:768px){.left-panel,.right-panel{display:none}.friendly-column,.enemy-column{width:100px}}
+@media(max-width:768px){.left-panel,.right-panel{display:none}.friendly-column,.enemy-column{width:100px}.top-row-user{height:auto;flex-wrap:wrap;padding:4px 8px}.top-row-nav{padding:0 4px}}
 </style>
 </head>
 <body>
@@ -239,7 +252,10 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 </div>
 
 <div id="app" style="display:none;">
+<!-- 顶部栏：两行结构 -->
 <div class="top-bar">
+<!-- 第一行：玩家信息 + 资源 + 同步状态 -->
+<div class="top-row-user">
 <div class="user-info">
 <div class="user-avatar"></div>
 <span class="user-name" id="playerName">舰长</span>
@@ -252,6 +268,16 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 <span>物资 <span class="val" id="itemCount">0</span></span>
 <span id="syncStatus" class="ok">● 已同步</span>
 <span style="cursor:pointer;color:#4a6080;font-size:.55rem;" id="logoutBtn">退出</span>
+</div>
+</div>
+<!-- 第二行：功能导航标签 -->
+<div class="top-row-nav" id="topNav">
+<span class="top-nav-tab active" data-tab="trade">🏪 交易</span>
+<span class="top-nav-tab" data-tab="factory">🏭 工厂</span>
+<span class="top-nav-tab" data-tab="mineral">💎 矿物</span>
+<span class="top-nav-tab" data-tab="rank">🏆 排行</span>
+<span class="top-nav-tab" data-tab="alliance">🏛️ 星际联盟</span>
+<span class="top-nav-tab" data-tab="settings">⚙️ 设置</span>
 </div>
 </div>
 
@@ -277,34 +303,39 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 <div class="battle-footer">
 <div class="battle-log-mini" id="battleLog"></div>
 <div class="action-buttons">
-<button class="btn btn-success" id="btnAutoBattle">⏸️ 暂停</button>
-<button class="btn btn-gold" id="btnRefreshMarket">🔄 刷新市场</button>
-<button class="btn btn-purple" id="btnViewBlueprints">📐 蓝图</button>
-<button class="btn" id="btnAlliance" style="background:#4a2a6a;border-color:#6a3a8a;">🏛️ 星际联盟</button>
+<button class="btn-xs btn-success" id="btnAutoBattle">⏸️ 暂停</button>
+<button class="btn-xs btn-gold" id="btnRefreshMarket">🔄 刷新</button>
+<button class="btn-xs btn-purple" id="btnViewBlueprints">📐 蓝图</button>
 </div>
 </div>
 </div>
 
 <div class="right-panel">
-<div class="nav-tabs">
-<span class="nav-tab active" data-tab="trade">🏪 交易</span>
-<span class="nav-tab" data-tab="factory">🏭 工厂</span>
-<span class="nav-tab" data-tab="mineral">💎 矿物</span>
-<span class="nav-tab" data-tab="rank">🏆 排行</span>
-<span class="nav-tab" data-tab="settings">⚙️ 设置</span>
-</div>
+<!-- 交易 -->
 <div class="tab-content active" id="tab-trade">
 <div class="page-tabs"><span class="page-tab active" data-page="market">📋 市场</span><span class="page-tab" data-page="myorders">📦 我的</span><span class="page-tab" data-page="sell">📤 上架</span></div>
 <div class="page-body">
-<div class="page-content active" id="page-market"><div class="trade-search"><input type="text" id="tradeSearchInput" placeholder="搜索..."><select id="tradeTierFilter"><option value="all">全部</option><option value="1">T1</option><option value="2">T2</option><option value="3">T3</option><option value="4">T4</option><option value="5">T5</option><option value="6">T6</option><option value="7">T7</option></select><button class="btn-sm" onclick="renderMarket()">搜</button></div><div class="trade-list-page" id="marketList"></div><div class="trade-pagination" id="marketPagination"></div></div>
+<div class="page-content active" id="page-market"><div class="trade-search"><input type="text" id="tradeSearchInput" placeholder="搜索..."><select id="tradeTierFilter"><option value="all">全部</option><option value="1">T1</option><option value="2">T2</option><option value="3">T3</option><option value="4">T4</option><option value="5">T5</option><option value="6">T6</option><option value="7">T7</option></select><button class="btn-xs" onclick="renderMarket()">搜</button></div><div class="trade-list-page" id="marketList"></div><div class="trade-pagination" id="marketPagination"></div></div>
 <div class="page-content" id="page-myorders"><div class="trade-list-page" id="myOrdersList"></div><div class="trade-pagination" id="myOrdersPagination"></div></div>
 <div class="page-content" id="page-sell"><div style="display:flex;flex-direction:column;gap:6px;padding:6px 0;"><div style="display:flex;gap:6px;align-items:center;"><span style="color:var(--ts);width:40px;font-size:.55rem;">物品</span><select id="sellSelectPage" style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:4px;color:var(--th);font-size:.55rem;"></select></div><div style="display:flex;gap:6px;align-items:center;"><span style="color:var(--ts);width:40px;font-size:.55rem;">单价</span><input type="number" id="sellPricePage" value="50" style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:4px;color:var(--th);font-size:.55rem;"></div><div style="display:flex;gap:6px;align-items:center;"><span style="color:var(--ts);width:40px;font-size:.55rem;">数量</span><input type="number" id="sellQtyPage" value="1" min="1" style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:4px;color:var(--th);font-size:.55rem;"></div><button class="btn-sm" style="background:#6a5a2a;padding:4px;" onclick="confirmSellPage()">✅ 上架</button></div></div>
 </div>
 </div>
+<!-- 工厂 -->
 <div class="tab-content" id="tab-factory"><div style="font-size:.6rem;color:var(--ts);margin-bottom:4px;">🏭 战舰工厂</div><div style="flex:1;overflow-y:auto;" id="factoryList"></div></div>
+<!-- 矿物 -->
 <div class="tab-content" id="tab-mineral"><div style="font-size:.6rem;color:var(--ts);margin-bottom:3px;">💎 矿物星球</div><div id="mineralStatus" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:3px;"></div></div>
+<!-- 排行 -->
 <div class="tab-content" id="tab-rank"><div style="display:flex;gap:6px;margin-bottom:3px;"><span style="color:var(--ts);font-size:.55rem;">战力排行</span><span style="color:#4a6080;font-size:.5rem;" id="rankCount">共 1 人</span></div><div class="rank-list" id="rankList"></div></div>
-<div class="tab-content" id="tab-settings"><div style="overflow-y:auto;"><div style="background:var(--bgp);border:1px solid var(--bd);border-radius:6px;padding:10px 12px;margin-bottom:8px;"><div style="color:var(--gold);font-weight:600;font-size:.7rem;">🎁 兑换码</div><div style="display:flex;gap:6px;margin-top:4px;"><input type="text" id="inviteInput" placeholder="输入兑换码..." style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:4px 8px;color:var(--th);font-size:.6rem;"><button class="btn-sm" id="redeemInviteBtn">兑换</button></div><div id="inviteResult" style="font-size:.55rem;margin-top:4px;color:var(--ts);"></div></div><div style="background:var(--bgp);border:1px solid var(--bd);border-radius:5px;padding:8px 10px;font-size:.65rem;"><div style="color:var(--gold);font-weight:600;font-size:.7rem;">☁️ 云端同步</div><p style="font-size:.6rem;">✅ 数据保存到 Gist</p><div style="font-size:.55rem;color:var(--grn);">状态：已连接</div></div></div></div>
+<!-- 星际联盟 -->
+<div class="tab-content" id="tab-alliance">
+<div style="display:flex;gap:6px;margin-bottom:8px;">
+<input type="text" id="allySearch" placeholder="搜索联盟..." oninput="filterAlliance()" style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:5px 10px;color:var(--th);font-size:.65rem;">
+<button class="btn-xs" style="background:#6a5a2a;padding:4px 12px;" onclick="showCreateAlliance()">+ 创建联盟</button>
+</div>
+<div class="alliance-list" id="allianceList" style="flex:1;overflow-y:auto;"></div>
+</div>
+<!-- 设置 -->
+<div class="tab-content" id="tab-settings"><div style="overflow-y:auto;"><div style="background:var(--bgp);border:1px solid var(--bd);border-radius:6px;padding:10px 12px;margin-bottom:8px;"><div style="color:var(--gold);font-weight:600;font-size:.7rem;">🎁 兑换码</div><div style="display:flex;gap:6px;margin-top:4px;"><input type="text" id="inviteInput" placeholder="输入兑换码..." style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:4px 8px;color:var(--th);font-size:.6rem;"><button class="btn-sm" id="redeemInviteBtn">兑换</button></div><div id="inviteResult" style="font-size:.55rem;margin-top:4px;color:var(--ts);"></div></div><div style="background:var(--bgp);border:1px solid var(--bd);border-radius:5px;padding:8px 10px;font-size:.65rem;"><div style="color:var(--gold);font-weight:600;font-size:.7rem;">☁️ 云端同步</div><p style="font-size:.6rem;">每次操作自动保存到 Gist</p><div style="font-size:.55rem;margin-top:4px;">状态：<span id="cloudStatusDetail" style="color:var(--grn);">已连接</span></div><button class="btn-sm" style="margin-top:6px;width:100%;" onclick="manualSync()">🔄 手动同步</button></div></div></div>
 </div>
 </div>
 </div>
@@ -339,16 +370,13 @@ let serverTimeOffset=0;
 //  联网时间
 // ============================================================
 async function syncServerTime(){
-  try{
-    const r=await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
-    if(r.ok){const d=await r.json();serverTimeOffset=new Date(d.datetime).getTime()-Date.now();console.log('⏰ 时间同步完成');}
-  }catch(e){console.warn('⚠️ 时间同步失败，使用本地时间');}
+try{const r=await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');if(r.ok){const d=await r.json();serverTimeOffset=new Date(d.datetime).getTime()-Date.now();console.log('⏰ 时间同步完成')}}catch(e){console.warn('⚠️ 时间同步失败')}
 }
-function now(){return Date.now()+serverTimeOffset;}
-function getToday(){const d=new Date(now());return d.getUTCFullYear()+'-'+(d.getUTCMonth()+1)+'-'+d.getUTCDate();}
+function now(){return Date.now()+serverTimeOffset}
+function getToday(){const d=new Date(now());return d.getUTCFullYear()+'-'+(d.getUTCMonth()+1)+'-'+d.getUTCDate()}
 
 // ============================================================
-//  星系数据
+//  数据定义
 // ============================================================
 const GALAXY_DATA=[
 {name:'银河系',tier:1,levelBase:1,dropTier:1,systems:['太阳系','泰尔斯达','奥维尔','诺瓦里斯','艾德隆','赛伦迪斯','维拉克斯','卡佩尔','达米安','雷克萨']},
@@ -363,9 +391,6 @@ const GALAXY_DATA=[
 {name:'室女座',tier:7,levelBase:900,dropTier:7,systems:['维雅','卡兰','索拉','梅里安','奥德赛','维斯塔','艾瑞斯','泰兰','洛恩','赛伦']}
 ];
 
-// ============================================================
-//  材料数据
-// ============================================================
 const ALL_MATERIALS=[];
 const MATERIALS={
 T1:[{name:'电路板',tier:1},{name:'铜线',tier:1},{name:'电阻',tier:1},{name:'焊料',tier:1},{name:'电容',tier:1},{name:'二极管',tier:1},{name:'晶振',tier:1},{name:'继电器',tier:1},{name:'保险丝',tier:1},{name:'接线端子',tier:1}],
@@ -376,11 +401,8 @@ T5:[{name:'暗物质',tier:5},{name:'量子芯片',tier:5},{name:'纳米装甲',
 T6:[{name:'星核碎片',tier:6},{name:'重力发生器',tier:6},{name:'时空透镜',tier:6},{name:'零点模块',tier:6},{name:'奇点束缚器',tier:6},{name:'超空间引擎',tier:6},{name:'相位转移器',tier:6},{name:'因果律稳定器',tier:6},{name:'维度之门',tier:6},{name:'宇宙常数调节器',tier:6}],
 T7:[{name:'创世结晶',tier:7},{name:'宇宙之核',tier:7},{name:'奇点碎片',tier:7},{name:'永恒合金',tier:7},{name:'造物主之眼',tier:7},{name:'宇宙弦',tier:7},{name:'大爆炸回响',tier:7},{name:'暗能量核心',tier:7},{name:'多元宇宙之心',tier:7},{name:'终焉之尘',tier:7}]
 };
-Object.values(MATERIALS).forEach(list=>list.forEach(m=>ALL_MATERIALS.push(m)));
+Object.values(MATERIALS).forEach(l=>l.forEach(m=>ALL_MATERIALS.push(m)));
 
-// ============================================================
-//  战舰数据库
-// ============================================================
 const SHIP_DB={
 T1:{front:['基础战舰','临时部署单元 T-01','废弃协议执行舰','低优先级巡逻器','备用节点护卫船','民用巡洋舰','Z-9 零状态守卫'],mid:['慢速聚能平台 SC-05','基础蓄力炮','延迟释放协议舰 DL-03','能量堆叠平台 ES-11','一次性爆发单元 OS-03'],rear:['后勤供应链末端节点 LS-09','基础后勤舰','勤务综合支援系统 SS-07','Rep-12 结构修复代理']},
 T2:{front:['战术扫描前驱舰 TS-09','短程光学侦察艇 SR-11','信号采集先锋平台 SP-07','地形扫描前导机 TM-08','先制打击试行舰 PS-05','先行接战护卫舰 EN-07'],mid:['二级蓄力协议执行舰 SL-07','渐进式能量堆叠器 PE-09','破盾型炮舰 SS-04','二级穿甲试行机 PA-10','二级发射协议执行体 LP-05'],rear:['二级物资调度舰 MS-12','二级供应链中继舰 CS-08','二级战场修补舰 FR-09','结构加固施作舰 SR-06','二级医疗扩展模块 ME-06','二级勤务支援系统 SS-11']},
@@ -391,7 +413,6 @@ T6:{front:['永恒之刃 EB-01','星界穿梭者 AV-07','幻影神舰 PG-00','�
 T7:{front:['战争原型 WP-00','前锋定义者 FD-03','终焉宣告者 AE-01','先驱回响舰 PR-01','沉默方尖碑 SO-11','熵逆引擎 EE-01','反物理前哨 AP-03','灵魂牵引者 ST-09','夹缝穿行者 CV-01','铭文舰 IR-01','光铸舰 LC-01'],mid:['虚空吸气舰 VS-01','碎片蓄力舰 FS-09','凝视反噬炮 GR-11','禁忌公式舰 TF-09','量子冻结舰 QF-07'],rear:['稳定协议执行舰 SP-09','战场缝合舰 BF-01','噩梦清除者 NC-03','虚空园艺师 VG-07','寂静回响者 SE-09','意志力配送舰 WD-07','恐惧吸收舰 FA-01']}
 };
 
-// 配方
 const SHIP_RECIPES={
 '基础战舰':{'电路板':5,'螺丝':10},'临时部署单元 T-01':{'电路板':4,'螺丝':8},'废弃协议执行舰':{'电路板':6,'螺丝':6,'焊料':4},'低优先级巡逻器':{'电路板':3,'铜线':5},'备用节点护卫船':{'电路板':5,'螺丝':8,'电容':2},'民用巡洋舰':{'电路板':8,'螺丝':12,'继电器':2},'Z-9 零状态守卫':{'电路板':10,'螺丝':15,'焊料':5},
 '慢速聚能平台 SC-05':{'电路板':6,'螺丝':10,'电容':4},'基础蓄力炮':{'电路板':5,'螺丝':8,'焊料':3},'延迟释放协议舰 DL-03':{'电路板':7,'螺丝':12,'继电器':3},'能量堆叠平台 ES-11':{'电路板':8,'螺丝':10,'电容':5},'一次性爆发单元 OS-03':{'电路板':6,'螺丝':6,'二极管':4},
@@ -436,7 +457,7 @@ function getShipContribution(tier){const m={1:10,2:20,3:40,4:80,5:100,6:200,7:40
 function getTaskReward(tier){const m={1:10,2:20,3:50,4:100,5:300,6:500,7:1000};return m[tier]||10}
 
 // ============================================================
-//  Gist 存储
+//  Gist 存储（含重试）
 // ============================================================
 async function saveToGist(data){
   const url=`https://api.github.com/gists/${GIST_ID}`;
@@ -444,35 +465,63 @@ async function saveToGist(data){
   try{const r=await fetch(url);if(r.ok){const i=await r.json();sha=i.files[GIST_FILENAME]?.sha||''}}catch(e){}
   const payload={files:{[GIST_FILENAME]:{content:JSON.stringify(data,null,2)}}};
   if(sha)payload.sha=sha;
-  const r=await fetch(url,{method:'PATCH',headers:{'Authorization':`token ${GITHUB_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify(payload)});
-  return r.ok;
+  try{
+    const r=await fetch(url,{method:'PATCH',headers:{'Authorization':`token ${GITHUB_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(r.ok)return true;
+    const errText=await r.text();
+    console.error('Gist保存失败:',r.status,errText);
+    return false;
+  }catch(e){console.error('Gist保存异常:',e);return false}
 }
 async function loadFromGist(){
-  try{const r=await fetch(`https://api.github.com/gists/${GIST_ID}`);if(!r.ok)return null;const i=await r.json();const c=i.files[GIST_FILENAME]?.content;if(!c)return{};return JSON.parse(c)}catch(e){return null}
+  try{
+    const r=await fetch(`https://api.github.com/gists/${GIST_ID}`,{headers:{'Authorization':`token ${GITHUB_TOKEN}`}});
+    if(!r.ok){
+      console.error('Gist加载失败:',r.status);
+      return null;
+    }
+    const i=await r.json();
+    const c=i.files[GIST_FILENAME]?.content;
+    if(!c)return{};
+    return JSON.parse(c);
+  }catch(e){console.error('Gist加载异常:',e);return null}
 }
 
 function getPlayerData(){return{inventory,tradeList,credits,playerShips,statBattles,statWins,statLosses,statDrops,playerLevel,playerExp,maxExp,currentGalaxyIdx,currentSystemIdx,blueprints,constructionQueue,maxShips,upgradeLevel,alphaSquadDefeated,redeemedCodes,currentAlliance,lastOnline:now(),lastTaskRefresh}}
 
-async function saveGameImmediate(){
+// 保存（多次重试）
+async function saveGameImmediate(retry=3){
   if(!currentUser)return false;
   if(_saveInProgress){await new Promise(r=>setTimeout(r,100));return saveGameImmediate()}
   _saveInProgress=true;
   updateSyncStatus('syncing','保存中...');
   try{
-    let allData=await loadFromGist()||{};
-    if(!allData.players)allData.players={};
-    if(!allData.alliances)allData.alliances={};
-    if(!allData.meta)allData.meta={};
-    allData.players[currentUser]=getPlayerData();
-    allData.alliances=allianceData;
-    allData.meta.lastUpdate=now();
-    // 计算排行榜
-    allData.leaderboard=Object.keys(allData.players).map(name=>{const p=allData.players[name];let power=100;(p.playerShips||[]).forEach(s=>{power+=Math.floor(s.maxHp/2)+s.atk*3});return{name,power,level:p.playerLevel||1}}).sort((a,b)=>b.power-a.power);
-    const ok=await saveToGist(allData);
-    updateSyncStatus(ok?'ok':'fail',ok?'已同步':'保存失败');
-    return ok;
-  }catch(e){updateSyncStatus('fail','保存异常');return false}
-  finally{_saveInProgress=false}
+    for(let attempt=0;attempt<retry;attempt++){
+      let allData=await loadFromGist();
+      if(!allData)allData={};
+      if(!allData.players)allData.players={};
+      if(!allData.alliances)allData.alliances={};
+      if(!allData.meta)allData.meta={};
+      allData.players[currentUser]=getPlayerData();
+      allData.alliances=allianceData;
+      allData.meta.lastUpdate=now();
+      allData.leaderboard=Object.keys(allData.players).map(name=>{const p=allData.players[name];let power=100;(p.playerShips||[]).forEach(s=>{power+=Math.floor(s.maxHp/2)+s.atk*3});return{name,power,level:p.playerLevel||1}}).sort((a,b)=>b.power-a.power);
+      const ok=await saveToGist(allData);
+      if(ok){
+        updateSyncStatus('ok','已同步');
+        _saveInProgress=false;
+        return true;
+      }
+      await new Promise(r=>setTimeout(r,800*(attempt+1)));
+    }
+    updateSyncStatus('fail','同步失败');
+    _saveInProgress=false;
+    return false;
+  }catch(e){
+    updateSyncStatus('fail','保存异常');
+    _saveInProgress=false;
+    return false;
+  }
 }
 
 async function loadFromServer(){
@@ -486,22 +535,34 @@ async function loadFromServer(){
   }catch(e){return null}
 }
 
+async function manualSync(){
+  const s=await saveGameImmediate();
+  if(s)addLog('☁️ 手动同步成功','sys');
+  else addLog('❌ 手动同步失败，请检查网络或Token','dmg');
+}
+
 async function consumeItems(items,actionFn){
   const backup=JSON.parse(JSON.stringify(inventory));
-  for(const[name,qty]of Object.entries(items)){if(!inventory[name]||inventory[name].count<qty)return{success:false,error:'材料不足：'+name}}
-  for(const[name,qty]of Object.entries(items)){inventory[name].count-=qty;if(inventory[name].count<=0)delete inventory[name]}
+  for(const[n,q]of Object.entries(items)){if(!inventory[n]||inventory[n].count<q)return{success:false,error:'材料不足：'+n}}
+  for(const[n,q]of Object.entries(items)){inventory[n].count-=q;if(inventory[n].count<=0)delete inventory[n]}
   try{const r=await actionFn();if(r===false){inventory=backup;return{success:false,error:'操作失败'}}return{success:true}}
   catch(e){inventory=backup;return{success:false,error:e.message}}
 }
 
-function updateSyncStatus(s,msg){const el=document.getElementById('syncStatus');if(!el)return;el.className='';if(s==='ok'){el.textContent='● '+(msg||'已同步');el.classList.add('ok')}else if(s==='syncing'){el.textContent='⟳ '+(msg||'同步中...');el.classList.add('sync')}else{el.textContent='✗ '+(msg||'同步失败');el.classList.add('fail')}}
+function updateSyncStatus(s,msg){
+  const el=document.getElementById('syncStatus');if(!el)return;el.className='';
+  if(s==='ok'){el.textContent='● '+(msg||'已同步');el.classList.add('ok')}
+  else if(s==='syncing'){el.textContent='⟳ '+(msg||'同步中...');el.classList.add('sync')}
+  else{el.textContent='✗ '+(msg||'同步失败');el.classList.add('fail')}
+  const cd=document.getElementById('cloudStatusDetail');
+  if(cd){cd.textContent=el.textContent;cd.style.color=s==='ok'?'#4aad7a':s==='syncing'?'#d4a843':'#c0392b'}
+}
 function addLog(msg,cls='sys'){const log=document.getElementById('battleLog');if(!log)return;const d=document.createElement('div');d.className=cls;d.textContent=msg;log.appendChild(d);log.scrollTop=log.scrollHeight;if(log.children.length>50)log.removeChild(log.firstChild)}
 function showModal(t,c){document.getElementById('modalTitle').textContent=t;document.getElementById('modalContent').innerHTML=c;document.getElementById('modalOverlay').classList.add('show')}
 function hideModal(){document.getElementById('modalOverlay').classList.remove('show')}
 document.getElementById('modalClose').addEventListener('click',hideModal);
 document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('modalOverlay'))hideModal()});
 
-// 主题
 function initTheme(){const s=localStorage.getItem('starfleet_theme')||'dark';if(s==='light'){document.body.classList.add('light');document.getElementById('themeToggle').textContent='☀️'}}
 document.getElementById('themeToggle').addEventListener('click',function(){if(document.body.classList.contains('light')){document.body.classList.remove('light');this.textContent='🌙';localStorage.setItem('starfleet_theme','dark')}else{document.body.classList.add('light');this.textContent='☀️';localStorage.setItem('starfleet_theme','light')}});
 
@@ -519,90 +580,90 @@ function createInitialShips(){const t1f=SHIP_DB.T1.front,t1m=SHIP_DB.T1.mid,t1r=
 function createInitialInventory(){return{'电路板':{count:10,tier:1},'螺丝':{count:20,tier:2},'基础护盾发生器':{count:1,tier:1}}}
 
 async function doRegister(){
-  const u=document.getElementById('registerUsername').value.trim(),p=document.getElementById('registerPassword').value.trim(),c=document.getElementById('registerConfirm').value.trim();
-  const errEl=document.getElementById('registerError'),okEl=document.getElementById('registerSuccess');
-  if(!u||!p||!c){errEl.textContent='请填写完整信息';return}
-  if(u.length<2){errEl.textContent='账号至少2个字符';return}
-  if(p.length<3){errEl.textContent='密码至少3个字符';return}
-  if(p!==c){errEl.textContent='两次密码不一致';return}
-  const users=getUsers();
-  if(users[u]){errEl.textContent='账号已存在';return}
-  inventory=createInitialInventory();tradeList=[];credits=0;playerShips=createInitialShips();blueprints=[];constructionQueue=[];
-  maxShips={front:2,mid:1,rear:2};upgradeLevel={front:0,mid:0,rear:0};
-  statBattles=0;statWins=0;statLosses=0;statDrops=0;playerLevel=1;playerExp=0;maxExp=100;
-  currentGalaxyIdx=0;currentSystemIdx=0;alphaSquadDefeated={};redeemedCodes={};currentAlliance=null;lastTaskRefresh=getToday();
-  users[u]=p;saveUsers(users);
-  const tempUser=currentUser;currentUser=u;
-  const saved=await saveGameImmediate();
-  if(saved){errEl.textContent='';okEl.textContent='注册成功！正在登录...';currentUser=tempUser;document.getElementById('loginUsername').value=u;document.getElementById('loginPassword').value=p;setTimeout(()=>{showLogin();doLogin()},500)}
-  else{errEl.textContent='注册失败，请检查网络';currentUser=tempUser}
+const u=document.getElementById('registerUsername').value.trim(),p=document.getElementById('registerPassword').value.trim(),c=document.getElementById('registerConfirm').value.trim();
+const errEl=document.getElementById('registerError'),okEl=document.getElementById('registerSuccess');
+if(!u||!p||!c){errEl.textContent='请填写完整信息';return}
+if(u.length<2){errEl.textContent='账号至少2个字符';return}
+if(p.length<3){errEl.textContent='密码至少3个字符';return}
+if(p!==c){errEl.textContent='两次密码不一致';return}
+const users=getUsers();
+if(users[u]){errEl.textContent='账号已存在';return}
+inventory=createInitialInventory();tradeList=[];credits=0;playerShips=createInitialShips();blueprints=[];constructionQueue=[];
+maxShips={front:2,mid:1,rear:2};upgradeLevel={front:0,mid:0,rear:0};
+statBattles=0;statWins=0;statLosses=0;statDrops=0;playerLevel=1;playerExp=0;maxExp=100;
+currentGalaxyIdx=0;currentSystemIdx=0;alphaSquadDefeated={};redeemedCodes={};currentAlliance=null;lastTaskRefresh=getToday();
+users[u]=p;saveUsers(users);
+const tempUser=currentUser;currentUser=u;
+const saved=await saveGameImmediate();
+if(saved){errEl.textContent='';okEl.textContent='注册成功！正在登录...';currentUser=tempUser;document.getElementById('loginUsername').value=u;document.getElementById('loginPassword').value=p;setTimeout(()=>{showLogin();doLogin()},500)}
+else{errEl.textContent='注册失败，请检查网络';currentUser=tempUser}
 }
 
 async function doLogin(){
-  const u=document.getElementById('loginUsername').value.trim(),p=document.getElementById('loginPassword').value.trim();
-  const errEl=document.getElementById('loginError'),okEl=document.getElementById('loginSuccess');
-  if(!u||!p){errEl.textContent='请输入账号和密码';return}
-  const users=getUsers();
-  if(!users[u]){errEl.textContent='账号不存在，请先注册';return}
-  if(users[u]!==p){errEl.textContent='密码错误';return}
-  errEl.textContent='';okEl.textContent='登录成功！';
-  currentUser=u;document.getElementById('playerName').textContent=u;
-  document.getElementById('loginOverlay').classList.add('hidden');
-  document.getElementById('app').style.display='flex';
-  const loaded=await loadFromServer();
-  if(loaded&&Object.keys(loaded).length>0){
-    Object.assign(window,loaded);
-    if(!Array.isArray(playerShips)||playerShips.length===0)playerShips=createInitialShips();
-    if(!Array.isArray(blueprints))blueprints=[];
-    if(!Array.isArray(constructionQueue))constructionQueue=[];
-    if(!currentAlliance)currentAlliance=null;
-    addLog('☁️ 从 Gist 加载数据成功','sys');
-  }else{
-    inventory=createInitialInventory();playerShips=createInitialShips();credits=0;lastTaskRefresh=getToday();
-    await saveGameImmediate();
-    addLog('🆕 新玩家已初始化','sys');
-  }
-  checkDailyTaskRefresh();
-  renderAll();
-  updateSyncStatus('ok');
+const u=document.getElementById('loginUsername').value.trim(),p=document.getElementById('loginPassword').value.trim();
+const errEl=document.getElementById('loginError'),okEl=document.getElementById('loginSuccess');
+if(!u||!p){errEl.textContent='请输入账号和密码';return}
+const users=getUsers();
+if(!users[u]){errEl.textContent='账号不存在，请先注册';return}
+if(users[u]!==p){errEl.textContent='密码错误';return}
+errEl.textContent='';okEl.textContent='登录成功！';
+currentUser=u;document.getElementById('playerName').textContent=u;
+document.getElementById('loginOverlay').classList.add('hidden');
+document.getElementById('app').style.display='flex';
+const loaded=await loadFromServer();
+if(loaded&&Object.keys(loaded).length>0){
+Object.assign(window,loaded);
+if(!Array.isArray(playerShips)||playerShips.length===0)playerShips=createInitialShips();
+if(!Array.isArray(blueprints))blueprints=[];
+if(!Array.isArray(constructionQueue))constructionQueue=[];
+if(!currentAlliance)currentAlliance=null;
+addLog('☁️ 从 Gist 加载数据成功','sys');
+}else{
+inventory=createInitialInventory();playerShips=createInitialShips();credits=0;lastTaskRefresh=getToday();
+await saveGameImmediate();
+addLog('🆕 新玩家已初始化','sys');
+}
+checkDailyTaskRefresh();
+renderAll();
+updateSyncStatus('ok');
 }
 document.getElementById('loginBtn').addEventListener('click',doLogin);
 document.getElementById('loginPassword').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 document.getElementById('registerBtn').addEventListener('click',doRegister);
 document.getElementById('registerConfirm').addEventListener('keydown',e=>{if(e.key==='Enter')doRegister()});
 document.getElementById('logoutBtn').addEventListener('click',async function(){
-  if(currentUser)await saveGameImmediate();
-  currentUser=null;
-  document.getElementById('loginOverlay').classList.remove('hidden');
-  document.getElementById('app').style.display='none';
-  document.getElementById('loginPassword').value='';
-  showLogin();
+if(currentUser)await saveGameImmediate();
+currentUser=null;
+document.getElementById('loginOverlay').classList.remove('hidden');
+document.getElementById('app').style.display='none';
+document.getElementById('loginPassword').value='';
+showLogin();
 });
 
 // ============================================================
-//  星系导航
+//  星系
 // ============================================================
 function renderGalaxies(){
-  const c=document.getElementById('galaxyContainer');if(!c)return;c.innerHTML='';
-  GALAXY_DATA.forEach((g,idx)=>{
-    const isActive=idx===currentGalaxyIdx;
-    const isExpanded=galaxyExpanded[idx]!==undefined?galaxyExpanded[idx]:(idx===0);
-    const group=document.createElement('div');group.className='galaxy-group';
-    const header=document.createElement('div');header.className='galaxy-header';
-    header.style.borderColor=isActive?'#d4a843':'';
-    header.innerHTML=`<span>${g.name} <span class="g-tier">T${g.tier}</span></span><span class="g-arrow ${isExpanded?'open':''}">▶</span>`;
-    header.addEventListener('click',()=>{galaxyExpanded[idx]=!galaxyExpanded[idx];renderGalaxies()});
-    const sysDiv=document.createElement('div');sysDiv.className='galaxy-systems'+(isExpanded?' open':'');
-    g.systems.forEach((sn,si)=>{
-      const isA=idx===currentGalaxyIdx&&si===currentSystemIdx;
-      const mn=g.levelBase+si*2,mx=mn+3;
-      const chip=document.createElement('span');chip.className='system-chip'+(isA?' active':'');
-      chip.innerHTML=`${sn} <span class="s-lvl">(${mn}-${mx})</span>`;
-      chip.addEventListener('click',e=>{e.stopPropagation();currentGalaxyIdx=idx;currentSystemIdx=si;galaxyExpanded[idx]=true;renderGalaxies();updateBattleInfo();generateEnemies();saveGameImmediate();addLog('🪐 进入 '+sn,'sys')});
-      sysDiv.appendChild(chip);
-    });
-    group.appendChild(header);group.appendChild(sysDiv);c.appendChild(group);
-  });
+const c=document.getElementById('galaxyContainer');if(!c)return;c.innerHTML='';
+GALAXY_DATA.forEach((g,idx)=>{
+const isActive=idx===currentGalaxyIdx;
+const isExpanded=galaxyExpanded[idx]!==undefined?galaxyExpanded[idx]:(idx===0);
+const group=document.createElement('div');group.className='galaxy-group';
+const header=document.createElement('div');header.className='galaxy-header';
+header.style.borderColor=isActive?'#d4a843':'';
+header.innerHTML=`<span>${g.name} <span class="g-tier">T${g.tier}</span></span><span class="g-arrow ${isExpanded?'open':''}">▶</span>`;
+header.addEventListener('click',()=>{galaxyExpanded[idx]=!galaxyExpanded[idx];renderGalaxies()});
+const sysDiv=document.createElement('div');sysDiv.className='galaxy-systems'+(isExpanded?' open':'');
+g.systems.forEach((sn,si)=>{
+const isA=idx===currentGalaxyIdx&&si===currentSystemIdx;
+const mn=g.levelBase+si*2,mx=mn+3;
+const chip=document.createElement('span');chip.className='system-chip'+(isA?' active':'');
+chip.innerHTML=`${sn} <span class="s-lvl">(${mn}-${mx})</span>`;
+chip.addEventListener('click',e=>{e.stopPropagation();currentGalaxyIdx=idx;currentSystemIdx=si;galaxyExpanded[idx]=true;renderGalaxies();updateBattleInfo();generateEnemies();saveGameImmediate();addLog('🪐 进入 '+sn,'sys')});
+sysDiv.appendChild(chip);
+});
+group.appendChild(header);group.appendChild(sysDiv);c.appendChild(group);
+});
 }
 function getCurrentGalaxy(){return GALAXY_DATA[currentGalaxyIdx]||GALAXY_DATA[0]}
 function getCurrentSystemName(){const g=getCurrentGalaxy();return g.systems[currentSystemIdx]||g.systems[0]}
@@ -613,254 +674,237 @@ function getGalaxyTier(){return getCurrentGalaxy().tier||1}
 //  战斗
 // ============================================================
 function generateEnemies(){
-  const lv=getSystemLevel(),tier=Math.min(getGalaxyTier(),7);
-  const db=SHIP_DB['T'+tier];if(!db)return;
-  const all=[...db.front,...db.mid,...db.rear];
-  let count=5;if(currentGalaxyIdx>=4&&Math.random()<.7)count=8+Math.floor(Math.random()*5);
-  enemies=[];
-  for(let i=0;i<count;i++){
-    const name=all[Math.floor(Math.random()*all.length)];
-    const baseLv=lv.min+Math.floor(Math.random()*(lv.max-lv.min+1));
-    const pos=['front','mid','rear'][Math.floor(Math.random()*3)];
-    const base=getBaseStats(tier,pos);
-    const hp=applyDeviation(base.hp,tier),atk=applyDeviation(base.atk,tier);
-    const affixes=[];
-    // 20%概率获得1个词条
-    if(Math.random()<0.2)affixes.push(randomAffix());
-    enemies.push({id:'e'+i+'_'+Date.now(),name:name+' Lv.'+baseLv,hp,maxHp:hp,atk,alive:true,reward:5+baseLv*2+Math.floor(Math.random()*5),tier,level:baseLv,pos,affixes});
-  }
-  renderEnemy();updateBattleInfo();
+const lv=getSystemLevel(),tier=Math.min(getGalaxyTier(),7);
+const db=SHIP_DB['T'+tier];if(!db)return;
+const all=[...db.front,...db.mid,...db.rear];
+let count=5;if(currentGalaxyIdx>=4&&Math.random()<.7)count=8+Math.floor(Math.random()*5);
+enemies=[];
+for(let i=0;i<count;i++){
+const name=all[Math.floor(Math.random()*all.length)];
+const baseLv=lv.min+Math.floor(Math.random()*(lv.max-lv.min+1));
+const pos=['front','mid','rear'][Math.floor(Math.random()*3)];
+const base=getBaseStats(tier,pos);
+const hp=applyDeviation(base.hp,tier),atk=applyDeviation(base.atk,tier);
+const affixes=[];
+if(Math.random()<0.2)affixes.push(randomAffix());
+enemies.push({id:'e'+i+'_'+Date.now(),name:name+' Lv.'+baseLv,hp,maxHp:hp,atk,alive:true,reward:5+baseLv*2+Math.floor(Math.random()*5),tier,level:baseLv,pos,affixes});
+}
+renderEnemy();updateBattleInfo();
 }
 
 function renderEnemy(){
-  const col=document.getElementById('enemyColumn');col.innerHTML='';
-  const alive=enemies.filter(e=>e.alive);
-  if(alive.length===0){generateEnemies();return}
-  alive.forEach(enemy=>{
-    const div=document.createElement('div');div.className='enemy-unit';
-    const pct=Math.round((enemy.hp/enemy.maxHp)*100);
-    let at=enemy.affixes?.map(a=>`<span style="font-size:.3rem;color:#9b59b6;">[${a.name}]</span>`).join('')||'';
-    div.innerHTML=`<div class="ship-info"><div class="ship-name">◈ ${enemy.name} ${at}</div><div class="hp-wrap"><span class="hp-text">${Math.floor(enemy.hp)}/${enemy.maxHp}</span><div class="hp-bar"><div class="fill" style="width:${pct}%;"></div></div></div></div><span class="ship-icon">◈</span>`;
-    col.appendChild(div);
-  });
-  document.getElementById('enemyCount').textContent=alive.length;
+const col=document.getElementById('enemyColumn');col.innerHTML='';
+const alive=enemies.filter(e=>e.alive);
+if(alive.length===0){generateEnemies();return}
+alive.forEach(enemy=>{
+const div=document.createElement('div');div.className='enemy-unit';
+const pct=Math.round((enemy.hp/enemy.maxHp)*100);
+let at=enemy.affixes?.map(a=>`<span style="font-size:.3rem;color:#9b59b6;">[${a.name}]</span>`).join('')||'';
+div.innerHTML=`<div class="ship-info"><div class="ship-name">◈ ${enemy.name} ${at}</div><div class="hp-wrap"><span class="hp-text">${Math.floor(enemy.hp)}/${enemy.maxHp}</span><div class="hp-bar"><div class="fill" style="width:${pct}%;"></div></div></div></div><span class="ship-icon">◈</span>`;
+col.appendChild(div);
+});
+document.getElementById('enemyCount').textContent=alive.length;
 }
 
 function updateFleetUI(){
-  if(!playerShips||playerShips.length===0)playerShips=createInitialShips();
-  const dep=playerShips.filter(s=>s.deployed);
-  const f=dep.filter(s=>s.pos==='front').length,m=dep.filter(s=>s.pos==='mid').length,r=dep.filter(s=>s.pos==='rear').length;
-  document.getElementById('fleetSummary').innerHTML=`<span class="fleet-tag front">先锋 ${f}/${maxShips.front}</span><span class="fleet-tag mid">中间 ${m}/${maxShips.mid}</span><span class="fleet-tag rear">后勤 ${r}/${maxShips.rear}</span><span class="fleet-tag" style="border-style:dashed;">总 ${dep.length}/${maxShips.front+maxShips.mid+maxShips.rear}</span>`;
-  document.getElementById('fleetCountLabel').textContent=dep.length+'/'+(maxShips.front+maxShips.mid+maxShips.rear);
-  friendlyShips=dep.map(s=>({...s,hp:s.hp,maxHp:s.maxHp,atk:s.atk,charge:s.charge||0,maxCharge:100,heal:s.pos==='rear'?12:0,burst:s.affixes.some(a=>a.id==='burst'),dmgBonus:s.affixes.reduce((sum,a)=>sum+(a.id==='focus'?a.value/100:0),0),plunder:s.affixes.reduce((sum,a)=>sum+(a.id==='plunder'?a.value/100:0),0),selfDestruct:s.affixes.reduce((sum,a)=>sum+(a.id==='self_destruct'?a.value/100:0),0),isAlive:true}));
-  renderFleet();updatePower();
+if(!playerShips||playerShips.length===0)playerShips=createInitialShips();
+const dep=playerShips.filter(s=>s.deployed);
+const f=dep.filter(s=>s.pos==='front').length,m=dep.filter(s=>s.pos==='mid').length,r=dep.filter(s=>s.pos==='rear').length;
+document.getElementById('fleetSummary').innerHTML=`<span class="fleet-tag front">先锋 ${f}/${maxShips.front}</span><span class="fleet-tag mid">中间 ${m}/${maxShips.mid}</span><span class="fleet-tag rear">后勤 ${r}/${maxShips.rear}</span><span class="fleet-tag" style="border-style:dashed;">总 ${dep.length}/${maxShips.front+maxShips.mid+maxShips.rear}</span>`;
+document.getElementById('fleetCountLabel').textContent=dep.length+'/'+(maxShips.front+maxShips.mid+maxShips.rear);
+friendlyShips=dep.map(s=>({...s,hp:s.hp,maxHp:s.maxHp,atk:s.atk,charge:s.charge||0,maxCharge:100,heal:s.pos==='rear'?12:0,burst:s.affixes.some(a=>a.id==='burst'),dmgBonus:s.affixes.reduce((sum,a)=>sum+(a.id==='focus'?a.value/100:0),0),plunder:s.affixes.reduce((sum,a)=>sum+(a.id==='plunder'?a.value/100:0),0),selfDestruct:s.affixes.reduce((sum,a)=>sum+(a.id==='self_destruct'?a.value/100:0),0),isAlive:true}));
+renderFleet();updatePower();
 }
 
 function renderFleet(){
-  const col=document.getElementById('friendlyColumn');col.innerHTML='';
-  if(!friendlyShips||friendlyShips.length===0){col.innerHTML='<div style="color:#4a6080;font-size:.5rem;text-align:center;">暂无战舰</div>';return}
-  const order=['rear','mid','front'];
-  [...friendlyShips].sort((a,b)=>order.indexOf(a.pos)-order.indexOf(b.pos)).forEach(ship=>{
-    const div=document.createElement('div');div.className='friendly-unit';
-    const color=getQualityColor(ship.tier);div.style.borderColor=color;
-    const pct=Math.round((ship.hp/ship.maxHp)*100);
-    let extra='';
-    if(ship.pos==='mid'){const cp=Math.round((ship.charge||0)/100*100);extra=`<div class="charge-bar"><div class="fill" style="width:${cp}%;"></div></div>`}
-    const at=ship.affixes?.map(a=>`<span style="font-size:.3rem;color:#9b59b6;">[${a.name}]</span>`).join('')||'';
-    div.innerHTML=`<span class="pos-tag ${ship.pos}">${ship.pos==='front'?'先锋':ship.pos==='mid'?'中间':'后勤'}</span><div class="ship-info"><div class="ship-name" style="color:${color};">${ship.name} ${at}</div><div class="hp-wrap"><div class="hp-bar"><div class="fill" style="width:${pct}%;"></div></div><span class="hp-text">${Math.floor(ship.hp)}/${ship.maxHp}</span></div>${extra}</div>`;
-    div.addEventListener('click',()=>showShipDetail(ship.id));
-    col.appendChild(div);
-  });
+const col=document.getElementById('friendlyColumn');col.innerHTML='';
+if(!friendlyShips||friendlyShips.length===0){col.innerHTML='<div style="color:#4a6080;font-size:.5rem;text-align:center;">暂无战舰</div>';return}
+const order=['rear','mid','front'];
+[...friendlyShips].sort((a,b)=>order.indexOf(a.pos)-order.indexOf(b.pos)).forEach(ship=>{
+const div=document.createElement('div');div.className='friendly-unit';
+const color=getQualityColor(ship.tier);div.style.borderColor=color;
+const pct=Math.round((ship.hp/ship.maxHp)*100);
+let extra='';
+if(ship.pos==='mid'){const cp=Math.round((ship.charge||0));extra=`<div class="charge-bar"><div class="fill" style="width:${cp}%;"></div></div>`}
+const at=ship.affixes?.map(a=>`<span style="font-size:.3rem;color:#9b59b6;">[${a.name}]</span>`).join('')||'';
+div.innerHTML=`<span class="pos-tag ${ship.pos}">${ship.pos==='front'?'先锋':ship.pos==='mid'?'中间':'后勤'}</span><div class="ship-info"><div class="ship-name" style="color:${color};">${ship.name} ${at}</div><div class="hp-wrap"><div class="hp-bar"><div class="fill" style="width:${pct}%;"></div></div><span class="hp-text">${Math.floor(ship.hp)}/${ship.maxHp}</span></div>${extra}</div>`;
+div.addEventListener('click',()=>showShipDetail(ship.id));
+col.appendChild(div);
+});
 }
 
 function updateBattleInfo(){
-  const g=getCurrentGalaxy(),lv=getSystemLevel();
-  document.getElementById('battleLocation').textContent=g.name+' · '+getCurrentSystemName();
-  document.getElementById('enemyInfo').textContent='敌人等级: '+lv.min+'-'+lv.max;
-  document.getElementById('enemyCount').textContent=enemies.filter(e=>e.alive).length;
+const g=getCurrentGalaxy(),lv=getSystemLevel();
+document.getElementById('battleLocation').textContent=g.name+' · '+getCurrentSystemName();
+document.getElementById('enemyInfo').textContent='敌人等级: '+lv.min+'-'+lv.max;
+document.getElementById('enemyCount').textContent=enemies.filter(e=>e.alive).length;
 }
 
 function updatePower(){
-  let t=100;
-  playerShips.forEach(s=>{t+=Math.floor(s.maxHp/2)+s.atk*3;if(s.affixes)s.affixes.forEach(a=>{if(a.id==='heavy_armor')t+=Math.floor(s.maxHp*.05);if(a.id==='focus')t+=Math.floor(s.atk*.1)})});
-  document.getElementById('powerDisplay').textContent=Math.floor(t);
+let t=100;
+playerShips.forEach(s=>{t+=Math.floor(s.maxHp/2)+s.atk*3;if(s.affixes)s.affixes.forEach(a=>{if(a.id==='heavy_armor')t+=Math.floor(s.maxHp*.05);if(a.id==='focus')t+=Math.floor(s.atk*.1)})});
+document.getElementById('powerDisplay').textContent=Math.floor(t);
 }
 
 function syncFleetHpToPlayer(){if(!friendlyShips||!playerShips)return;friendlyShips.forEach(fs=>{const ps=playerShips.find(s=>s.id===fs.id);if(ps){ps.hp=fs.hp;ps.maxHp=fs.maxHp;ps.atk=fs.atk;ps.charge=fs.charge||0}})}
 
 function handleEnemyDeath(target,ship){
-  const reward=target.reward||10;credits+=reward;document.getElementById('creditDisplay').textContent=credits;
-  addLog(`💰 击杀 ${target.name} 获得 ${reward} 星际币`,'loot');
-  const expGain=Math.floor((target.level||1)*.8);addExp(expGain);
-  if(ship.plunder){const h=Math.floor(ship.maxHp*ship.plunder);ship.hp=Math.min(ship.maxHp,ship.hp+h)}
-  const dropRate=.08+(currentGalaxyIdx*.02);
-  if(Math.random()<dropRate){const dt=Math.min(target.tier||1,7);const pool=ALL_MATERIALS.filter(m=>m.tier===dt);if(pool.length){const mat=pool[Math.floor(Math.random()*pool.length)];const qty=1+Math.floor(Math.random()*(1+Math.floor(currentGalaxyIdx/3)));if(inventory[mat.name])inventory[mat.name].count+=qty;else inventory[mat.name]={count:qty,tier:mat.tier};statDrops++;addLog(`🎁 掉落 ${mat.name} x${qty}`,'loot');renderWarehouse()}}
-  if(Math.random()<.01){addBlueprint(getGalaxyTier());renderWarehouse()}
-  saveGameImmediate();
+const reward=target.reward||10;credits+=reward;document.getElementById('creditDisplay').textContent=credits;
+addLog(`💰 击杀 ${target.name} 获得 ${reward} 星际币`,'loot');
+const expGain=Math.floor((target.level||1)*.8);addExp(expGain);
+if(ship.plunder){const h=Math.floor(ship.maxHp*ship.plunder);ship.hp=Math.min(ship.maxHp,ship.hp+h)}
+const dropRate=.08+(currentGalaxyIdx*.02);
+if(Math.random()<dropRate){const dt=Math.min(target.tier||1,7);const pool=ALL_MATERIALS.filter(m=>m.tier===dt);if(pool.length){const mat=pool[Math.floor(Math.random()*pool.length)];const qty=1+Math.floor(Math.random()*(1+Math.floor(currentGalaxyIdx/3)));if(inventory[mat.name])inventory[mat.name].count+=qty;else inventory[mat.name]={count:qty,tier:mat.tier};statDrops++;addLog(`🎁 掉落 ${mat.name} x${qty}`,'loot');renderWarehouse()}}
+if(Math.random()<.01){addBlueprint(getGalaxyTier());renderWarehouse()}
+saveGameImmediate();
 }
 
 function addExp(a){playerExp+=a;while(playerExp>=maxExp){playerExp-=maxExp;playerLevel++;maxExp=Math.floor(maxExp*1.3)+50;addLog('🎉 升级！Lv.'+playerLevel,'exp')}document.getElementById('levelDisplay').textContent='Lv.'+playerLevel}
 
 function handleDefeat(){
-  if(isDefeated)return;isDefeated=true;isAuto=false;
-  document.getElementById('statusLabel').textContent='💀 战败·暂停5秒';
-  document.getElementById('statusLabel').style.color='#c0392b';
-  document.getElementById('btnAutoBattle').textContent='⏳ 等待...';
-  addLog('💀 战败，5秒后修复','dmg');enemies=[];renderEnemy();
-  if(defeatTimer)clearTimeout(defeatTimer);
-  defeatTimer=setTimeout(()=>{
-    isDefeated=false;
-    playerShips.forEach(s=>{s.hp=s.maxHp;s.charge=0});
-    friendlyShips.forEach(fs=>{fs.hp=fs.maxHp;fs.charge=0});
-    syncFleetHpToPlayer();
-    addLog('🔧 修复完成','heal');
-    document.getElementById('statusLabel').textContent='⚔️ 战斗中';
-    document.getElementById('statusLabel').style.color='';
-    isAuto=true;document.getElementById('btnAutoBattle').textContent='⏸️ 暂停';
-    generateEnemies();renderFleet();defeatTimer=null;
-  },5000);
+if(isDefeated)return;isDefeated=true;isAuto=false;
+document.getElementById('statusLabel').textContent='💀 战败·暂停5秒';
+document.getElementById('statusLabel').style.color='#c0392b';
+document.getElementById('btnAutoBattle').textContent='⏳ 等待...';
+addLog('💀 战败，5秒后修复','dmg');enemies=[];renderEnemy();
+if(defeatTimer)clearTimeout(defeatTimer);
+defeatTimer=setTimeout(()=>{
+isDefeated=false;
+playerShips.forEach(s=>{s.hp=s.maxHp;s.charge=0});
+friendlyShips.forEach(fs=>{fs.hp=fs.maxHp;fs.charge=0});
+syncFleetHpToPlayer();
+addLog('🔧 修复完成','heal');
+document.getElementById('statusLabel').textContent='⚔️ 战斗中';
+document.getElementById('statusLabel').style.color='';
+isAuto=true;document.getElementById('btnAutoBattle').textContent='⏸️ 暂停';
+generateEnemies();renderFleet();defeatTimer=null;
+},5000);
 }
 
 function doBattle(){
-  if(!isAuto||isDefeated||isPaused)return;
-  enemies=enemies.filter(e=>e.alive||e.hp>0);enemies.forEach(e=>{if(e.hp<=0)e.alive=false});
-  if(friendlyShips.filter(s=>s.hp>0).length===0){statLosses++;statBattles++;handleDefeat();return}
-  const alive=enemies.filter(e=>e.alive);
-  if(alive.length===0){statWins++;statBattles++;addLog('🎉 战斗胜利！','loot');isAuto=false;document.getElementById('btnAutoBattle').textContent='▶️ 继续';document.getElementById('statusLabel').textContent='⏸️ 已暂停(胜利)';syncFleetHpToPlayer();saveGameImmediate();return}
-  const order=['front','mid','rear'];
-  const sorted=[...friendlyShips].filter(s=>s.hp>0).sort((a,b)=>order.indexOf(a.pos)-order.indexOf(b.pos));
-  for(const ship of sorted){
-    const tg=enemies.filter(e=>e.alive);if(tg.length===0)break;
-    const target=tg[Math.floor(Math.random()*tg.length)];
-    let bd=ship.atk+Math.floor(Math.random()*5)-2;
-    if(ship.pos==='mid'){ship.charge=Math.min(100,(ship.charge||0)+25+Math.floor(Math.random()*15));bd=Math.floor(bd*(1+ship.charge/100));if(ship.charge>=100){addLog(`💥 满蓄力！对 ${target.name} 造成 ${bd} 伤害`,'dmg');ship.charge=0}else addLog(`💥 蓄力 ${Math.round(ship.charge)}% 对 ${target.name} 造成 ${bd} 伤害`,'dmg')}else{addLog(`⚔️ ${ship.name} 对 ${target.name} 造成 ${bd} 伤害`,'dmg')}
-    let dmg=bd;if(ship.dmgBonus)dmg=Math.floor(dmg*(1+ship.dmgBonus));
-    if(ship.burst){target.hp-=dmg;if(target.hp<=0){target.alive=false;handleEnemyDeath(target,ship)}if(target.alive){const d2=Math.floor(dmg*.8);target.hp-=d2;if(target.hp<=0){target.alive=false;handleEnemyDeath(target,ship)}addLog(`🔁 连发 ${target.name} ${d2} 伤害`,'dmg')}}else{target.hp-=dmg;if(target.hp<=0){target.alive=false;handleEnemyDeath(target,ship)}}
-  }
-  const aliveShips=friendlyShips.filter(s=>s.hp>0);
-  for(const enemy of enemies.filter(e=>e.alive)){
-    if(aliveShips.length===0)break;
-    let target=null;
-    for(const pos of ['front','mid','rear']){const c=aliveShips.filter(s=>s.pos===pos);if(c.length>0){target=c[Math.floor(Math.random()*c.length)];break}}
-    if(!target)target=aliveShips[Math.floor(Math.random()*aliveShips.length)];
-    let dmg=Math.max(1,enemy.atk+Math.floor(Math.random()*4)-2);
-    if(enemy.affixes)enemy.affixes.forEach(a=>{if(a.id==='focus')dmg=Math.floor(dmg*(1+a.value/100))});
-    target.hp-=dmg;if(target.hp<0)target.hp=0;
-    addLog(`👾 ${enemy.name} 攻击 ${target.name} 造成 ${dmg} 伤害`,'dmg');
-    if(target.hp<=0&&target.selfDestruct){const ex=Math.floor(target.maxHp*target.selfDestruct);enemies.forEach(e=>{if(e.alive){e.hp-=ex;if(e.hp<=0)e.alive=false}});addLog(`💥 ${target.name} 自爆！${ex} 伤害`,'dmg')}
-  }
-  for(const ship of friendlyShips.filter(s=>s.pos==='rear'&&s.hp>0)){
-    const dam=friendlyShips.filter(s=>s.hp>0&&s.hp<s.maxHp);
-    if(dam.length>0){const t=dam.sort((a,b)=>(a.hp/a.maxHp)-(b.hp/b.maxHp))[0];const h=8+Math.floor(Math.random()*8);t.hp=Math.min(t.maxHp,t.hp+h);addLog(`💚 ${ship.name} 修复 ${t.name} +${h}`,'heal')}
-  }
-  enemies=enemies.filter(e=>e.alive);
-  if(friendlyShips.filter(s=>s.hp>0).length===0){statLosses++;statBattles++;handleDefeat()}
-  syncFleetHpToPlayer();renderFleet();renderEnemy();saveGameImmediate();
+if(!isAuto||isDefeated||isPaused)return;
+enemies=enemies.filter(e=>e.alive||e.hp>0);enemies.forEach(e=>{if(e.hp<=0)e.alive=false});
+if(friendlyShips.filter(s=>s.hp>0).length===0){statLosses++;statBattles++;handleDefeat();return}
+const alive=enemies.filter(e=>e.alive);
+if(alive.length===0){statWins++;statBattles++;addLog('🎉 战斗胜利！','loot');isAuto=false;document.getElementById('btnAutoBattle').textContent='▶️ 继续';document.getElementById('statusLabel').textContent='⏸️ 已暂停(胜利)';syncFleetHpToPlayer();saveGameImmediate();return}
+const order=['front','mid','rear'];
+const sorted=[...friendlyShips].filter(s=>s.hp>0).sort((a,b)=>order.indexOf(a.pos)-order.indexOf(b.pos));
+for(const ship of sorted){
+const tg=enemies.filter(e=>e.alive);if(tg.length===0)break;
+const target=tg[Math.floor(Math.random()*tg.length)];
+let bd=ship.atk+Math.floor(Math.random()*5)-2;
+if(ship.pos==='mid'){ship.charge=Math.min(100,(ship.charge||0)+25+Math.floor(Math.random()*15));bd=Math.floor(bd*(1+ship.charge/100));if(ship.charge>=100){addLog(`💥 满蓄力！对 ${target.name} 造成 ${bd} 伤害`,'dmg');ship.charge=0}else addLog(`💥 蓄力 ${Math.round(ship.charge)}% 对 ${target.name} 造成 ${bd} 伤害`,'dmg')}else{addLog(`⚔️ ${ship.name} 对 ${target.name} 造成 ${bd} 伤害`,'dmg')}
+let dmg=bd;if(ship.dmgBonus)dmg=Math.floor(dmg*(1+ship.dmgBonus));
+if(ship.burst){target.hp-=dmg;if(target.hp<=0){target.alive=false;handleEnemyDeath(target,ship)}if(target.alive){const d2=Math.floor(dmg*.8);target.hp-=d2;if(target.hp<=0){target.alive=false;handleEnemyDeath(target,ship)}addLog(`🔁 连发 ${target.name} ${d2} 伤害`,'dmg')}}else{target.hp-=dmg;if(target.hp<=0){target.alive=false;handleEnemyDeath(target,ship)}}
+}
+const aliveShips=friendlyShips.filter(s=>s.hp>0);
+for(const enemy of enemies.filter(e=>e.alive)){
+if(aliveShips.length===0)break;
+let target=null;
+for(const pos of ['front','mid','rear']){const c=aliveShips.filter(s=>s.pos===pos);if(c.length>0){target=c[Math.floor(Math.random()*c.length)];break}}
+if(!target)target=aliveShips[Math.floor(Math.random()*aliveShips.length)];
+let dmg=Math.max(1,enemy.atk+Math.floor(Math.random()*4)-2);
+if(enemy.affixes)enemy.affixes.forEach(a=>{if(a.id==='focus')dmg=Math.floor(dmg*(1+a.value/100))});
+target.hp-=dmg;if(target.hp<0)target.hp=0;
+addLog(`👾 ${enemy.name} 攻击 ${target.name} 造成 ${dmg} 伤害`,'dmg');
+if(target.hp<=0&&target.selfDestruct){const ex=Math.floor(target.maxHp*target.selfDestruct);enemies.forEach(e=>{if(e.alive){e.hp-=ex;if(e.hp<=0)e.alive=false}});addLog(`💥 ${target.name} 自爆！${ex} 伤害`,'dmg')}
+}
+for(const ship of friendlyShips.filter(s=>s.pos==='rear'&&s.hp>0)){
+const dam=friendlyShips.filter(s=>s.hp>0&&s.hp<s.maxHp);
+if(dam.length>0){const t=dam.sort((a,b)=>(a.hp/a.maxHp)-(b.hp/b.maxHp))[0];const h=8+Math.floor(Math.random()*8);t.hp=Math.min(t.maxHp,t.hp+h);addLog(`💚 ${ship.name} 修复 ${t.name} +${h}`,'heal')}
+}
+enemies=enemies.filter(e=>e.alive);
+if(friendlyShips.filter(s=>s.hp>0).length===0){statLosses++;statBattles++;handleDefeat()}
+syncFleetHpToPlayer();renderFleet();renderEnemy();saveGameImmediate();
 }
 
 // ============================================================
-//  仓库 & 蓝图
+//  仓库
 // ============================================================
 function renderWarehouse(){
-  const g=document.getElementById('warehouseGrid');g.innerHTML='';
-  const slots=Object.keys(inventory).sort((a,b)=>(inventory[b].tier||0)-(inventory[a].tier||0));
-  slots.forEach(name=>{
-    const d=inventory[name];const div=document.createElement('div');
-    div.className='warehouse-slot has-item '+getQualityClass(d.tier);
-    div.innerHTML=`<div class="name">${name}</div><div class="info-row"><span>T${d.tier}</span><span>×${d.count}</span></div>`;
-    div.addEventListener('click',()=>showItemDetail(name));
-    g.appendChild(div);
-  });
-  const un=blueprints.filter(b=>!b.learned&&!b.used);
-  un.forEach(bp=>{
-    const div=document.createElement('div');div.className='warehouse-slot has-item blueprint';
-    div.innerHTML=`<div class="name">📐 ${bp.name}</div><div class="info-row"><span>T${bp.tier}</span><span>可学习</span></div>`;
-    div.addEventListener('click',()=>showBlueprintDetail(bp.id));g.appendChild(div);
-  });
-  const used=Object.keys(inventory).length+un.length;
-  for(let i=0;i<Math.min(100-used,40);i++){const div=document.createElement('div');div.className='warehouse-slot';div.innerHTML='<span style="color:#2a3a4a;">空</span>';g.appendChild(div)}
-  updateWarehouseCount();updateSellSelect();
+const g=document.getElementById('warehouseGrid');g.innerHTML='';
+const slots=Object.keys(inventory).sort((a,b)=>(inventory[b].tier||0)-(inventory[a].tier||0));
+slots.forEach(name=>{
+const d=inventory[name];const div=document.createElement('div');
+div.className='warehouse-slot has-item '+getQualityClass(d.tier);
+div.innerHTML=`<div class="name">${name}</div><div class="info-row"><span>T${d.tier}</span><span>×${d.count}</span></div>`;
+div.addEventListener('click',()=>showItemDetail(name));
+g.appendChild(div);
+});
+const un=blueprints.filter(b=>!b.learned&&!b.used);
+un.forEach(bp=>{
+const div=document.createElement('div');div.className='warehouse-slot has-item blueprint';
+div.innerHTML=`<div class="name">📐 ${bp.name}</div><div class="info-row"><span>T${bp.tier}</span><span>可学习</span></div>`;
+div.addEventListener('click',()=>showBlueprintDetail(bp.id));g.appendChild(div);
+});
+const used=Object.keys(inventory).length+un.length;
+for(let i=0;i<Math.min(100-used,40);i++){const div=document.createElement('div');div.className='warehouse-slot';div.innerHTML='<span style="color:#2a3a4a;">空</span>';g.appendChild(div)}
+updateWarehouseCount();updateSellSelect();
 }
 function updateWarehouseCount(){const c=Object.keys(inventory).length+blueprints.filter(b=>!b.learned&&!b.used).length;document.getElementById('warehouseCount').textContent=c+'/100';document.getElementById('itemCount').textContent=Object.values(inventory).reduce((s,d)=>s+d.count,0)}
 function updateSellSelect(){const s=document.getElementById('sellSelectPage');const slots=Object.keys(inventory);if(slots.length===0){s.innerHTML='<option value="">仓库为空</option>';return}s.innerHTML=slots.map(n=>`<option value="${n}">${n} x${inventory[n].count} (T${inventory[n].tier})</option>`).join('')}
 
-function showItemDetail(name){
-  const d=inventory[name];if(!d)return;
-  showModal('📦 '+name,`<div class="item"><span>名称</span><span>${name}</span></div><div class="item"><span>数量</span><span>${d.count}</span></div><div class="item"><span>等级</span><span>T${d.tier}</span></div><div style="margin-top:12px;display:flex;gap:8px;"><button class="btn-sm" style="flex:1;background:#2a5a7a;" onclick="hideModal();quickSell('${name}')">📤 上架</button><button class="btn-sm" style="flex:1;background:#4a1a1a;" onclick="hideModal();dropItem('${name}')">🗑️ 丢弃</button></div>`);
-}
-function showBlueprintDetail(id){
-  const bp=blueprints.find(b=>b.id===id);if(!bp)return;
-  showModal('📐 '+bp.name,`<div class="item"><span>名称</span><span style="color:#d4a843;">${bp.name}</span></div><div class="item"><span>等级</span><span>T${bp.tier}</span></div><div class="item"><span>位置</span><span>${bp.pos}</span></div><div style="margin-top:12px;display:flex;gap:8px;"><button class="btn-sm" style="flex:1;background:#4a2a6a;" onclick="hideModal();learnBlueprint('${bp.id}')">📖 学习</button><button class="btn-sm" style="flex:1;background:#4a1a1a;" onclick="hideModal();discardBlueprint('${bp.id}')">🗑️ 丢弃</button></div>`);
-}
-function addBlueprint(gt){
-  const tier=Math.min(gt,7);const db=SHIP_DB['T'+tier];if(!db)return;
-  const pos=['front','mid','rear'][Math.floor(Math.random()*3)];const list=db[pos];if(!list||!list.length)return;
-  const name=list[Math.floor(Math.random()*list.length)];
-  blueprints.push({id:'bp_'+Date.now()+Math.random().toString(36).substr(2,4),name,tier,pos,used:false,learned:false});
-  addLog('📐 获得蓝图: '+name+' (T'+tier+')','blueprint');saveGameImmediate();
-}
-window.learnBlueprint=function(id){
-  const bp=blueprints.find(b=>b.id===id);if(!bp||bp.used||bp.learned)return;
-  bp.learned=true;addLog('📖 学习了蓝图: '+bp.name,'loot');
-  renderWarehouse();renderFactory();saveGameImmediate();hideModal();
-};
+function showItemDetail(name){const d=inventory[name];if(!d)return;showModal('📦 '+name,`<div class="item"><span>名称</span><span>${name}</span></div><div class="item"><span>数量</span><span>${d.count}</span></div><div class="item"><span>等级</span><span>T${d.tier}</span></div><div style="margin-top:12px;display:flex;gap:8px;"><button class="btn-sm" style="flex:1;background:#2a5a7a;" onclick="hideModal();quickSell('${name}')">📤 上架</button><button class="btn-sm" style="flex:1;background:#4a1a1a;" onclick="hideModal();dropItem('${name}')">🗑️ 丢弃</button></div>`)}
+function showBlueprintDetail(id){const bp=blueprints.find(b=>b.id===id);if(!bp)return;showModal('📐 '+bp.name,`<div class="item"><span>名称</span><span style="color:#d4a843;">${bp.name}</span></div><div class="item"><span>等级</span><span>T${bp.tier}</span></div><div class="item"><span>位置</span><span>${bp.pos}</span></div><div style="margin-top:12px;display:flex;gap:8px;"><button class="btn-sm" style="flex:1;background:#4a2a6a;" onclick="hideModal();learnBlueprint('${bp.id}')">📖 学习</button><button class="btn-sm" style="flex:1;background:#4a1a1a;" onclick="hideModal();discardBlueprint('${bp.id}')">🗑️ 丢弃</button></div>`)}
+function addBlueprint(gt){const tier=Math.min(gt,7);const db=SHIP_DB['T'+tier];if(!db)return;const pos=['front','mid','rear'][Math.floor(Math.random()*3)];const list=db[pos];if(!list||!list.length)return;const name=list[Math.floor(Math.random()*list.length)];blueprints.push({id:'bp_'+Date.now()+Math.random().toString(36).substr(2,4),name,tier,pos,used:false,learned:false});addLog('📐 获得蓝图: '+name+' (T'+tier+')','blueprint');saveGameImmediate()}
+window.learnBlueprint=function(id){const bp=blueprints.find(b=>b.id===id);if(!bp||bp.used||bp.learned)return;bp.learned=true;addLog('📖 学习了蓝图: '+bp.name,'loot');renderWarehouse();renderFactory();saveGameImmediate();hideModal()};
 window.discardBlueprint=function(id){const i=blueprints.findIndex(b=>b.id===id);if(i>-1){blueprints.splice(i,1);renderWarehouse();saveGameImmediate()}hideModal()};
 
 // ============================================================
 //  工厂
 // ============================================================
 function renderFactory(){
-  const fl=document.getElementById('factoryList');if(!fl)return;fl.innerHTML='';
-  const learned=blueprints.filter(b=>b.learned&&!b.used);
-  const building=constructionQueue.filter(c=>!c.completed);
-  if(building.length){
-    let html='<div style="color:#d4a843;font-size:.6rem;margin-bottom:4px;">🔧 建造中</div><div class="factory-grid">';
-    building.forEach(c=>{
-      const totalMs=getBuildTime(c.tier);const elapsed=now()-c.startTime;
-      const pct=Math.min(100,Math.floor((elapsed/totalMs)*100));
-      const color=getQualityColor(c.tier);const remain=Math.max(0,Math.ceil((totalMs-elapsed)/1000));
-      html+=`<div class="factory-item" style="border-color:${color};"><div class="fname" style="color:${color};">${c.name}</div><div class="ftier">T${c.tier} · ${c.pos}</div><div class="fprogress"><div class="fill" style="width:${pct}%;"></div></div><div style="font-size:.5rem;color:#d4a843;">⏳ ${remain}s (${pct}%)</div></div>`;
-    });
-    html+='</div>';fl.innerHTML+=html;
-  }
-  if(learned.length===0&&building.length===0){fl.innerHTML='<div style="color:#4a6080;font-size:.6rem;text-align:center;padding:20px 0;">暂无可建造蓝图<br>打怪获得蓝图后在仓库学习</div>';return}
-  if(learned.length){
-    let html='<div style="color:#4aad7a;font-size:.6rem;margin:4px 0;">📐 可建造</div><div class="factory-grid">';
-    learned.forEach(bp=>{
-      const color=getQualityColor(bp.tier);const recipe=getShipRecipe(bp.name);
-      let canBuild=false;
-      if(recipe){canBuild=true;for(const[mat,qty]of Object.entries(recipe)){if(!inventory[mat]||inventory[mat].count<qty){canBuild=false;break}}}
-      const rs=recipe?Object.entries(recipe).map(([k,v])=>`${k}x${v}`).join(' '):'无配方';
-      html+=`<div class="factory-item ${canBuild?'':'dim'}" style="border-color:${color};"><div class="fname" style="color:${color};">${bp.name}</div><div class="ftier">T${bp.tier} · ${bp.pos}</div><div style="font-size:.4rem;color:#4a6080;margin:2px 0;">${rs}</div><div style="font-size:.45rem;color:${canBuild?'#4aad7a':'#4a6080'};">${canBuild?'✅ 材料充足':'⚠️ 材料不足'}</div><button class="build-btn" ${canBuild?`onclick="startBuilding('${bp.id}')"`:'disabled'}>🔧 建造</button></div>`;
-    });
-    html+='</div>';fl.innerHTML+=html;
-  }
+const fl=document.getElementById('factoryList');if(!fl)return;fl.innerHTML='';
+const learned=blueprints.filter(b=>b.learned&&!b.used);
+const building=constructionQueue.filter(c=>!c.completed);
+if(building.length){
+let html='<div style="color:#d4a843;font-size:.6rem;margin-bottom:4px;">🔧 建造中</div><div class="factory-grid">';
+building.forEach(c=>{
+const totalMs=getBuildTime(c.tier);const elapsed=now()-c.startTime;
+const pct=Math.min(100,Math.floor((elapsed/totalMs)*100));
+const color=getQualityColor(c.tier);const remain=Math.max(0,Math.ceil((totalMs-elapsed)/1000));
+html+=`<div class="factory-item" style="border-color:${color};"><div class="fname" style="color:${color};">${c.name}</div><div class="ftier">T${c.tier} · ${c.pos}</div><div class="fprogress"><div class="fill" style="width:${pct}%;"></div></div><div style="font-size:.5rem;color:#d4a843;">⏳ ${remain}s (${pct}%)</div></div>`;
+});
+html+='</div>';fl.innerHTML+=html;
+}
+if(learned.length===0&&building.length===0){fl.innerHTML='<div style="color:#4a6080;font-size:.6rem;text-align:center;padding:20px 0;">暂无可建造蓝图<br>打怪获得蓝图后在仓库学习</div>';return}
+if(learned.length){
+let html='<div style="color:#4aad7a;font-size:.6rem;margin:4px 0;">📐 可建造</div><div class="factory-grid">';
+learned.forEach(bp=>{
+const color=getQualityColor(bp.tier);const recipe=getShipRecipe(bp.name);
+let canBuild=false;
+if(recipe){canBuild=true;for(const[mat,qty]of Object.entries(recipe)){if(!inventory[mat]||inventory[mat].count<qty){canBuild=false;break}}}
+const rs=recipe?Object.entries(recipe).map(([k,v])=>`${k}x${v}`).join(' '):'无配方';
+html+=`<div class="factory-item ${canBuild?'':'dim'}" style="border-color:${color};"><div class="fname" style="color:${color};">${bp.name}</div><div class="ftier">T${bp.tier} · ${bp.pos}</div><div style="font-size:.4rem;color:#4a6080;margin:2px 0;">${rs}</div><div style="font-size:.45rem;color:${canBuild?'#4aad7a':'#4a6080'};">${canBuild?'✅ 材料充足':'⚠️ 材料不足'}</div><button class="build-btn" ${canBuild?`onclick="startBuilding('${bp.id}')"`:'disabled'}>🔧 建造</button></div>`;
+});
+html+='</div>';fl.innerHTML+=html;
+}
 }
 
 window.startBuilding=async function(bpId){
-  const bp=blueprints.find(b=>b.id===bpId);if(!bp||!bp.learned||bp.used)return;
-  const recipe=getShipRecipe(bp.name);if(!recipe){addLog('❌ 无配方','dmg');return}
-  const result=await consumeItems(recipe,async()=>{bp.used=true;constructionQueue.push({id:'c_'+Date.now(),name:bp.name,tier:bp.tier,pos:bp.pos,startTime:now(),completed:false});return true});
-  if(result.success){addLog('🔧 开始建造 '+bp.name+'，预计'+(bp.tier*30)+'秒','sys');renderWarehouse();renderFactory();await saveGameImmediate()}
-  else addLog('❌ '+result.error,'dmg');
+const bp=blueprints.find(b=>b.id===bpId);if(!bp||!bp.learned||bp.used)return;
+const recipe=getShipRecipe(bp.name);if(!recipe){addLog('❌ 无配方','dmg');return}
+const result=await consumeItems(recipe,async()=>{bp.used=true;constructionQueue.push({id:'c_'+Date.now(),name:bp.name,tier:bp.tier,pos:bp.pos,startTime:now(),completed:false});return true});
+if(result.success){addLog('🔧 开始建造 '+bp.name+'，预计'+(bp.tier*30)+'秒','sys');renderWarehouse();renderFactory();await saveGameImmediate()}
+else addLog('❌ '+result.error,'dmg');
 };
 
 setInterval(()=>{
-  let ch=false;
-  constructionQueue.forEach(c=>{
-    if(!c.completed){
-      const el=now()-c.startTime;
-      if(el>=getBuildTime(c.tier)){
-        c.completed=true;
-        const ns=createShip(c.name,c.pos,c.tier,false);
-        playerShips.push(ns);
-        addLog('✅ 战舰建造完成！'+c.name+' (T'+c.tier+')','loot');
-        ch=true;updateFleetUI();renderWarehouse();saveGameImmediate();
-      }
-    }
-  });
-  constructionQueue=constructionQueue.filter(c=>!c.completed||(now()-c.startTime<getBuildTime(c.tier)+30000));
-  if(ch)renderFactory();
+let ch=false;
+constructionQueue.forEach(c=>{
+if(!c.completed){
+const el=now()-c.startTime;
+if(el>=getBuildTime(c.tier)){
+c.completed=true;
+const ns=createShip(c.name,c.pos,c.tier,false);
+playerShips.push(ns);
+addLog('✅ 战舰建造完成！'+c.name+' (T'+c.tier+')','loot');
+ch=true;updateFleetUI();renderWarehouse();saveGameImmediate();
+}
+}
+});
+constructionQueue=constructionQueue.filter(c=>!c.completed||(now()-c.startTime<getBuildTime(c.tier)+30000));
+if(ch)renderFactory();
 },2000);
 setInterval(()=>{if(currentUser)renderFactory()},1000);
 
@@ -868,139 +912,138 @@ setInterval(()=>{if(currentUser)renderFactory()},1000);
 //  市场
 // ============================================================
 window.quickSell=function(name){
-  if(!inventory[name]||inventory[name].count<=0)return;
-  const price=10+inventory[name].tier*20+Math.floor(Math.random()*30);
-  inventory[name].count-=1;if(inventory[name].count<=0)delete inventory[name];
-  tradeList.push({name,price,qty:1,tier:inventory[name]?.tier||1,seller:currentUser,time:now()});
-  addLog(`📤 上架 ${name} x1 单价 ${price}`,'loot');
-  renderWarehouse();renderMarket();renderMyOrders();saveGameImmediate();
+if(!inventory[name]||inventory[name].count<=0)return;
+const price=10+inventory[name].tier*20+Math.floor(Math.random()*30);
+inventory[name].count-=1;if(inventory[name].count<=0)delete inventory[name];
+tradeList.push({name,price,qty:1,tier:inventory[name]?.tier||1,seller:currentUser,time:now()});
+addLog(`📤 上架 ${name} x1 单价 ${price}`,'loot');
+renderWarehouse();renderMarket();renderMyOrders();saveGameImmediate();
 };
 window.dropItem=function(name){if(!inventory[name])return;if(inventory[name].count<=1)delete inventory[name];else inventory[name].count--;addLog('🗑️ 丢弃了 '+name,'dmg');renderWarehouse();saveGameImmediate()};
 window.confirmSellPage=function(){
-  const n=document.getElementById('sellSelectPage').value,p=parseInt(document.getElementById('sellPricePage').value)||50,q=parseInt(document.getElementById('sellQtyPage').value)||1;
-  if(!n||!inventory[n]){addLog('❌ 物品不存在','dmg');return}
-  if(inventory[n].count<q){addLog('❌ 数量不足','dmg');return}
-  inventory[n].count-=q;if(inventory[n].count<=0)delete inventory[n];
-  tradeList.push({name:n,price:p,qty:q,tier:inventory[n]?.tier||1,seller:currentUser,time:now()});
-  addLog(`📤 上架 ${n} x${q} 单价 ${p}`,'loot');
-  renderWarehouse();renderMarket();renderMyOrders();saveGameImmediate();
+const n=document.getElementById('sellSelectPage').value,p=parseInt(document.getElementById('sellPricePage').value)||50,q=parseInt(document.getElementById('sellQtyPage').value)||1;
+if(!n||!inventory[n]){addLog('❌ 物品不存在','dmg');return}
+if(inventory[n].count<q){addLog('❌ 数量不足','dmg');return}
+inventory[n].count-=q;if(inventory[n].count<=0)delete inventory[n];
+tradeList.push({name:n,price:p,qty:q,tier:inventory[n]?.tier||1,seller:currentUser,time:now()});
+addLog(`📤 上架 ${n} x${q} 单价 ${p}`,'loot');
+renderWarehouse();renderMarket();renderMyOrders();saveGameImmediate();
 };
 window.delistItem=function(i){
-  if(i<0||i>=tradeList.length)return;const it=tradeList[i];
-  if(it.seller!==currentUser){addLog('❌ 只能下架自己的','dmg');return}
-  const q=it.qty;
-  if(inventory[it.name])inventory[it.name].count+=q;else inventory[it.name]={count:q,tier:it.tier};
-  tradeList.splice(i,1);addLog(`📥 下架 ${it.name} x${q}`,'sys');
-  renderWarehouse();renderMarket();renderMyOrders();saveGameImmediate();
+if(i<0||i>=tradeList.length)return;const it=tradeList[i];
+if(it.seller!==currentUser){addLog('❌ 只能下架自己的','dmg');return}
+const q=it.qty;
+if(inventory[it.name])inventory[it.name].count+=q;else inventory[it.name]={count:q,tier:it.tier};
+tradeList.splice(i,1);addLog(`📥 下架 ${it.name} x${q}`,'sys');
+renderWarehouse();renderMarket();renderMyOrders();saveGameImmediate();
 };
 window.buyItem=async function(i){
-  if(i<0||i>=tradeList.length)return;const it=tradeList[i];
-  if(it.seller===currentUser){addLog('❌ 不能购买自己的','dmg');return}
-  const q=prompt('购买数量（最多'+it.qty+'）','1');if(!q)return;
-  const num=parseInt(q);if(isNaN(num)||num<=0)return;
-  if(num>it.qty){addLog('❌ 库存不足','dmg');return}
-  const tp=it.price*num;
-  if(credits<tp){addLog('❌ 星际币不足，需要 '+tp,'dmg');return}
-  credits-=tp;document.getElementById('creditDisplay').textContent=credits;
-  it.qty-=num;
-  if(inventory[it.name])inventory[it.name].count+=num;else inventory[it.name]={count:num,tier:it.tier};
-  // 给卖家加钱
-  try{const ad=await loadFromGist()||{};if(ad.players&&ad.players[it.seller]){ad.players[it.seller].credits=(ad.players[it.seller].credits||0)+tp;await saveToGist(ad);addLog(`💰 转账 ${tp} 星际币给 ${it.seller}`,'sys')}}catch(e){}
-  addLog(`🛒 购买 ${it.name} x${num}，花费 ${tp}`,'loot');
-  if(it.qty<=0)tradeList.splice(i,1);
-  renderWarehouse();renderMarket();renderMyOrders();saveGameImmediate();
+if(i<0||i>=tradeList.length)return;const it=tradeList[i];
+if(it.seller===currentUser){addLog('❌ 不能购买自己的','dmg');return}
+const q=prompt('购买数量（最多'+it.qty+'）','1');if(!q)return;
+const num=parseInt(q);if(isNaN(num)||num<=0)return;
+if(num>it.qty){addLog('❌ 库存不足','dmg');return}
+const tp=it.price*num;
+if(credits<tp){addLog('❌ 星际币不足，需要 '+tp,'dmg');return}
+credits-=tp;document.getElementById('creditDisplay').textContent=credits;
+it.qty-=num;
+if(inventory[it.name])inventory[it.name].count+=num;else inventory[it.name]={count:num,tier:it.tier};
+try{const ad=await loadFromGist()||{};if(ad.players&&ad.players[it.seller]){ad.players[it.seller].credits=(ad.players[it.seller].credits||0)+tp;await saveToGist(ad);addLog(`💰 转账 ${tp} 星际币给 ${it.seller}`,'sys')}}catch(e){}
+addLog(`🛒 购买 ${it.name} x${num}，花费 ${tp}`,'loot');
+if(it.qty<=0)tradeList.splice(i,1);
+renderWarehouse();renderMarket();renderMyOrders();saveGameImmediate();
 };
 
 function renderMarket(){
-  const s=document.getElementById('tradeSearchInput')?.value?.toLowerCase()||'';
-  const tf=document.getElementById('tradeTierFilter')?.value||'all';
-  const filtered=tradeList.filter(it=>{if(it.seller===currentUser)return false;if(s&&!it.name.toLowerCase().includes(s))return false;if(tf!=='all'&&it.tier!==parseInt(tf))return false;return it.qty>0});
-  const tp=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));if(marketPage>tp)marketPage=tp;
-  const st=(marketPage-1)*PAGE_SIZE;const pi=filtered.slice(st,st+PAGE_SIZE);
-  const list=document.getElementById('marketList');list.innerHTML='';
-  if(pi.length===0)list.innerHTML='<div class="trade-empty-page">📭 暂无上架物品</div>';
-  else pi.forEach(it=>{
-    const ri=tradeList.indexOf(it);const div=document.createElement('div');div.className='trade-item-page';
-    div.innerHTML=`<div class="info"><span class="name" style="color:${getQualityColor(it.tier)};">${it.name}</span><span style="font-size:.4rem;color:#4a6080;">T${it.tier} 👤${it.seller} ×${it.qty}</span></div><div><span style="color:#d4a843;font-weight:600;">${it.price}💰</span> <button class="btn-page" onclick="buyItem(${ri})">购买</button></div>`;
-    list.appendChild(div);
-  });
-  renderPagination('marketPagination',marketPage,tp,p=>{marketPage=p;renderMarket()});
+const s=document.getElementById('tradeSearchInput')?.value?.toLowerCase()||'';
+const tf=document.getElementById('tradeTierFilter')?.value||'all';
+const filtered=tradeList.filter(it=>{if(it.seller===currentUser)return false;if(s&&!it.name.toLowerCase().includes(s))return false;if(tf!=='all'&&it.tier!==parseInt(tf))return false;return it.qty>0});
+const tp=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));if(marketPage>tp)marketPage=tp;
+const st=(marketPage-1)*PAGE_SIZE;const pi=filtered.slice(st,st+PAGE_SIZE);
+const list=document.getElementById('marketList');list.innerHTML='';
+if(pi.length===0)list.innerHTML='<div class="trade-empty-page">📭 暂无上架物品</div>';
+else pi.forEach(it=>{
+const ri=tradeList.indexOf(it);const div=document.createElement('div');div.className='trade-item-page';
+div.innerHTML=`<div class="info"><span class="name" style="color:${getQualityColor(it.tier)};">${it.name}</span><span style="font-size:.4rem;color:#4a6080;">T${it.tier} 👤${it.seller} ×${it.qty}</span></div><div><span style="color:#d4a843;font-weight:600;">${it.price}💰</span> <button class="btn-page" onclick="buyItem(${ri})">购买</button></div>`;
+list.appendChild(div);
+});
+renderPagination('marketPagination',marketPage,tp,p=>{marketPage=p;renderMarket()});
 }
 function renderMyOrders(){
-  const my=tradeList.filter(it=>it.seller===currentUser);
-  const tp=Math.max(1,Math.ceil(my.length/PAGE_SIZE));if(myOrdersPage>tp)myOrdersPage=tp;
-  const st=(myOrdersPage-1)*PAGE_SIZE;const pi=my.slice(st,st+PAGE_SIZE);
-  const list=document.getElementById('myOrdersList');list.innerHTML='';
-  if(pi.length===0)list.innerHTML='<div class="trade-empty-page">📭 你还没有上架物品</div>';
-  else pi.forEach(it=>{
-    const ri=tradeList.indexOf(it);const div=document.createElement('div');div.className='trade-item-page';
-    div.innerHTML=`<div class="info"><span class="name" style="color:${getQualityColor(it.tier)};">${it.name}</span><span style="font-size:.4rem;color:#4a6080;">T${it.tier} ×${it.qty} 💰${it.price}</span></div><div><button class="btn-page delist" onclick="delistItem(${ri})">下架</button></div>`;
-    list.appendChild(div);
-  });
-  renderPagination('myOrdersPagination',myOrdersPage,tp,p=>{myOrdersPage=p;renderMyOrders()});
+const my=tradeList.filter(it=>it.seller===currentUser);
+const tp=Math.max(1,Math.ceil(my.length/PAGE_SIZE));if(myOrdersPage>tp)myOrdersPage=tp;
+const st=(myOrdersPage-1)*PAGE_SIZE;const pi=my.slice(st,st+PAGE_SIZE);
+const list=document.getElementById('myOrdersList');list.innerHTML='';
+if(pi.length===0)list.innerHTML='<div class="trade-empty-page">📭 你还没有上架物品</div>';
+else pi.forEach(it=>{
+const ri=tradeList.indexOf(it);const div=document.createElement('div');div.className='trade-item-page';
+div.innerHTML=`<div class="info"><span class="name" style="color:${getQualityColor(it.tier)};">${it.name}</span><span style="font-size:.4rem;color:#4a6080;">T${it.tier} ×${it.qty} 💰${it.price}</span></div><div><button class="btn-page delist" onclick="delistItem(${ri})">下架</button></div>`;
+list.appendChild(div);
+});
+renderPagination('myOrdersPagination',myOrdersPage,tp,p=>{myOrdersPage=p;renderMyOrders()});
 }
 function renderPagination(id,cur,tot,cb){
-  const c=document.getElementById(id);if(!c)return;c.innerHTML='';if(tot<=1)return;
-  const p=document.createElement('button');p.textContent='‹';p.onclick=()=>{if(cur>1)cb(cur-1)};c.appendChild(p);
-  const i=document.createElement('span');i.style.cssText='font-size:.45rem;color:#4a6080;padding:1px 6px;';i.textContent=cur+'/'+tot;c.appendChild(i);
-  const n=document.createElement('button');n.textContent='›';n.onclick=()=>{if(cur<tot)cb(cur+1)};c.appendChild(n);
+const c=document.getElementById(id);if(!c)return;c.innerHTML='';if(tot<=1)return;
+const p=document.createElement('button');p.textContent='‹';p.onclick=()=>{if(cur>1)cb(cur-1)};c.appendChild(p);
+const i=document.createElement('span');i.style.cssText='font-size:.45rem;color:#4a6080;padding:1px 6px;';i.textContent=cur+'/'+tot;c.appendChild(i);
+const n=document.createElement('button');n.textContent='›';n.onclick=()=>{if(cur<tot)cb(cur+1)};c.appendChild(n);
 }
 
 // ============================================================
 //  排行榜
 // ============================================================
 async function renderRank(){
-  const list=document.getElementById('rankList');list.innerHTML='';
-  try{
-    const ad=await loadFromGist()||{};const players=ad.players||{};
-    const arr=Object.keys(players).map(n=>{const p=players[n];let pw=100;(p.playerShips||[]).forEach(s=>{pw+=Math.floor(s.maxHp/2)+s.atk*3});return{name:n,power:pw,level:p.playerLevel||1,isMe:n===currentUser}}).sort((a,b)=>b.power-a.power);
-    document.getElementById('rankCount').textContent='共 '+arr.length+' 人';
-    arr.forEach((p,idx)=>{
-      const div=document.createElement('div');div.className='rank-item';
-      let cl='rank-num';if(idx===0)cl+=' top1';else if(idx===1)cl+=' top2';else if(idx===2)cl+=' top3';
-      div.innerHTML=`<span class="${cl}">${idx+1}</span><div class="rank-avatar"></div><span class="rank-name">${p.name}${p.isMe?' (你)':''}</span><span style="font-size:.4rem;color:#4a6080;">Lv.${p.level}</span><span class="rank-score">${p.power}</span>`;
-      list.appendChild(div);
-    });
-  }catch(e){list.innerHTML='<div style="text-align:center;color:#4a6080;padding:20px;">加载失败</div>'}
+const list=document.getElementById('rankList');list.innerHTML='';
+try{
+const ad=await loadFromGist()||{};const players=ad.players||{};
+const arr=Object.keys(players).map(n=>{const p=players[n];let pw=100;(p.playerShips||[]).forEach(s=>{pw+=Math.floor(s.maxHp/2)+s.atk*3});return{name:n,power:pw,level:p.playerLevel||1,isMe:n===currentUser}}).sort((a,b)=>b.power-a.power);
+document.getElementById('rankCount').textContent='共 '+arr.length+' 人';
+arr.forEach((p,idx)=>{
+const div=document.createElement('div');div.className='rank-item';
+let cl='rank-num';if(idx===0)cl+=' top1';else if(idx===1)cl+=' top2';else if(idx===2)cl+=' top3';
+div.innerHTML=`<span class="${cl}">${idx+1}</span><div class="rank-avatar"></div><span class="rank-name">${p.name}${p.isMe?' (你)':''}</span><span style="font-size:.4rem;color:#4a6080;">Lv.${p.level}</span><span class="rank-score">${p.power}</span>`;
+list.appendChild(div);
+});
+}catch(e){list.innerHTML='<div style="text-align:center;color:#4a6080;padding:20px;">加载失败</div>'}
 }
 
 // ============================================================
-//  矿物星球
+//  矿物
 // ============================================================
 function checkMineralSpawn(){
-  GALAXY_DATA.forEach((g,idx)=>{
-    if(Math.random()<.5){
-      const sn=g.systems[Math.floor(Math.random()*g.systems.length)];
-      mineralPlanets.push({id:'min_'+Date.now()+'_'+idx,galaxyIdx:idx,galaxyName:g.name,systemName:sn,tier:g.tier,miner:null,startTime:now(),expireTime:now()+3600000,active:true});
-      addLog('💎 矿物星球出现在 '+g.name+' · '+sn,'loot');
-    }
-  });
-  renderMineralStatus();
+GALAXY_DATA.forEach((g,idx)=>{
+if(Math.random()<.5){
+const sn=g.systems[Math.floor(Math.random()*g.systems.length)];
+mineralPlanets.push({id:'min_'+Date.now()+'_'+idx,galaxyIdx:idx,galaxyName:g.name,systemName:sn,tier:g.tier,miner:null,startTime:now(),expireTime:now()+3600000,active:true});
+addLog('💎 矿物星球出现在 '+g.name+' · '+sn,'loot');
+}
+});
+renderMineralStatus();
 }
 function renderMineralStatus(){
-  const n=now();mineralPlanets=mineralPlanets.filter(p=>p.active&&p.expireTime>n);
-  const ms=document.getElementById('mineralStatus');ms.innerHTML='';
-  if(mineralPlanets.length===0){ms.innerHTML='<div style="color:#4a6080;font-size:.55rem;text-align:center;padding:20px 0;">暂无矿物星球</div>';return}
-  mineralPlanets.forEach(p=>{
-    const r=Math.max(0,Math.floor((p.expireTime-n)/60000));const div=document.createElement('div');div.className='mineral-info';
-    const isM=p.miner===currentUser;const cB=p.miner&&p.miner!==currentUser;
-    div.innerHTML=`<div style="color:${getQualityColor(p.tier)};font-weight:600;">💎 ${p.galaxyName} · ${p.systemName} (T${p.tier})</div><div style="font-size:.5rem;color:#6f8bb0;">⏱️ 剩余 ${r} 分钟 | ${p.miner?'👤 '+p.miner:'⏸️ 无人'}</div>${isM?'<div style="color:#4aad7a;font-size:.5rem;">✅ 开采中</div>':cB?`<div class="m-battle" onclick="challengeMiner('${p.id}')">⚔️ 挑战</div>`:`<div class="m-battle" onclick="startMining('${p.id}')">⛏️ 开始开采</div>`}`;
-    ms.appendChild(div);
-  });
+const n=now();mineralPlanets=mineralPlanets.filter(p=>p.active&&p.expireTime>n);
+const ms=document.getElementById('mineralStatus');ms.innerHTML='';
+if(mineralPlanets.length===0){ms.innerHTML='<div style="color:#4a6080;font-size:.55rem;text-align:center;padding:20px 0;">暂无矿物星球</div>';return}
+mineralPlanets.forEach(p=>{
+const r=Math.max(0,Math.floor((p.expireTime-n)/60000));const div=document.createElement('div');div.className='mineral-info';
+const isM=p.miner===currentUser;const cB=p.miner&&p.miner!==currentUser;
+div.innerHTML=`<div style="color:${getQualityColor(p.tier)};font-weight:600;">💎 ${p.galaxyName} · ${p.systemName} (T${p.tier})</div><div style="font-size:.5rem;color:#6f8bb0;">⏱️ 剩余 ${r} 分钟 | ${p.miner?'👤 '+p.miner:'⏸️ 无人'}</div>${isM?'<div style="color:#4aad7a;font-size:.5rem;">✅ 开采中</div>':cB?`<div class="m-battle" onclick="challengeMiner('${p.id}')">⚔️ 挑战</div>`:`<div class="m-battle" onclick="startMining('${p.id}')">⛏️ 开始开采</div>`}`;
+ms.appendChild(div);
+});
 }
 window.startMining=function(pid){
-  const p=mineralPlanets.find(x=>x.id===pid);if(!p||p.miner)return;
-  p.miner=currentUser;addLog('⛏️ 开始开采','loot');renderMineralStatus();
-  setInterval(()=>{
-    const pl=mineralPlanets.find(x=>x.id===pid);if(!pl||pl.miner!==currentUser)return;
-    if(Math.random()<.8){const pool=ALL_MATERIALS.filter(m=>m.tier===pl.tier);if(pool.length){const mat=pool[Math.floor(Math.random()*pool.length)];const q=1+Math.floor(Math.random()*2);if(inventory[mat.name])inventory[mat.name].count+=q;else inventory[mat.name]={count:q,tier:mat.tier};addLog(`⛏️ 开采到 ${mat.name} x${q}`,'loot');renderWarehouse();saveGameImmediate()}}
-  },60000);
+const p=mineralPlanets.find(x=>x.id===pid);if(!p||p.miner)return;
+p.miner=currentUser;addLog('⛏️ 开始开采','loot');renderMineralStatus();
+setInterval(()=>{
+const pl=mineralPlanets.find(x=>x.id===pid);if(!pl||pl.miner!==currentUser)return;
+if(Math.random()<.8){const pool=ALL_MATERIALS.filter(m=>m.tier===pl.tier);if(pool.length){const mat=pool[Math.floor(Math.random()*pool.length)];const q=1+Math.floor(Math.random()*2);if(inventory[mat.name])inventory[mat.name].count+=q;else inventory[mat.name]={count:q,tier:mat.tier};addLog(`⛏️ 开采到 ${mat.name} x${q}`,'loot');renderWarehouse();saveGameImmediate()}}
+},60000);
 };
 window.challengeMiner=function(pid){
-  const p=mineralPlanets.find(x=>x.id===pid);if(!p||!p.miner)return;
-  const my=parseInt(document.getElementById('powerDisplay').textContent),def=Math.floor(my*(.7+Math.random()*.6));
-  if(my>def){p.miner=currentUser;addLog('🎉 占领！','loot')}else addLog('💀 失败','dmg');
-  renderMineralStatus();
+const p=mineralPlanets.find(x=>x.id===pid);if(!p||!p.miner)return;
+const my=parseInt(document.getElementById('powerDisplay').textContent),def=Math.floor(my*(.7+Math.random()*.6));
+if(my>def){p.miner=currentUser;addLog('🎉 占领！','loot')}else addLog('💀 失败','dmg');
+renderMineralStatus();
 };
 setInterval(()=>{mineralTimer++;if(mineralTimer%10===0)checkMineralSpawn();mineralPlanets=mineralPlanets.filter(p=>p.expireTime>now());renderMineralStatus()},60000);
 
@@ -1008,486 +1051,492 @@ setInterval(()=>{mineralTimer++;if(mineralTimer%10===0)checkMineralSpawn();miner
 //  每日任务刷新
 // ============================================================
 function checkDailyTaskRefresh(){
-  const t=getToday();
-  if(lastTaskRefresh!==t){lastTaskRefresh=t;addLog('📋 每日任务已刷新','sys');saveGameImmediate()}
+const t=getToday();
+if(lastTaskRefresh!==t){lastTaskRefresh=t;addLog('📋 每日任务已刷新','sys');saveGameImmediate()}
 }
 
 // ============================================================
 //  兑换码
 // ============================================================
 document.getElementById('redeemInviteBtn').addEventListener('click',async function(){
-  const code=document.getElementById('inviteInput').value.trim();
-  const res=document.getElementById('inviteResult');
-  if(!code){res.textContent='❌ 请输入';res.style.color='#c0392b';return}
-  if(!currentUser){res.textContent='❌ 请先登录';res.style.color='#c0392b';return}
-  if(redeemedCodes[code]){res.textContent='❌ 已兑换过';res.style.color='#c0392b';return}
-  const rw=VALID_CODES[code];if(!rw){res.textContent='❌ 无效';res.style.color='#c0392b';return}
-  if(rw.type==='bundle'){
-    credits+=rw.credits||10000;
-    const tier=rw.shipTier||4,pos=rw.shipPos||'front';const db=SHIP_DB['T'+tier];
-    if(db&&db[pos]){const name=db[pos][Math.floor(Math.random()*db[pos].length)];playerShips.push(createShip(name,pos,tier,false));addLog(`🎁 兑换成功！获得 ${rw.credits} 星际币 + ${name}`,'loot')}
-    res.textContent='✅ 兑换成功！';res.style.color='#4aad7a';
-  }else if(rw.type==='ship'){
-    const tier=rw.tier,pos=rw.pos;const db=SHIP_DB['T'+tier];
-    if(db&&db[pos]){const name=db[pos][Math.floor(Math.random()*db[pos].length)];playerShips.push(createShip(name,pos,tier,false));addLog(`🎁 兑换成功！获得 ${name}`,'loot')}
-    res.textContent='✅ 兑换成功！';res.style.color='#4aad7a';
-  }
-  redeemedCodes[code]=true;renderAll();saveGameImmediate();
-  document.getElementById('inviteInput').value='';
+const code=document.getElementById('inviteInput').value.trim();
+const res=document.getElementById('inviteResult');
+if(!code){res.textContent='❌ 请输入';res.style.color='#c0392b';return}
+if(!currentUser){res.textContent='❌ 请先登录';res.style.color='#c0392b';return}
+if(redeemedCodes[code]){res.textContent='❌ 已兑换过';res.style.color='#c0392b';return}
+const rw=VALID_CODES[code];if(!rw){res.textContent='❌ 无效';res.style.color='#c0392b';return}
+if(rw.type==='bundle'){
+credits+=rw.credits||10000;
+const tier=rw.shipTier||4,pos=rw.shipPos||'front';const db=SHIP_DB['T'+tier];
+if(db&&db[pos]){const name=db[pos][Math.floor(Math.random()*db[pos].length)];playerShips.push(createShip(name,pos,tier,false));addLog(`🎁 兑换成功！获得 ${rw.credits} 星际币 + ${name}`,'loot')}
+res.textContent='✅ 兑换成功！';res.style.color='#4aad7a';
+}else if(rw.type==='ship'){
+const tier=rw.tier,pos=rw.pos;const db=SHIP_DB['T'+tier];
+if(db&&db[pos]){const name=db[pos][Math.floor(Math.random()*db[pos].length)];playerShips.push(createShip(name,pos,tier,false));addLog(`🎁 兑换成功！获得 ${name}`,'loot')}
+res.textContent='✅ 兑换成功！';res.style.color='#4aad7a';
+}
+redeemedCodes[code]=true;renderAll();saveGameImmediate();
+document.getElementById('inviteInput').value='';
 });
 
 // ============================================================
 //  战舰详情/锻造
 // ============================================================
 function showShipDetail(id){
-  const s=playerShips.find(x=>x.id===id);if(!s)return;
-  const color=getQualityColor(s.tier);
-  const ah=s.affixes?.length?s.affixes.map(a=>`<div style="font-size:.7rem;color:#9b59b6;">${a.name}: ${a.desc}</div>`).join(''):'<div style="color:#4a6080;font-size:.7rem;">无词条</div>';
-  const pl=s.pos==='front'?'先锋':s.pos==='mid'?'中间':'后勤';
-  showModal('🚀 战舰详情',`<div class="item"><span>名称</span><span style="color:${color};">${s.name}</span></div><div class="item"><span>等级</span><span>T${s.tier}</span></div><div class="item"><span>位置</span><span>${pl}</span></div><div class="item"><span>生命</span><span>${s.maxHp}</span></div><div class="item"><span>攻击</span><span>${s.atk}</span></div><div class="item"><span>锻造次数</span><span>${s.forgeCount||0}/5</span></div><div style="margin-top:8px;border-top:1px solid var(--bd);padding-top:6px;"><div style="font-size:.75rem;color:var(--ts);">词条 (${s.affixes?.length||0}/5)</div>${ah}</div><div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">${s.deployed?`<button class="btn-sm" style="background:#4a1a1a;" onclick="hideModal();deployShip('${s.id}',false)">撤下</button>`:`<button class="btn-sm" style="background:#1a4a2a;" onclick="hideModal();deployShip('${s.id}',true)">上阵</button>`}<button class="btn-sm" style="background:#6a5a2a;" onclick="hideModal();forgeShip('${s.id}')">🔨 锻造 (10个T${s.tier})</button><button class="btn-sm" style="background:#2a2a4a;" onclick="hideModal()">关闭</button></div>`);
+const s=playerShips.find(x=>x.id===id);if(!s)return;
+const color=getQualityColor(s.tier);
+const ah=s.affixes?.length?s.affixes.map(a=>`<div style="font-size:.7rem;color:#9b59b6;">${a.name}: ${a.desc}</div>`).join(''):'<div style="color:#4a6080;font-size:.7rem;">无词条</div>';
+const pl=s.pos==='front'?'先锋':s.pos==='mid'?'中间':'后勤';
+showModal('🚀 战舰详情',`<div class="item"><span>名称</span><span style="color:${color};">${s.name}</span></div><div class="item"><span>等级</span><span>T${s.tier}</span></div><div class="item"><span>位置</span><span>${pl}</span></div><div class="item"><span>生命</span><span>${s.maxHp}</span></div><div class="item"><span>攻击</span><span>${s.atk}</span></div><div class="item"><span>锻造次数</span><span>${s.forgeCount||0}/5</span></div><div style="margin-top:8px;border-top:1px solid var(--bd);padding-top:6px;"><div style="font-size:.75rem;color:var(--ts);">词条 (${s.affixes?.length||0}/5)</div>${ah}</div><div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">${s.deployed?`<button class="btn-sm" style="background:#4a1a1a;" onclick="hideModal();deployShip('${s.id}',false)">撤下</button>`:`<button class="btn-sm" style="background:#1a4a2a;" onclick="hideModal();deployShip('${s.id}',true)">上阵</button>`}<button class="btn-sm" style="background:#6a5a2a;" onclick="hideModal();forgeShip('${s.id}')">🔨 锻造 (10个T${s.tier})</button><button class="btn-sm" style="background:#2a2a4a;" onclick="hideModal()">关闭</button></div>`);
 }
 window.forgeShip=async function(id){
-  const s=playerShips.find(x=>x.id===id);if(!s)return;
-  if((s.forgeCount||0)>=5){addLog('❌ 已达最大锻造次数','dmg');return}
-  const pool=ALL_MATERIALS.filter(m=>m.tier===s.tier);let um=null;
-  for(const m of pool){if(inventory[m.name]&&inventory[m.name].count>=10){um=m;break}}
-  if(!um){addLog('❌ 需要10个T'+s.tier+'材料','dmg');return}
-  const result=await consumeItems({[um.name]:10},async()=>{
-    const a=randomAffix();s.affixes.push(a);s.forgeCount=(s.forgeCount||0)+1;
-    const base=getBaseStats(s.tier,s.pos);
-    const hp=applyDeviation(base.hp,s.tier),atk=applyDeviation(base.atk,s.tier);
-    s.baseHp=base.hp;s.baseAtk=base.atk;s.maxHp=hp;s.atk=atk;s.hp=Math.min(s.hp,s.maxHp);
-    s.affixes.forEach(af=>{if(af.id==='heavy_armor'){s.maxHp=Math.floor(s.maxHp*(1+af.value/100));s.hp=Math.min(s.hp,s.maxHp)}if(af.id==='burst')s.atk=Math.floor(s.atk*(1-af.value/100));if(af.id==='focus')s.dmgBonus=(s.dmgBonus||0)+af.value/100;if(af.id==='plunder')s.plunder=(s.plunder||0)+af.value/100;if(af.id==='self_destruct')s.selfDestruct=(s.selfDestruct||0)+af.value/100});
-    return true;
-  });
-  if(result.success){addLog('🔨 锻造成功！获得词条','affix');renderWarehouse();updateFleetUI();saveGameImmediate()}
-  else addLog('❌ '+result.error,'dmg');
+const s=playerShips.find(x=>x.id===id);if(!s)return;
+if((s.forgeCount||0)>=5){addLog('❌ 已达最大锻造次数','dmg');return}
+const pool=ALL_MATERIALS.filter(m=>m.tier===s.tier);let um=null;
+for(const m of pool){if(inventory[m.name]&&inventory[m.name].count>=10){um=m;break}}
+if(!um){addLog('❌ 需要10个T'+s.tier+'材料','dmg');return}
+const result=await consumeItems({[um.name]:10},async()=>{
+const a=randomAffix();s.affixes.push(a);s.forgeCount=(s.forgeCount||0)+1;
+const base=getBaseStats(s.tier,s.pos);
+const hp=applyDeviation(base.hp,s.tier),atk=applyDeviation(base.atk,s.tier);
+s.baseHp=base.hp;s.baseAtk=base.atk;s.maxHp=hp;s.atk=atk;s.hp=Math.min(s.hp,s.maxHp);
+s.affixes.forEach(af=>{if(af.id==='heavy_armor'){s.maxHp=Math.floor(s.maxHp*(1+af.value/100));s.hp=Math.min(s.hp,s.maxHp)}if(af.id==='burst')s.atk=Math.floor(s.atk*(1-af.value/100));if(af.id==='focus')s.dmgBonus=(s.dmgBonus||0)+af.value/100;if(af.id==='plunder')s.plunder=(s.plunder||0)+af.value/100;if(af.id==='self_destruct')s.selfDestruct=(s.selfDestruct||0)+af.value/100});
+return true;
+});
+if(result.success){addLog('🔨 锻造成功！获得词条','affix');renderWarehouse();updateFleetUI();saveGameImmediate()}
+else addLog('❌ '+result.error,'dmg');
 };
 window.deployShip=function(id,dep){
-  const s=playerShips.find(x=>x.id===id);if(!s)return;
-  if(dep){const d=playerShips.filter(x=>x.deployed&&x.pos===s.pos);if(d.length>=maxShips[s.pos]){addLog('❌ 位置已满','dmg');return}s.deployed=true;addLog('✅ '+s.name+' 已上阵','sys')}
-  else{s.deployed=false;addLog('📤 已撤下','sys')}
-  updateFleetUI();saveGameImmediate();
+const s=playerShips.find(x=>x.id===id);if(!s)return;
+if(dep){const d=playerShips.filter(x=>x.deployed&&x.pos===s.pos);if(d.length>=maxShips[s.pos]){addLog('❌ 位置已满','dmg');return}s.deployed=true;addLog('✅ '+s.name+' 已上阵','sys')}
+else{s.deployed=false;addLog('📤 已撤下','sys')}
+updateFleetUI();saveGameImmediate();
 };
 
-// ============================================================
-//  编队编辑
-// ============================================================
+// 编队编辑
 document.getElementById('btnEditFleet').addEventListener('click',function(){
-  let html='<div style="color:#6f8bb0;font-size:.7rem;margin-bottom:6px;">💡 点击卡片查看详情</div>';
-  ['front','mid','rear'].forEach(pos=>{
-    const labels={front:'⚔️ 先锋',mid:'💥 中间',rear:'💚 后勤'};
-    const colors={front:'#e74c3c',mid:'#f1c40f',rear:'#2ecc71'};
-    const ships=playerShips.filter(s=>s.pos===pos);const dep=ships.filter(s=>s.deployed).length;
-    html+=`<div style="padding:4px;background:var(--bgp);border-radius:4px;border-left:3px solid ${colors[pos]};margin-bottom:4px;"><div style="font-size:.6rem;color:var(--ts);">${labels[pos]} (${dep}/${maxShips[pos]})</div>`;
-    ships.forEach(s=>{
-      const color=getQualityColor(s.tier);const ac=s.affixes?.length||0;
-      html+=`<div class="ship-card" style="border-color:${color};margin-top:3px;"><div class="ship-info"><span style="color:${color};font-size:.6rem;">${s.name}</span><span style="font-size:.5rem;color:#6a8aaa;">T${s.tier} ❤${s.maxHp} ⚔${s.atk} ${ac>0?'['+ac+'词条]':''}</span></div><div class="ship-actions"><button class="btn-mini detail" onclick="hideModal();showShipDetail('${s.id}')">📋</button>${s.deployed?`<button class="btn-mini undeploy" onclick="hideModal();deployShip('${s.id}',false)">撤</button>`:`<button class="btn-mini deploy" onclick="hideModal();deployShip('${s.id}',true)">上</button>`}</div></div>`;
-    });
-    html+='</div>';
-  });
-  showModal('⚔️ 编辑战队',html);
+let html='<div style="color:#6f8bb0;font-size:.7rem;margin-bottom:6px;">💡 点击卡片查看详情</div>';
+['front','mid','rear'].forEach(pos=>{
+const labels={front:'⚔️ 先锋',mid:'💥 中间',rear:'💚 后勤'};
+const colors={front:'#e74c3c',mid:'#f1c40f',rear:'#2ecc71'};
+const ships=playerShips.filter(s=>s.pos===pos);const dep=ships.filter(s=>s.deployed).length;
+html+=`<div style="padding:4px;background:var(--bgp);border-radius:4px;border-left:3px solid ${colors[pos]};margin-bottom:4px;"><div style="font-size:.6rem;color:var(--ts);">${labels[pos]} (${dep}/${maxShips[pos]})</div>`;
+ships.forEach(s=>{
+const color=getQualityColor(s.tier);const ac=s.affixes?.length||0;
+html+=`<div class="ship-card" style="border-color:${color};margin-top:3px;"><div class="ship-info"><span style="color:${color};font-size:.6rem;">${s.name}</span><span style="font-size:.5rem;color:#6a8aaa;">T${s.tier} ❤${s.maxHp} ⚔${s.atk} ${ac>0?'['+ac+'词条]':''}</span></div><div class="ship-actions"><button class="btn-mini detail" onclick="hideModal();showShipDetail('${s.id}')">📋</button>${s.deployed?`<button class="btn-mini undeploy" onclick="hideModal();deployShip('${s.id}',false)">撤</button>`:`<button class="btn-mini deploy" onclick="hideModal();deployShip('${s.id}',true)">上</button>`}</div></div>`;
+});
+html+='</div>';
+});
+showModal('⚔️ 编辑战队',html);
 });
 
 // ============================================================
 //  星际联盟
 // ============================================================
-document.getElementById('btnAlliance').addEventListener('click',showAllianceMain);
-
-async function showAllianceMain(){
-  const ad=await loadFromGist()||{};
-  allianceData=ad.alliances||{};
-  const list=Object.values(allianceData);
-  let html=`
-    <div style="display:flex;gap:6px;margin-bottom:8px;">
-      <input type="text" id="allySearch" placeholder="搜索联盟..." oninput="filterAlliance()" style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:5px 10px;color:var(--th);font-size:.65rem;">
-      <button class="btn-sm" style="background:#6a5a2a;padding:4px 12px;" onclick="showCreateAlliance()">+ 创建联盟</button>
-    </div>
-    <div class="alliance-list" id="allianceList">
-  `;
-  if(list.length===0)html+='<div style="text-align:center;color:#4a6080;padding:20px;">暂无联盟，快来创建第一个吧！</div>';
-  else list.forEach(a=>{
-    const lv=getAllianceLevel(a.reputation||0);
-    html+=`<div class="alliance-item" data-name="${a.name}" onclick="showAllianceDetail('${a.name}')">
-      <div class="a-name">🏛️ ${a.name}</div>
-      <div class="a-info">等级：${lv} | 声望：${a.reputation||0} | 成员：${(a.members||[]).length}人 | 盟主：${a.leader}</div>
-    </div>`;
-  });
-  html+='</div>';
-  showModal('🏛️ 星际联盟',html);
+async function renderAllianceList(){
+const listEl=document.getElementById('allianceList');if(!listEl)return;
+const ad=await loadFromGist()||{};
+allianceData=ad.alliances||{};
+const list=Object.values(allianceData);
+if(list.length===0){listEl.innerHTML='<div style="text-align:center;color:#4a6080;padding:20px;">暂无联盟，快来创建第一个吧！</div>';return}
+let html='';
+list.forEach(a=>{
+const lv=getAllianceLevel(a.reputation||0);
+html+=`<div class="alliance-item" data-name="${a.name}" onclick="showAllianceDetail('${a.name}')">
+<div class="a-name">🏛️ ${a.name}</div>
+<div class="a-info">等级：${lv} | 声望：${a.reputation||0} | 成员：${(a.members||[]).length}人 | 盟主：${a.leader}</div>
+</div>`;
+});
+listEl.innerHTML=html;
 }
 
 window.filterAlliance=function(){
-  const q=document.getElementById('allySearch').value.toLowerCase();
-  document.querySelectorAll('#allianceList .alliance-item').forEach(el=>{
-    const n=el.dataset.name.toLowerCase();
-    el.style.display=n.includes(q)?'':'none';
-  });
+const q=document.getElementById('allySearch').value.toLowerCase();
+document.querySelectorAll('#allianceList .alliance-item').forEach(el=>{
+const n=el.dataset.name.toLowerCase();
+el.style.display=n.includes(q)?'':'none';
+});
 };
 
-window.showCreateAlliance=function(){
-  if(credits<10000){alert('需要 10000 星际币');return}
-  const name=prompt('请输入联盟名称（不可重复）：');
-  if(!name||name.length<2){alert('名称至少2个字符');return}
-  if(allianceData[name]){alert('联盟名已存在');return}
-  if(currentAlliance){alert('你已经在一个联盟中');return}
-  credits-=10000;
-  allianceData[name]={
-    name,leader:currentUser,
-    members:[{name:currentUser,contribution:0,joinTime:now()}],
-    pending:[],reputation:0,
-    warehouse:{},
-    tasks:{}
-  };
-  currentAlliance=name;
-  addLog('🏛️ 创建联盟成功：'+name,'loot');
-  renderAll();saveGameImmediate();
-  hideModal();
-  setTimeout(showAllianceDetail.bind(null,name),300);
+window.showCreateAlliance=async function(){
+if(credits<10000){alert('需要 10000 星际币');return}
+const name=prompt('请输入联盟名称（不可重复）：');
+if(!name||name.length<2){alert('名称至少2个字符');return}
+const ad=await loadFromGist()||{};
+if(!ad.alliances)ad.alliances={};
+if(ad.alliances[name]){alert('联盟名已存在');return}
+if(currentAlliance){alert('你已经在一个联盟中');return}
+credits-=10000;
+ad.alliances[name]={
+name,leader:currentUser,
+members:[{name:currentUser,contribution:0,joinTime:now()}],
+pending:[],reputation:0,
+warehouse:{},
+tasks:{}
+};
+allianceData=ad.alliances;
+await saveToGist(ad);
+currentAlliance=name;
+addLog('🏛️ 创建联盟成功：'+name,'loot');
+document.getElementById('allianceDisplay').textContent=name;
+renderAllianceList();saveGameImmediate();
+setTimeout(()=>showAllianceDetail(name),300);
 };
 
 window.showAllianceDetail=async function(name){
-  const ad=await loadFromGist()||{};
-  allianceData=ad.alliances||{};
-  const a=allianceData[name];if(!a){alert('联盟不存在');return}
-  const isLeader=a.leader===currentUser;
-  const isMember=(a.members||[]).some(m=>m.name===currentUser);
-  const lv=getAllianceLevel(a.reputation||0);
-  const myMember=a.members?.find(m=>m.name===currentUser);
-  let html=`
-    <div style="font-size:.85rem;color:#d4a843;font-weight:600;margin-bottom:6px;">🏛️ ${a.name}</div>
-    <div style="font-size:.65rem;color:var(--ts);line-height:1.6;">
-      等级：<span style="color:#4aad7a;">${lv}</span><br>
-      声望：${a.reputation||0}<br>
-      盟主：${a.leader}<br>
-      成员：${(a.members||[]).length}人
-    </div>
-    <div style="margin-top:10px;display:flex;gap:4px;flex-wrap:wrap;">
-  `;
-  if(!isMember&&!isLeader){
-    const isPending=(a.pending||[]).some(p=>p.name===currentUser);
-    if(isPending)html+=`<button class="btn-sm" disabled>⏳ 已申请，等待审核</button>`;
-    else html+=`<button class="btn-sm" style="background:#1f6a3a;" onclick="applyAlliance('${name}')">📝 申请加入</button>`;
-  }
-  if(isMember||isLeader){
-    html+=`<button class="btn-sm" style="background:#2a5a7a;" onclick="showAllianceWarehouse('${name}')">📦 仓库</button>`;
-    html+=`<button class="btn-sm" style="background:#4a2a6a;" onclick="showAllianceTasks('${name}')">📋 任务</button>`;
-    html+=`<button class="btn-sm" style="background:#6a5a2a;" onclick="showAllianceContribute('${name}')">💰 捐献</button>`;
-    html+=`<button class="btn-sm" style="background:#2a5a7a;" onclick="showAllianceMembers('${name}')">👥 成员</button>`;
-  }
-  if(isLeader){
-    if((a.pending||[]).length>0)html+=`<button class="btn-sm" style="background:#6a2a2a;" onclick="showPending('${name}')">⏳ 待审核(${a.pending.length})</button>`;
-    html+=`<button class="btn-sm" style="background:#8a2a2a;" onclick="disbandAlliance('${name}')">💥 解散联盟</button>`;
-  }
-  html+='</div>';
-  showModal('🏛️ '+a.name,html);
+const ad=await loadFromGist()||{};
+allianceData=ad.alliances||{};
+const a=allianceData[name];if(!a){alert('联盟不存在');return}
+const isLeader=a.leader===currentUser;
+const isMember=(a.members||[]).some(m=>m.name===currentUser);
+const lv=getAllianceLevel(a.reputation||0);
+let html=`
+<div style="font-size:.85rem;color:#d4a843;font-weight:600;margin-bottom:6px;">🏛️ ${a.name}</div>
+<div style="font-size:.65rem;color:var(--ts);line-height:1.6;">
+等级：<span style="color:#4aad7a;">${lv}</span><br>
+声望：${a.reputation||0}<br>
+盟主：${a.leader}<br>
+成员：${(a.members||[]).length}人
+</div>
+<div style="margin-top:10px;display:flex;gap:4px;flex-wrap:wrap;">
+`;
+if(!isMember&&!isLeader){
+const isPending=(a.pending||[]).some(p=>p.name===currentUser);
+if(isPending)html+=`<button class="btn-sm" disabled>⏳ 已申请</button>`;
+else html+=`<button class="btn-sm" style="background:#1f6a3a;" onclick="applyAlliance('${name}')">📝 申请加入</button>`;
+}
+if(isMember||isLeader){
+html+=`<button class="btn-sm" style="background:#2a5a7a;" onclick="showAllianceWarehouse('${name}')">📦 仓库</button>`;
+html+=`<button class="btn-sm" style="background:#4a2a6a;" onclick="showAllianceTasks('${name}')">📋 任务</button>`;
+html+=`<button class="btn-sm" style="background:#6a5a2a;" onclick="showAllianceContribute('${name}')">💰 捐献</button>`;
+html+=`<button class="btn-sm" style="background:#2a5a7a;" onclick="showAllianceMembers('${name}')">👥 成员</button>`;
+}
+if(isLeader){
+if((a.pending||[]).length>0)html+=`<button class="btn-sm" style="background:#6a2a2a;" onclick="showPending('${name}')">⏳ 待审核(${a.pending.length})</button>`;
+html+=`<button class="btn-sm" style="background:#8a2a2a;" onclick="disbandAlliance('${name}')">💥 解散联盟</button>`;
+}
+if(isMember&&!isLeader){
+html+=`<button class="btn-sm" style="background:#6a2a2a;" onclick="quitAlliance('${name}')">🚪 退出联盟</button>`;
+}
+html+='</div>';
+showModal('🏛️ '+a.name,html);
 };
 
 window.applyAlliance=async function(name){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[name];
-  if(!a){alert('联盟不存在');return}
-  if(a.leader===currentUser){alert('你是盟主');return}
-  if(a.members?.some(m=>m.name===currentUser)){alert('你已是成员');return}
-  if(a.pending?.some(p=>p.name===currentUser)){alert('已申请');return}
-  if(!a.pending)a.pending=[];
-  a.pending.push({name:currentUser,applyTime:now()});
-  await saveToGist(ad);
-  addLog('📝 已申请加入 '+name,'sys');
-  hideModal();
-  setTimeout(showAllianceDetail.bind(null,name),300);
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[name];
+if(!a){alert('联盟不存在');return}
+if(a.leader===currentUser){alert('你是盟主');return}
+if(a.members?.some(m=>m.name===currentUser)){alert('你已是成员');return}
+if(a.pending?.some(p=>p.name===currentUser)){alert('已申请');return}
+if(!a.pending)a.pending=[];
+a.pending.push({name:currentUser,applyTime:now()});
+await saveToGist(ad);
+addLog('📝 已申请加入 '+name,'sys');
+hideModal();
+setTimeout(()=>showAllianceDetail(name),300);
+};
+
+window.quitAlliance=async function(name){
+if(!confirm('确定退出联盟？'))return;
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[name];if(!a)return;
+a.members=a.members.filter(m=>m.name!==currentUser);
+await saveToGist(ad);
+currentAlliance=null;
+document.getElementById('allianceDisplay').textContent='无';
+addLog('🚪 已退出联盟','sys');
+hideModal();renderAllianceList();saveGameImmediate();
 };
 
 window.showAllianceMembers=async function(name){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[name];if(!a)return;
-  const isLeader=a.leader===currentUser;
-  let html='';
-  (a.members||[]).forEach(m=>{
-    const isL=a.leader===m.name;
-    html+=`<div class="member-row"><span><span class="m-name">${m.name}</span>${isL?' <span class="m-leader">👑盟主</span>':''}</span><span class="m-contrib">贡献:${m.contribution||0}</span>${isLeader&&!isL?`<button class="m-action" onclick="kickMember('${name}','${m.name}')">踢出</button>`:''}</div>`;
-  });
-  showModal('👥 成员列表 ('+(a.members||[]).length+')',html);
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[name];if(!a)return;
+const isLeader=a.leader===currentUser;
+let html='';
+(a.members||[]).forEach(m=>{
+const isL=a.leader===m.name;
+html+=`<div class="member-row"><span><span style="color:var(--th);">${m.name}</span>${isL?' <span style="color:#d4a843;font-size:.5rem;">👑盟主</span>':''}</span><span style="color:#4aad7a;">贡献:${m.contribution||0}</span>${isLeader&&!isL?`<button class="m-action" onclick="kickMember('${name}','${m.name}')">踢出</button>`:''}</div>`;
+});
+showModal('👥 成员列表 ('+(a.members||[]).length+')',html);
 };
 
 window.showPending=async function(name){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[name];if(!a)return;
-  let html='';
-  if(!a.pending||a.pending.length===0)html='<div style="text-align:center;color:#4a6080;padding:20px;">暂无待审核申请</div>';
-  else a.pending.forEach(p=>{
-    html+=`<div class="member-row"><span class="m-name">${p.name}</span><div><button class="m-action" style="background:#1f6a3a;" onclick="approveMember('${name}','${p.name}')">通过</button> <button class="m-action" onclick="rejectMember('${name}','${p.name}')">拒绝</button></div></div>`;
-  });
-  showModal('⏳ 待审核',html);
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[name];if(!a)return;
+let html='';
+if(!a.pending||a.pending.length===0)html='<div style="text-align:center;color:#4a6080;padding:20px;">暂无待审核</div>';
+else a.pending.forEach(p=>{
+html+=`<div class="member-row"><span style="color:var(--th);">${p.name}</span><div><button class="m-action" style="background:#1f6a3a;" onclick="approveMember('${name}','${p.name}')">通过</button> <button class="m-action" onclick="rejectMember('${name}','${p.name}')">拒绝</button></div></div>`;
+});
+showModal('⏳ 待审核',html);
 };
 
 window.approveMember=async function(an,pn){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[an];if(!a)return;
-  if(a.leader!==currentUser){alert('只有盟主可以审核');return}
-  a.pending=a.pending.filter(p=>p.name!==pn);
-  a.members.push({name:pn,contribution:0,joinTime:now()});
-  await saveToGist(ad);
-  addLog('✅ '+pn+' 已加入联盟','sys');
-  hideModal();setTimeout(showPending.bind(null,an),300);
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[an];if(!a)return;
+if(a.leader!==currentUser){alert('只有盟主可以审核');return}
+a.pending=a.pending.filter(p=>p.name!==pn);
+a.members.push({name:pn,contribution:0,joinTime:now()});
+await saveToGist(ad);
+addLog('✅ '+pn+' 已加入联盟','sys');
+hideModal();setTimeout(()=>showPending(an),300);
 };
 
 window.rejectMember=async function(an,pn){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[an];if(!a)return;
-  a.pending=a.pending.filter(p=>p.name!==pn);
-  await saveToGist(ad);
-  hideModal();setTimeout(showPending.bind(null,an),300);
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[an];if(!a)return;
+a.pending=a.pending.filter(p=>p.name!==pn);
+await saveToGist(ad);
+hideModal();setTimeout(()=>showPending(an),300);
 };
 
 window.kickMember=async function(an,mn){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[an];if(!a)return;
-  if(a.leader!==currentUser){alert('只有盟主可以踢人');return}
-  if(!confirm('确定踢出 '+mn+' 吗？'))return;
-  a.members=a.members.filter(m=>m.name!==mn);
-  await saveToGist(ad);
-  addLog('👢 '+mn+' 已被踢出','sys');
-  hideModal();setTimeout(showAllianceDetail.bind(null,an),300);
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[an];if(!a)return;
+if(a.leader!==currentUser){alert('只有盟主可以踢人');return}
+if(!confirm('确定踢出 '+mn+' 吗？'))return;
+a.members=a.members.filter(m=>m.name!==mn);
+await saveToGist(ad);
+addLog('👢 '+mn+' 已被踢出','sys');
+hideModal();setTimeout(()=>showAllianceDetail(an),300);
 };
 
 window.disbandAlliance=async function(name){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[name];if(!a)return;
-  if(a.leader!==currentUser){alert('只有盟主可以解散');return}
-  if(!confirm('确定解散 '+name+'？此操作不可恢复！'))return;
-  delete ad.alliances[name];
-  await saveToGist(ad);
-  if(currentAlliance===name)currentAlliance=null;
-  addLog('💥 联盟已解散','dmg');
-  hideModal();
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[name];if(!a)return;
+if(a.leader!==currentUser){alert('只有盟主可以解散');return}
+if(!confirm('确定解散 '+name+'？此操作不可恢复！'))return;
+delete ad.alliances[name];
+await saveToGist(ad);
+if(currentAlliance===name){currentAlliance=null;document.getElementById('allianceDisplay').textContent='无'}
+addLog('💥 联盟已解散','dmg');
+hideModal();renderAllianceList();saveGameImmediate();
 };
 
 window.showAllianceContribute=async function(name){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[name];if(!a)return;
-  if(a.leader!==currentUser&&!a.members?.some(m=>m.name===currentUser)){alert('不是成员');return}
-  let html=`
-    <div style="font-size:.7rem;color:var(--ts);margin-bottom:6px;">选择要捐献的物品（可捐献材料、蓝图、战舰）</div>
-    <div style="max-height:400px;overflow-y:auto;">
-    <div style="color:#d4a843;font-weight:600;font-size:.65rem;margin:6px 0;">📦 材料</div>
-  `;
-  Object.keys(inventory).forEach(mat=>{
-    const d=inventory[mat];const cv=getMaterialContribution(d.tier);
-    html+=`<div class="member-row"><span>${mat} <span style="color:#4a6080;font-size:.5rem;">(T${d.tier}, 有${d.count}个, 每个+${cv}贡献)</span></span><button class="m-action" style="background:#1f6a3a;" onclick="contributeMaterial('${name}','${mat}',1)">捐1</button></div>`;
-  });
-  const un=blueprints.filter(b=>!b.learned&&!b.used);
-  if(un.length){
-    html+='<div style="color:#d4a843;font-weight:600;font-size:.65rem;margin:6px 0;">📐 蓝图</div>';
-    un.forEach(bp=>{
-      const cv=getBlueprintContribution(bp.tier);
-      html+=`<div class="member-row"><span>${bp.name} <span style="color:#4a6080;font-size:.5rem;">(T${bp.tier}, +${cv}贡献)</span></span><button class="m-action" style="background:#1f6a3a;" onclick="contributeBlueprint('${name}','${bp.id}')">捐献</button></div>`;
-    });
-  }
-  const ships=playerShips.filter(s=>!s.deployed);
-  if(ships.length){
-    html+='<div style="color:#d4a843;font-weight:600;font-size:.65rem;margin:6px 0;">🚀 战舰(未上阵)</div>';
-    ships.forEach(s=>{
-      const cv=getShipContribution(s.tier);
-      html+=`<div class="member-row"><span>${s.name} <span style="color:#4a6080;font-size:.5rem;">(T${s.tier}, +${cv}贡献)</span></span><button class="m-action" style="background:#1f6a3a;" onclick="contributeShip('${name}','${s.id}')">捐献</button></div>`;
-    });
-  }
-  html+='</div>';
-  showModal('💰 捐献 - '+name,html);
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[name];if(!a)return;
+if(a.leader!==currentUser&&!a.members?.some(m=>m.name===currentUser)){alert('不是成员');return}
+let html='<div style="font-size:.7rem;color:var(--ts);margin-bottom:6px;">选择要捐献的物品</div><div style="max-height:400px;overflow-y:auto;">';
+html+='<div style="color:#d4a843;font-weight:600;font-size:.65rem;margin:6px 0;">📦 材料</div>';
+Object.keys(inventory).forEach(mat=>{
+const d=inventory[mat];const cv=getMaterialContribution(d.tier);
+html+=`<div class="member-row"><span>${mat} <span style="color:#4a6080;font-size:.5rem;">(T${d.tier}, 有${d.count}, +${cv}贡献/个)</span></span><button class="m-action" style="background:#1f6a3a;" onclick="contributeMaterial('${name}','${mat}',1)">捐1</button></div>`;
+});
+const un=blueprints.filter(b=>!b.learned&&!b.used);
+if(un.length){
+html+='<div style="color:#d4a843;font-weight:600;font-size:.65rem;margin:6px 0;">📐 蓝图</div>';
+un.forEach(bp=>{
+const cv=getBlueprintContribution(bp.tier);
+html+=`<div class="member-row"><span>${bp.name} <span style="color:#4a6080;font-size:.5rem;">(T${bp.tier}, +${cv}贡献)</span></span><button class="m-action" style="background:#1f6a3a;" onclick="contributeBlueprint('${name}','${bp.id}')">捐献</button></div>`;
+});
+}
+const ships=playerShips.filter(s=>!s.deployed);
+if(ships.length){
+html+='<div style="color:#d4a843;font-weight:600;font-size:.65rem;margin:6px 0;">🚀 战舰(未上阵)</div>';
+ships.forEach(s=>{
+const cv=getShipContribution(s.tier);
+html+=`<div class="member-row"><span>${s.name} <span style="color:#4a6080;font-size:.5rem;">(T${s.tier}, +${cv}贡献)</span></span><button class="m-action" style="background:#1f6a3a;" onclick="contributeShip('${name}','${s.id}')">捐献</button></div>`;
+});
+}
+html+='</div>';
+showModal('💰 捐献 - '+name,html);
 };
 
 window.contributeMaterial=async function(an,mat,qty){
-  if(!inventory[mat]||inventory[mat].count<qty){alert('数量不足');return}
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[an];if(!a)return;
-  const tier=inventory[mat].tier;const cv=getMaterialContribution(tier)*qty;
-  inventory[mat].count-=qty;if(inventory[mat].count<=0)delete inventory[mat];
-  const me=a.members?.find(m=>m.name===currentUser);
-  if(me)me.contribution=(me.contribution||0)+cv;
-  const key=mat;if(!a.warehouse[key])a.warehouse[key]={name:mat,tier,count:0,contributor:currentUser,contribValue:getMaterialContribution(tier)};
-  a.warehouse[key].count+=qty;
-  await saveToGist(ad);
-  addLog(`💰 捐献 ${mat} x${qty}，获得 ${cv} 贡献值`,'loot');
-  renderWarehouse();saveGameImmediate();
-  hideModal();setTimeout(()=>showAllianceContribute(an),300);
+if(!inventory[mat]||inventory[mat].count<qty){alert('数量不足');return}
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[an];if(!a)return;
+const tier=inventory[mat].tier;const cv=getMaterialContribution(tier)*qty;
+inventory[mat].count-=qty;if(inventory[mat].count<=0)delete inventory[mat];
+const me=a.members?.find(m=>m.name===currentUser);
+if(me)me.contribution=(me.contribution||0)+cv;
+const key=mat;
+if(!a.warehouse[key])a.warehouse[key]={name:mat,tier,count:0,contributor:currentUser,contribValue:getMaterialContribution(tier)};
+a.warehouse[key].count+=qty;
+await saveToGist(ad);
+addLog(`💰 捐献 ${mat} x${qty}，获得 ${cv} 贡献`,'loot');
+renderWarehouse();saveGameImmediate();
+hideModal();setTimeout(()=>showAllianceContribute(an),300);
 };
 
 window.contributeBlueprint=async function(an,bid){
-  const bp=blueprints.find(b=>b.id===bid);if(!bp||bp.learned||bp.used){alert('蓝图不可用');return}
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[an];if(!a)return;
-  const cv=getBlueprintContribution(bp.tier);
-  const me=a.members?.find(m=>m.name===currentUser);
-  if(me)me.contribution=(me.contribution||0)+cv;
-  const key='bp_'+bp.name;
-  if(!a.warehouse[key])a.warehouse[key]={name:bp.name,tier:bp.tier,count:0,isBlueprint:true,contributor:currentUser,contribValue:cv};
-  a.warehouse[key].count++;
-  blueprints.splice(blueprints.indexOf(bp),1);
-  await saveToGist(ad);
-  addLog(`💰 捐献蓝图 ${bp.name}，获得 ${cv} 贡献值`,'loot');
-  renderWarehouse();saveGameImmediate();
-  hideModal();setTimeout(()=>showAllianceContribute(an),300);
+const bp=blueprints.find(b=>b.id===bid);if(!bp||bp.learned||bp.used){alert('蓝图不可用');return}
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[an];if(!a)return;
+const cv=getBlueprintContribution(bp.tier);
+const me=a.members?.find(m=>m.name===currentUser);
+if(me)me.contribution=(me.contribution||0)+cv;
+const key='bp_'+bp.name;
+if(!a.warehouse[key])a.warehouse[key]={name:bp.name,tier:bp.tier,count:0,isBlueprint:true,contributor:currentUser,contribValue:cv};
+a.warehouse[key].count++;
+blueprints.splice(blueprints.indexOf(bp),1);
+await saveToGist(ad);
+addLog(`💰 捐献蓝图 ${bp.name}，获得 ${cv} 贡献`,'loot');
+renderWarehouse();saveGameImmediate();
+hideModal();setTimeout(()=>showAllianceContribute(an),300);
 };
 
 window.contributeShip=async function(an,sid){
-  const s=playerShips.find(x=>x.id===sid);if(!s||s.deployed){alert('战舰不可捐');return}
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[an];if(!a)return;
-  const cv=getShipContribution(s.tier);
-  const me=a.members?.find(m=>m.name===currentUser);
-  if(me)me.contribution=(me.contribution||0)+cv;
-  const key='ship_'+s.id;
-  if(!a.warehouse[key])a.warehouse[key]={name:s.name,tier:s.tier,pos:s.pos,count:1,isShip:true,shipData:s,contributor:currentUser,contribValue:cv};
-  playerShips.splice(playerShips.indexOf(s),1);
-  await saveToGist(ad);
-  addLog(`💰 捐献战舰 ${s.name}，获得 ${cv} 贡献值`,'loot');
-  updateFleetUI();saveGameImmediate();
-  hideModal();setTimeout(()=>showAllianceContribute(an),300);
+const s=playerShips.find(x=>x.id===sid);if(!s||s.deployed){alert('战舰不可捐');return}
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[an];if(!a)return;
+const cv=getShipContribution(s.tier);
+const me=a.members?.find(m=>m.name===currentUser);
+if(me)me.contribution=(me.contribution||0)+cv;
+const key='ship_'+s.id;
+a.warehouse[key]={name:s.name,tier:s.tier,pos:s.pos,count:1,isShip:true,shipData:s,contributor:currentUser,contribValue:cv};
+playerShips.splice(playerShips.indexOf(s),1);
+await saveToGist(ad);
+addLog(`💰 捐献战舰 ${s.name}，获得 ${cv} 贡献`,'loot');
+updateFleetUI();saveGameImmediate();
+hideModal();setTimeout(()=>showAllianceContribute(an),300);
 };
 
 window.showAllianceWarehouse=async function(name){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[name];if(!a)return;
-  const me=a.members?.find(m=>m.name===currentUser);
-  const myContrib=me?.contribution||0;
-  let html=`<div style="font-size:.65rem;color:#d4a843;margin-bottom:6px;">你的贡献值：${myContrib}</div>`;
-  html+='<div style="max-height:400px;overflow-y:auto;">';
-  const items=Object.keys(a.warehouse||{});
-  if(items.length===0)html+='<div style="text-align:center;color:#4a6080;padding:20px;">仓库空空如也</div>';
-  else items.forEach(key=>{
-    const it=a.warehouse[key];
-    const canBuy=myContrib>=it.contribValue&&it.contributor!==currentUser;
-    html+=`<div class="member-row"><span>${it.isBlueprint?'📐':it.isShip?'🚀':'📦'} ${it.name} <span style="color:#4a6080;font-size:.5rem;">(T${it.tier}, ${it.count}个, ${it.contribValue}贡献, 由${it.contributor}捐献)</span></span>${it.contributor===currentUser?'<span style="color:#4a6080;font-size:.5rem;">自己的</span>':`<button class="m-action" style="background:${canBuy?'#1f6a3a':'#4a6080'};" ${canBuy?`onclick="buyFromAlliance('${name}','${key}')"`:'disabled'}>花${it.contribValue}购买</button>`}</div>`;
-  });
-  html+='</div>';
-  showModal('📦 联盟仓库 - '+name,html);
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[name];if(!a)return;
+const me=a.members?.find(m=>m.name===currentUser);
+const myContrib=me?.contribution||0;
+let html=`<div style="font-size:.65rem;color:#d4a843;margin-bottom:6px;">你的贡献值：${myContrib}</div><div style="max-height:400px;overflow-y:auto;">`;
+const items=Object.keys(a.warehouse||{});
+if(items.length===0)html+='<div style="text-align:center;color:#4a6080;padding:20px;">仓库空空如也</div>';
+else items.forEach(key=>{
+const it=a.warehouse[key];
+const canBuy=myContrib>=it.contribValue&&it.contributor!==currentUser;
+html+=`<div class="member-row"><span>${it.isBlueprint?'📐':it.isShip?'🚀':'📦'} ${it.name} <span style="color:#4a6080;font-size:.5rem;">(T${it.tier}, ${it.count}个, ${it.contribValue}贡献, 由${it.contributor}捐献)</span></span>${it.contributor===currentUser?'<span style="color:#4a6080;font-size:.5rem;">自己的</span>':`<button class="m-action" style="background:${canBuy?'#1f6a3a':'#4a6080'};" ${canBuy?`onclick="buyFromAlliance('${name}','${key}')"`:'disabled'}>花${it.contribValue}购买</button>`}</div>`;
+});
+html+='</div>';
+showModal('📦 联盟仓库 - '+name,html);
 };
 
 window.buyFromAlliance=async function(an,key){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[an];if(!a)return;
-  const it=a.warehouse[key];if(!it){alert('物品不存在');return}
-  const me=a.members?.find(m=>m.name===currentUser);
-  if(!me||me.contribution<it.contribValue){alert('贡献值不足');return}
-  if(it.contributor===currentUser){alert('不能购买自己的');return}
-  me.contribution-=it.contribValue;
-  const seller=a.members?.find(m=>m.name===it.contributor);
-  if(seller)seller.contribution=(seller.contribution||0)+it.contribValue;
-  if(it.isBlueprint){
-    blueprints.push({id:'bp_'+Date.now()+Math.random().toString(36).substr(2,4),name:it.name,tier:it.tier,pos:'front',used:false,learned:false});
-  }else if(it.isShip){
-    playerShips.push({...it.shipData,id:'ship_'+Date.now()+Math.random().toString(36).substr(2,4),deployed:false});
-  }else{
-    if(inventory[it.name])inventory[it.name].count+=1;else inventory[it.name]={count:1,tier:it.tier};
-  }
-  it.count--;
-  if(it.count<=0)delete a.warehouse[key];
-  await saveToGist(ad);
-  addLog(`🛒 购买了 ${it.name}，花费 ${it.contribValue} 贡献`,'loot');
-  renderWarehouse();saveGameImmediate();
-  hideModal();setTimeout(()=>showAllianceWarehouse(an),300);
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[an];if(!a)return;
+const it=a.warehouse[key];if(!it){alert('物品不存在');return}
+const me=a.members?.find(m=>m.name===currentUser);
+if(!me||me.contribution<it.contribValue){alert('贡献值不足');return}
+if(it.contributor===currentUser){alert('不能购买自己的');return}
+me.contribution-=it.contribValue;
+const seller=a.members?.find(m=>m.name===it.contributor);
+if(seller)seller.contribution=(seller.contribution||0)+it.contribValue;
+if(it.isBlueprint){
+blueprints.push({id:'bp_'+Date.now()+Math.random().toString(36).substr(2,4),name:it.name,tier:it.tier,pos:'front',used:false,learned:false});
+}else if(it.isShip){
+playerShips.push({...it.shipData,id:'ship_'+Date.now()+Math.random().toString(36).substr(2,4),deployed:false});
+}else{
+if(inventory[it.name])inventory[it.name].count+=1;else inventory[it.name]={count:1,tier:it.tier};
+}
+it.count--;
+if(it.count<=0)delete a.warehouse[key];
+await saveToGist(ad);
+addLog(`🛒 购买 ${it.name}，花费 ${it.contribValue} 贡献`,'loot');
+renderWarehouse();updateFleetUI();saveGameImmediate();
+hideModal();setTimeout(()=>showAllianceWarehouse(an),300);
 };
 
 window.showAllianceTasks=async function(name){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[name];if(!a)return;
-  const today=getToday();
-  if(!a.tasks)a.tasks={};
-  if(!a.tasks[today])a.tasks[today]={};
-  if(!a.tasks[today][currentUser]){
-    // 生成7个任务
-    const tasks={};
-    for(let tier=1;tier<=7;tier++){
-      const pool=ALL_MATERIALS.filter(m=>m.tier===tier);
-      const mat=pool[Math.floor(Math.random()*pool.length)];
-      const qty=1+Math.floor(Math.random()*3);
-      tasks['T'+tier]={material:mat.name,tier,qty,completed:false,reward:getTaskReward(tier)};
-    }
-    a.tasks[today][currentUser]=tasks;
-    await saveToGist(ad);
-  }
-  const tasks=a.tasks[today][currentUser];
-  let html=`<div style="font-size:.65rem;color:var(--ts);margin-bottom:6px;">今日任务（每天0点刷新）</div>`;
-  for(let tier=1;tier<=7;tier++){
-    const t=tasks['T'+tier];if(!t)continue;
-    const has=inventory[t.material]?.count>=t.qty;
-    html+=`<div class="task-row"><span>T${tier}: 上交 ${t.material} ×${t.qty} <span class="t-reward">+${t.reward}💰 +1声望</span></span>${t.completed?'<span style="color:#4aad7a;">✅已完成</span>':`<button class="t-btn" ${has?'':'disabled'} onclick="completeTask('${name}','T${tier}')">${has?'上交':'材料不足'}</button>`}</div>`;
-  }
-  showModal('📋 每日任务 - '+name,html);
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[name];if(!a)return;
+const today=getToday();
+if(!a.tasks)a.tasks={};
+if(!a.tasks[today])a.tasks[today]={};
+if(!a.tasks[today][currentUser]){
+const tasks={};
+for(let tier=1;tier<=7;tier++){
+const pool=ALL_MATERIALS.filter(m=>m.tier===tier);
+const mat=pool[Math.floor(Math.random()*pool.length)];
+const qty=1+Math.floor(Math.random()*3);
+tasks['T'+tier]={material:mat.name,tier,qty,completed:false,reward:getTaskReward(tier)};
+}
+a.tasks[today][currentUser]=tasks;
+await saveToGist(ad);
+}
+const tasks=a.tasks[today][currentUser];
+let html='<div style="font-size:.65rem;color:var(--ts);margin-bottom:6px;">今日任务（每天0点刷新）</div>';
+for(let tier=1;tier<=7;tier++){
+const t=tasks['T'+tier];if(!t)continue;
+const has=inventory[t.material]?.count>=t.qty;
+html+=`<div class="task-row"><span>T${tier}: ${t.material} ×${t.qty} <span class="t-reward">+${t.reward}💰 +1声望</span></span>${t.completed?'<span style="color:#4aad7a;">✅已完成</span>':`<button class="t-btn" ${has?'':'disabled'} onclick="completeTask('${name}','T${tier}')">${has?'上交':'不足'}</button>`}</div>`;
+}
+showModal('📋 每日任务 - '+name,html);
 };
 
 window.completeTask=async function(an,tk){
-  const ad=await loadFromGist()||{};
-  const a=ad.alliances?.[an];if(!a)return;
-  const today=getToday();
-  const t=a.tasks?.[today]?.[currentUser]?.[tk];
-  if(!t||t.completed){alert('任务已完成');return}
-  if(!inventory[t.material]||inventory[t.material].count<t.qty){alert('材料不足');return}
-  inventory[t.material].count-=t.qty;
-  if(inventory[t.material].count<=0)delete inventory[t.material];
-  t.completed=true;
-  credits+=t.reward;
-  a.reputation=(a.reputation||0)+1;
-  await saveToGist(ad);
-  addLog(`✅ 完成任务 ${tk}，获得 ${t.reward} 星际币，联盟+1声望`,'loot');
-  document.getElementById('creditDisplay').textContent=credits;
-  renderWarehouse();saveGameImmediate();
-  hideModal();setTimeout(()=>showAllianceTasks(an),300);
+const ad=await loadFromGist()||{};
+const a=ad.alliances?.[an];if(!a)return;
+const today=getToday();
+const t=a.tasks?.[today]?.[currentUser]?.[tk];
+if(!t||t.completed){alert('任务已完成');return}
+if(!inventory[t.material]||inventory[t.material].count<t.qty){alert('材料不足');return}
+inventory[t.material].count-=t.qty;
+if(inventory[t.material].count<=0)delete inventory[t.material];
+t.completed=true;
+credits+=t.reward;
+a.reputation=(a.reputation||0)+1;
+await saveToGist(ad);
+addLog(`✅ 完成任务 ${tk}，获得 ${t.reward} 星际币，联盟+1声望`,'loot');
+document.getElementById('creditDisplay').textContent=credits;
+renderWarehouse();saveGameImmediate();
+hideModal();setTimeout(()=>showAllianceTasks(an),300);
 };
 
 // ============================================================
 //  渲染全部
 // ============================================================
 function renderAll(){
-  try{
-    if(!playerShips||playerShips.length===0)playerShips=createInitialShips();
-    renderGalaxies();updateBattleInfo();generateEnemies();updateFleetUI();renderWarehouse();
-    renderMarket();renderMyOrders();renderRank();renderFactory();renderMineralStatus();
-    updateWarehouseCount();updateSellSelect();
-    document.getElementById('creditDisplay').textContent=credits;
-    document.getElementById('levelDisplay').textContent='Lv.'+playerLevel;
-    document.getElementById('allianceDisplay').textContent=currentAlliance||'无';
-    renderFleet();
-  }catch(e){console.error('渲染出错:',e)}
+try{
+if(!playerShips||playerShips.length===0)playerShips=createInitialShips();
+renderGalaxies();updateBattleInfo();generateEnemies();updateFleetUI();renderWarehouse();
+renderMarket();renderMyOrders();renderRank();renderFactory();renderMineralStatus();
+updateWarehouseCount();updateSellSelect();
+document.getElementById('creditDisplay').textContent=credits;
+document.getElementById('levelDisplay').textContent='Lv.'+playerLevel;
+document.getElementById('allianceDisplay').textContent=currentAlliance||'无';
+renderFleet();
+renderAllianceList();
+}catch(e){console.error('渲染出错:',e)}
 }
 
 // ============================================================
-//  导航切换
+//  顶部导航切换
 // ============================================================
-document.querySelectorAll('.nav-tab').forEach(tab=>{
-  tab.addEventListener('click',function(){
-    document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-    this.classList.add('active');
-    const t=this.dataset.tab;
-    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-    document.getElementById('tab-'+t)?.classList.add('active');
-    if(t==='rank')renderRank();
-    if(t==='trade'){renderMarket();renderMyOrders()}
-    if(t==='mineral')renderMineralStatus();
-    if(t==='factory')renderFactory();
-  });
+document.querySelectorAll('.top-nav-tab').forEach(tab=>{
+tab.addEventListener('click',function(){
+document.querySelectorAll('.top-nav-tab').forEach(t=>t.classList.remove('active'));
+this.classList.add('active');
+const t=this.dataset.tab;
+document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+document.getElementById('tab-'+t)?.classList.add('active');
+if(t==='rank')renderRank();
+if(t==='trade'){renderMarket();renderMyOrders()}
+if(t==='mineral')renderMineralStatus();
+if(t==='factory')renderFactory();
+if(t==='alliance')renderAllianceList();
+});
 });
 document.querySelectorAll('.page-tab').forEach(tab=>{
-  tab.addEventListener('click',function(){
-    document.querySelectorAll('.page-tab').forEach(t=>t.classList.remove('active'));
-    this.classList.add('active');
-    const t=this.dataset.page;
-    document.querySelectorAll('.page-content').forEach(c=>c.classList.remove('active'));
-    document.getElementById('page-'+t)?.classList.add('active');
-  });
+tab.addEventListener('click',function(){
+document.querySelectorAll('.page-tab').forEach(t=>t.classList.remove('active'));
+this.classList.add('active');
+const t=this.dataset.page;
+document.querySelectorAll('.page-content').forEach(c=>c.classList.remove('active'));
+document.getElementById('page-'+t)?.classList.add('active');
 });
-document.getElementById('btnRefreshMarket').addEventListener('click',()=>{renderMarket();renderMyOrders()});
+});
+document.getElementById('btnRefreshMarket').addEventListener('click',()=>{renderMarket();renderMyOrders();addLog('🔄 市场已刷新','sys')});
 document.getElementById('btnViewBlueprints').addEventListener('click',()=>{
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelector('[data-tab="factory"]')?.classList.add('active');
-  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-  document.getElementById('tab-factory')?.classList.add('active');
-  renderFactory();
+document.querySelectorAll('.top-nav-tab').forEach(t=>t.classList.remove('active'));
+document.querySelector('[data-tab="factory"]')?.classList.add('active');
+document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+document.getElementById('tab-factory')?.classList.add('active');
+renderFactory();
 });
 document.getElementById('btnAutoBattle').addEventListener('click',function(){
-  if(isDefeated)return;
-  if(!isAuto){isAuto=true;isPaused=false;this.textContent='⏸️ 暂停';document.getElementById('statusLabel').textContent='⚔️ 战斗中';if(enemies.filter(e=>e.alive).length===0)generateEnemies();doBattle()}
-  else{isAuto=false;isPaused=true;this.textContent='▶️ 继续';document.getElementById('statusLabel').textContent='⏸️ 已暂停'}
+if(isDefeated)return;
+if(!isAuto){isAuto=true;isPaused=false;this.textContent='⏸️ 暂停';document.getElementById('statusLabel').textContent='⚔️ 战斗中';if(enemies.filter(e=>e.alive).length===0)generateEnemies();doBattle()}
+else{isAuto=false;isPaused=true;this.textContent='▶️ 继续';document.getElementById('statusLabel').textContent='⏸️ 已暂停'}
 });
 
 // ============================================================
@@ -1496,27 +1545,23 @@ document.getElementById('btnAutoBattle').addEventListener('click',function(){
 initTheme();
 syncServerTime();
 setInterval(()=>{
-  if(isAuto&&!isDefeated&&currentUser){
-    doBattle();battleTimer++;
-    const m=String(Math.floor(battleTimer/60)).padStart(2,'0');
-    const s=String(battleTimer%60).padStart(2,'0');
-    document.getElementById('battleTimer').textContent=m+':'+s;
-  }
+if(isAuto&&!isDefeated&&currentUser){
+doBattle();battleTimer++;
+const m=String(Math.floor(battleTimer/60)).padStart(2,'0');
+const s=String(battleTimer%60).padStart(2,'0');
+document.getElementById('battleTimer').textContent=m+':'+s;
+}
 },2000);
-// 每5分钟保存一次
 setInterval(()=>{if(currentUser)saveGameImmediate()},300000);
-// 每30分钟同步时间
 setInterval(syncServerTime,1800000);
 
 document.getElementById('loginOverlay').classList.remove('hidden');
 document.getElementById('app').style.display='none';
-console.log('🚀 星际征途 v2.0 完整版已加载');
+console.log('🚀 星际征途 v2.1 完整版已加载');
 console.log('📡 Gist ID:',GIST_ID);
-console.log('✅ 敌人属性与玩家相同');
-console.log('✅ 20%概率敌人获得词条');
-console.log('✅ 建造时间：T1=30s，每级+30s');
-console.log('✅ 星际联盟系统');
-console.log('✅ 全数据云端存储');
+console.log('✅ 顶部导航两行布局');
+console.log('✅ 星际联盟改为标签页');
+console.log('✅ 云同步失败修复');
 </script>
 </body>
 </html>
