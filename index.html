@@ -6,10 +6,7 @@
 <title>星际征途</title>
 <script>
 (function(){function b(e){const k=e.key||'';const c=e.ctrlKey||e.metaKey;const s=e.shiftKey;if(k==='F12'||(c&&s&&(k==='I'||k==='i'))||(c&&(k==='U'||k==='u'))||(c&&(k==='S'||k==='s'))){e.preventDefault();e.stopPropagation();return false}return true}
-document.addEventListener('keydown',b,true);
-document.addEventListener('contextmenu',e=>{e.preventDefault();e.stopPropagation();return false},true);
-document.addEventListener('dragstart',e=>{e.preventDefault();return false},true);
-document.addEventListener('selectstart',e=>{e.preventDefault();return false},true)})();
+document.addEventListener('keydown',b,true);document.addEventListener('contextmenu',e=>{e.preventDefault();e.stopPropagation();return false},true);document.addEventListener('dragstart',e=>{e.preventDefault();return false},true);document.addEventListener('selectstart',e=>{e.preventDefault();return false},true)})();
 </script>
 <style>
 :root{--bg:#080c1a;--bg2:#0a1022;--bgp:#0b1422;--bgb:#141e32;--bgi:#0b1422;--bd:#1a2842;--bl:#2a4065;--tx:#c8d6e5;--ts:#6f8bb0;--th:#e8f0ff;--gold:#d4a843;--grn:#4aad7a;--red:#c0392b}
@@ -19,7 +16,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 #app{width:100vw;height:100vh;display:flex;flex-direction:column;background:var(--bg2);overflow:hidden}
 #themeToggle{position:fixed;top:70px;right:10px;z-index:999;background:var(--bgp);border:1px solid var(--bl);border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:.9rem;color:var(--tx)}
 #themeToggle:hover{border-color:var(--gold)}
-
 .login-overlay{position:fixed;inset:0;background:rgba(8,12,26,.96);backdrop-filter:blur(8px);display:flex;justify-content:center;align-items:center;z-index:2000;transition:opacity .5s}
 .login-overlay.hidden{opacity:0;pointer-events:none}
 .login-box{background:var(--bgb);border-radius:20px;padding:36px 44px;max-width:440px;width:90%;border:1px solid var(--bl);box-shadow:0 30px 60px rgba(0,0,0,.9)}
@@ -34,8 +30,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .login-box .success{color:var(--grn);font-size:.75rem;margin-top:6px;min-height:20px;text-align:center}
 .login-box .toggle-mode{text-align:center;margin-top:12px;font-size:.75rem;color:var(--ts);cursor:pointer}
 .login-box .toggle-mode span{color:#4a8aaa;text-decoration:underline}
-
-/* 顶部栏 - 两行 */
 .top-bar{display:flex;flex-direction:column;background:var(--bgp);border-bottom:1px solid var(--bd);flex-shrink:0;z-index:10}
 .top-row-user{display:flex;justify-content:space-between;align-items:center;padding:4px 18px;height:42px;border-bottom:1px solid var(--bd)}
 .top-row-nav{display:flex;gap:2px;padding:0 10px;height:32px;align-items:center;overflow-x:auto}
@@ -54,18 +48,14 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 #syncStatus.sync{color:var(--gold);border:1px solid #7a6a2a;animation:pulse .8s infinite}
 #syncStatus.fail{color:var(--red);border:1px solid #6a2a2a;font-weight:600}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* 顶部导航标签 - 横向排列 */
 .top-nav-tab{padding:4px 14px;font-size:.6rem;cursor:pointer;color:var(--ts);border-bottom:2px solid transparent;transition:.15s;white-space:nowrap;border-radius:4px 4px 0 0}
 .top-nav-tab:hover{color:var(--th);background:rgba(42,64,101,.3)}
 .top-nav-tab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(212,168,67,.08);font-weight:600}
-
 .main-body{display:flex;flex:1;overflow:hidden}
 .left-panel{width:240px;min-width:180px;background:var(--bgp);border-right:1px solid var(--bd);padding:6px 10px;overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column;gap:5px}
 .left-panel::-webkit-scrollbar{width:3px}.left-panel::-webkit-scrollbar-thumb{background:var(--bl);border-radius:10px}
 .panel-section{background:rgba(15,24,42,.5);border-radius:6px;padding:6px 10px;border:1px solid var(--bd)}
 .panel-section .section-title{font-size:.55rem;color:var(--ts);text-transform:uppercase;margin-bottom:3px;display:flex;justify-content:space-between}
-
 .galaxy-container{display:flex;flex-direction:column;gap:6px}
 .galaxy-group{border:1px solid var(--bd);border-radius:4px;overflow:hidden}
 .galaxy-header{background:#0f182a;padding:3px 8px;font-size:.55rem;color:var(--gold);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
@@ -79,7 +69,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .system-chip:hover{border-color:#3a5380}
 .system-chip.active{border-color:#4a7aad;color:var(--th);background:var(--bd)}
 .system-chip .s-lvl{font-size:.35rem;color:#4a6080}
-
 .warehouse-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-height:120px;overflow-y:auto}
 .warehouse-slot{background:var(--bgp);border:1px solid var(--bd);border-radius:3px;padding:2px;text-align:center;font-size:.4rem;min-height:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--ts)}
 .warehouse-slot:hover{border-color:#3a5380}
@@ -94,7 +83,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .q-5{color:var(--gold);border-color:#7a6a2a}.q-5 .name{color:var(--gold)}
 .q-6{color:#d4853a;border-color:#7a4a2a}.q-6 .name{color:#d4853a}
 .q-7{color:#c06a9a;border-color:#7a3a5a}.q-7 .name{color:#c06a9a}
-
 .fleet-summary{display:flex;gap:3px;flex-wrap:wrap}
 .fleet-tag{font-size:.45rem;padding:1px 6px;border-radius:8px;border:1px solid var(--bd);color:var(--ts)}
 .fleet-tag.front{border-color:var(--red);color:#e67a6a}
@@ -104,7 +92,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .btn-sm:hover{border-color:#4a7aad}
 .btn-large{font-size:.6rem;padding:4px 12px;background:var(--bd);border:1px solid #4a7aad;border-radius:30px;color:var(--th);cursor:pointer;width:100%;text-align:center;font-weight:600}
 .btn-large:hover{background:#2a3a5a}
-
 .center-panel{flex:1;display:flex;flex-direction:column;padding:6px 14px;overflow:hidden;min-width:0}
 .battle-header{display:flex;justify-content:space-between;align-items:center;font-size:.65rem;color:var(--ts);flex-shrink:0;margin-bottom:3px;flex-wrap:wrap;gap:2px}
 .battle-header .location{color:var(--th);font-weight:600}
@@ -121,7 +108,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .friendly-unit .hp-text{font-size:.35rem;color:#6a8aaa;min-width:24px;text-align:right}
 .friendly-unit .charge-bar{flex:1;height:2px;background:#1a1a2a;border-radius:4px;overflow:hidden;min-width:14px}
 .friendly-unit .charge-bar .fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--red));border-radius:4px}
-
 .vs-divider{display:flex;justify-content:center;align-items:center;width:12px;border-left:1px solid rgba(42,64,101,.15);border-right:1px solid rgba(42,64,101,.15)}
 .vs-divider span{font-size:.5rem;color:#3a5380;writing-mode:vertical-lr;letter-spacing:2px}
 .enemy-column{display:flex;flex-direction:column;justify-content:center;gap:5px;width:150px}
@@ -130,24 +116,16 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .enemy-unit .hp-bar{flex:1;height:3px;background:#2a1a1a;border-radius:4px;overflow:hidden;min-width:24px}
 .enemy-unit .hp-bar .fill{height:100%;background:var(--red);border-radius:4px}
 .enemy-unit .hp-text{font-size:.35rem;color:#8a6a6a;min-width:24px}
-
 .battle-footer{display:flex;gap:6px;flex-shrink:0;padding-top:4px;border-top:1px solid var(--bd);margin-top:3px;flex-wrap:wrap;min-height:50px}
 .battle-log-mini{flex:2;font-size:.55rem;color:#6a8aaa;max-height:50px;overflow-y:auto;background:#080c18;border-radius:4px;padding:3px 10px;border:1px solid #121c2e;min-width:100px}
 .battle-log-mini div{padding:1px 0;border-bottom:1px solid #0f182a}
 .battle-log-mini .dmg{color:var(--red)}.battle-log-mini .heal{color:var(--grn)}.battle-log-mini .sys{color:#4a8aaa}.battle-log-mini .loot{color:var(--gold)}.battle-log-mini .blueprint{color:#e67e22;font-weight:600}.battle-log-mini .affix{color:#9b59b6}.battle-log-mini .exp{color:var(--grn)}
-
 .action-buttons{display:flex;gap:3px;flex-wrap:wrap;align-items:center}
-/* 小按钮样式 */
 .btn-xs{background:var(--bd);border:1px solid #3a5380;border-radius:20px;padding:2px 8px;color:var(--th);font-size:.45rem;font-weight:500;cursor:pointer;transition:.1s}
 .btn-xs:hover{border-color:#4a7aad}
-.btn-xs:active{transform:scale(.95)}
 .btn-xs.btn-success{background:#1f6a3a;border-color:#3a8a5a}
-.btn-xs.btn-success:hover{background:#2a7a4a}
 .btn-xs.btn-gold{background:#6a5a2a;border-color:#8a7a3a}
-.btn-xs.btn-gold:hover{background:#7a6a3a}
 .btn-xs.btn-purple{background:#4a2a6a;border-color:#6a3a8a}
-.btn-xs.btn-purple:hover{background:#5a3a7a}
-
 .right-panel{width:280px;min-width:220px;background:var(--bgp);border-left:1px solid var(--bd);padding:6px 10px;overflow:hidden;flex-shrink:0;display:flex;flex-direction:column}
 .tab-content{display:none;flex-direction:column;flex:1;overflow:hidden;margin-top:4px}
 .tab-content.active{display:flex}
@@ -170,7 +148,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .trade-empty-page{color:#4a6080;text-align:center;padding:20px 0;font-size:.6rem}
 .trade-pagination{display:flex;gap:4px;justify-content:center;padding:4px 0}
 .trade-pagination button{background:var(--bgp);border:1px solid var(--bd);border-radius:3px;padding:1px 10px;color:var(--ts);cursor:pointer;font-size:.45rem}
-
 .rank-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:2px;padding-right:3px}
 .rank-item{display:flex;align-items:center;gap:8px;padding:3px 8px;background:var(--bgp);border-radius:3px;border:1px solid var(--bd);font-size:.55rem}
 .rank-item .rank-num{width:24px;color:#4a6080;font-weight:600;text-align:center;font-size:.5rem}
@@ -180,7 +157,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .rank-item .rank-avatar{width:22px;height:22px;border-radius:50%;background:var(--bd);border:1px solid #3a5380}
 .rank-item .rank-name{flex:1;color:var(--th)}
 .rank-item .rank-score{color:var(--gold);font-weight:600}
-
 .factory-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px 0}
 .factory-item{background:var(--bgp);border:1px solid var(--bd);border-radius:4px;padding:6px 8px;text-align:center;position:relative;padding-bottom:24px}
 .factory-item.dim{opacity:.5}
@@ -190,10 +166,8 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .factory-item .fprogress .fill{height:100%;background:linear-gradient(90deg,var(--gold),#e67e22);border-radius:4px}
 .factory-item .build-btn{position:absolute;bottom:3px;right:3px;font-size:.4rem;padding:2px 8px;border-radius:20px;background:var(--grn);color:#fff;border:none;cursor:pointer}
 .factory-item .build-btn:disabled{background:#4a6080;cursor:not-allowed}
-
 .mineral-info{background:var(--bgp);border-radius:4px;padding:4px 8px;border:1px solid var(--bd);margin-bottom:3px;font-size:.55rem}
 .mineral-info .m-battle{color:#e74c3c;cursor:pointer}
-
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:1000}
 .modal-overlay.show{display:flex}
 .modal-box{background:var(--bgb);border-radius:14px;padding:20px 24px;max-width:580px;width:92%;border:1px solid var(--bl);max-height:85vh;overflow-y:auto}
@@ -206,8 +180,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .modal-box .ship-card .btn-mini.deploy{background:#1f6a3a}
 .modal-box .ship-card .btn-mini.undeploy{background:#6a2a2a}
 .modal-box .ship-card .btn-mini.detail{background:#2a5a7a}
-
-/* 联盟 */
 .alliance-list{display:flex;flex-direction:column;gap:4px;padding:4px 0}
 .alliance-item{background:var(--bgp);border:1px solid var(--bd);border-radius:6px;padding:8px 12px;cursor:pointer;transition:.1s}
 .alliance-item:hover{border-color:var(--gold);background:rgba(212,168,67,.05)}
@@ -219,14 +191,12 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 .task-row .t-reward{color:var(--gold)}
 .task-row .t-btn{padding:1px 8px;font-size:.45rem;border-radius:20px;border:none;cursor:pointer;background:var(--grn);color:#fff}
 .task-row .t-btn:disabled{background:#4a6080;cursor:not-allowed}
-
 @media(max-width:1024px){.left-panel{width:200px}.right-panel{width:240px}}
-@media(max-width:768px){.left-panel,.right-panel{display:none}.friendly-column,.enemy-column{width:100px}.top-row-user{height:auto;flex-wrap:wrap;padding:4px 8px}.top-row-nav{padding:0 4px}}
+@media(max-width:768px){.left-panel,.right-panel{display:none}.friendly-column,.enemy-column{width:100px}.top-row-user{height:auto;flex-wrap:wrap;padding:4px 8px}}
 </style>
 </head>
 <body>
 <button id="themeToggle">🌙</button>
-
 <div class="login-overlay" id="loginOverlay">
 <div class="login-box">
 <h1>星际征途</h1>
@@ -250,11 +220,8 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 </div>
 </div>
 </div>
-
 <div id="app" style="display:none;">
-<!-- 顶部栏：两行结构 -->
 <div class="top-bar">
-<!-- 第一行：玩家信息 + 资源 + 同步状态 -->
 <div class="top-row-user">
 <div class="user-info">
 <div class="user-avatar"></div>
@@ -270,7 +237,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 <span style="cursor:pointer;color:#4a6080;font-size:.55rem;" id="logoutBtn">退出</span>
 </div>
 </div>
-<!-- 第二行：功能导航标签 -->
 <div class="top-row-nav" id="topNav">
 <span class="top-nav-tab active" data-tab="trade">🏪 交易</span>
 <span class="top-nav-tab" data-tab="factory">🏭 工厂</span>
@@ -280,14 +246,12 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 <span class="top-nav-tab" data-tab="settings">⚙️ 设置</span>
 </div>
 </div>
-
 <div class="main-body">
 <div class="left-panel">
 <div class="panel-section"><div class="section-title">🌌 星系导航</div><div class="galaxy-container" id="galaxyContainer"></div></div>
 <div class="panel-section"><div class="section-title">⚔️ 编队 <span id="fleetCountLabel">5/6</span></div><div class="fleet-summary" id="fleetSummary"></div><button class="btn-large" id="btnEditFleet" style="margin-top:3px;">✏️ 编辑战队</button></div>
 <div class="panel-section"><div class="section-title">📦 仓库 <span id="warehouseCount">0/100</span></div><div class="warehouse-grid" id="warehouseGrid"></div></div>
 </div>
-
 <div class="center-panel">
 <div class="battle-header">
 <span>⚔️ <span class="location" id="battleLocation">银河系 · 太阳系</span></span>
@@ -309,9 +273,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 </div>
 </div>
 </div>
-
 <div class="right-panel">
-<!-- 交易 -->
 <div class="tab-content active" id="tab-trade">
 <div class="page-tabs"><span class="page-tab active" data-page="market">📋 市场</span><span class="page-tab" data-page="myorders">📦 我的</span><span class="page-tab" data-page="sell">📤 上架</span></div>
 <div class="page-body">
@@ -320,13 +282,9 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 <div class="page-content" id="page-sell"><div style="display:flex;flex-direction:column;gap:6px;padding:6px 0;"><div style="display:flex;gap:6px;align-items:center;"><span style="color:var(--ts);width:40px;font-size:.55rem;">物品</span><select id="sellSelectPage" style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:4px;color:var(--th);font-size:.55rem;"></select></div><div style="display:flex;gap:6px;align-items:center;"><span style="color:var(--ts);width:40px;font-size:.55rem;">单价</span><input type="number" id="sellPricePage" value="50" style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:4px;color:var(--th);font-size:.55rem;"></div><div style="display:flex;gap:6px;align-items:center;"><span style="color:var(--ts);width:40px;font-size:.55rem;">数量</span><input type="number" id="sellQtyPage" value="1" min="1" style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:4px;color:var(--th);font-size:.55rem;"></div><button class="btn-sm" style="background:#6a5a2a;padding:4px;" onclick="confirmSellPage()">✅ 上架</button></div></div>
 </div>
 </div>
-<!-- 工厂 -->
 <div class="tab-content" id="tab-factory"><div style="font-size:.6rem;color:var(--ts);margin-bottom:4px;">🏭 战舰工厂</div><div style="flex:1;overflow-y:auto;" id="factoryList"></div></div>
-<!-- 矿物 -->
 <div class="tab-content" id="tab-mineral"><div style="font-size:.6rem;color:var(--ts);margin-bottom:3px;">💎 矿物星球</div><div id="mineralStatus" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:3px;"></div></div>
-<!-- 排行 -->
 <div class="tab-content" id="tab-rank"><div style="display:flex;gap:6px;margin-bottom:3px;"><span style="color:var(--ts);font-size:.55rem;">战力排行</span><span style="color:#4a6080;font-size:.5rem;" id="rankCount">共 1 人</span></div><div class="rank-list" id="rankList"></div></div>
-<!-- 星际联盟 -->
 <div class="tab-content" id="tab-alliance">
 <div style="display:flex;gap:6px;margin-bottom:8px;">
 <input type="text" id="allySearch" placeholder="搜索联盟..." oninput="filterAlliance()" style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:5px 10px;color:var(--th);font-size:.65rem;">
@@ -334,12 +292,21 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 </div>
 <div class="alliance-list" id="allianceList" style="flex:1;overflow-y:auto;"></div>
 </div>
-<!-- 设置 -->
-<div class="tab-content" id="tab-settings"><div style="overflow-y:auto;"><div style="background:var(--bgp);border:1px solid var(--bd);border-radius:6px;padding:10px 12px;margin-bottom:8px;"><div style="color:var(--gold);font-weight:600;font-size:.7rem;">🎁 兑换码</div><div style="display:flex;gap:6px;margin-top:4px;"><input type="text" id="inviteInput" placeholder="输入兑换码..." style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:4px 8px;color:var(--th);font-size:.6rem;"><button class="btn-sm" id="redeemInviteBtn">兑换</button></div><div id="inviteResult" style="font-size:.55rem;margin-top:4px;color:var(--ts);"></div></div><div style="background:var(--bgp);border:1px solid var(--bd);border-radius:5px;padding:8px 10px;font-size:.65rem;"><div style="color:var(--gold);font-weight:600;font-size:.7rem;">☁️ 云端同步</div><p style="font-size:.6rem;">每次操作自动保存到 Gist</p><div style="font-size:.55rem;margin-top:4px;">状态：<span id="cloudStatusDetail" style="color:var(--grn);">已连接</span></div><button class="btn-sm" style="margin-top:6px;width:100%;" onclick="manualSync()">🔄 手动同步</button></div></div></div>
+<div class="tab-content" id="tab-settings"><div style="overflow-y:auto;">
+<div style="background:var(--bgp);border:1px solid var(--bd);border-radius:6px;padding:10px 12px;margin-bottom:8px;"><div style="color:var(--gold);font-weight:600;font-size:.7rem;">🎁 兑换码</div><div style="display:flex;gap:6px;margin-top:4px;"><input type="text" id="inviteInput" placeholder="输入兑换码..." style="flex:1;background:var(--bgi);border:1px solid var(--bd);border-radius:4px;padding:4px 8px;color:var(--th);font-size:.6rem;"><button class="btn-sm" id="redeemInviteBtn">兑换</button></div><div id="inviteResult" style="font-size:.55rem;margin-top:4px;color:var(--ts);"></div></div>
+<div style="background:var(--bgp);border:1px solid var(--bd);border-radius:5px;padding:8px 10px;font-size:.65rem;">
+<div style="color:var(--gold);font-weight:600;font-size:.7rem;">☁️ 云端同步</div>
+<p style="font-size:.6rem;margin-top:4px;">数据保存到 GitHub Gist</p>
+<div style="font-size:.55rem;margin-top:6px;">状态：<span id="cloudStatusDetail" style="color:var(--grn);">已连接</span></div>
+<button class="btn-sm" style="margin-top:8px;width:100%;background:#1f6a3a;" onclick="manualSync()">🔄 手动同步</button>
+<button class="btn-sm" style="margin-top:4px;width:100%;background:#4a2a6a;" onclick="testSync()">🧪 测试同步</button>
+<button class="btn-sm" style="margin-top:4px;width:100%;background:#5a3a3a;" onclick="checkGistStatus()">🔍 检查 Gist 状态</button>
+<div id="syncDebug" style="font-size:.5rem;margin-top:6px;color:var(--ts);max-height:150px;overflow-y:auto;background:#0b1422;padding:4px;border-radius:4px;"></div>
+</div>
+</div></div>
 </div>
 </div>
 </div>
-
 <div class="modal-overlay" id="modalOverlay"><div class="modal-box"><h2 id="modalTitle">标题</h2><div class="content" id="modalContent"></div><button class="close-btn" id="modalClose">关闭</button></div></div>
 
 <script>
@@ -366,11 +333,22 @@ let alphaSquadDefeated={},redeemedCodes={},_saveInProgress=false,galaxyExpanded=
 let currentAlliance=null,allianceData={},lastTaskRefresh=0;
 let serverTimeOffset=0;
 
+// 调试日志
+function debugLog(msg){
+  console.log(msg);
+  const el=document.getElementById('syncDebug');
+  if(el){
+    const time=new Date().toLocaleTimeString();
+    el.innerHTML+=`<div>[${time}] ${msg}</div>`;
+    el.scrollTop=el.scrollHeight;
+  }
+}
+
 // ============================================================
 //  联网时间
 // ============================================================
 async function syncServerTime(){
-try{const r=await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');if(r.ok){const d=await r.json();serverTimeOffset=new Date(d.datetime).getTime()-Date.now();console.log('⏰ 时间同步完成')}}catch(e){console.warn('⚠️ 时间同步失败')}
+try{const r=await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');if(r.ok){const d=await r.json();serverTimeOffset=new Date(d.datetime).getTime()-Date.now();debugLog('⏰ 时间同步完成')}}catch(e){debugLog('⚠️ 时间同步失败')}
 }
 function now(){return Date.now()+serverTimeOffset}
 function getToday(){const d=new Date(now());return d.getUTCFullYear()+'-'+(d.getUTCMonth()+1)+'-'+d.getUTCDate()}
@@ -390,7 +368,6 @@ const GALAXY_DATA=[
 {name:'天龙座',tier:7,levelBase:750,dropTier:7,systems:['瓦德拉','德拉科','纳加','瑟拉','卡兰索','泰拉贡','泽瑞斯','奥菲斯','梅德萨','瓦拉尔']},
 {name:'室女座',tier:7,levelBase:900,dropTier:7,systems:['维雅','卡兰','索拉','梅里安','奥德赛','维斯塔','艾瑞斯','泰兰','洛恩','赛伦']}
 ];
-
 const ALL_MATERIALS=[];
 const MATERIALS={
 T1:[{name:'电路板',tier:1},{name:'铜线',tier:1},{name:'电阻',tier:1},{name:'焊料',tier:1},{name:'电容',tier:1},{name:'二极管',tier:1},{name:'晶振',tier:1},{name:'继电器',tier:1},{name:'保险丝',tier:1},{name:'接线端子',tier:1}],
@@ -440,7 +417,6 @@ const SHIP_RECIPES={
 const VALID_CODES={'Star Trek':{type:'ship',tier:3,pos:'front'},'BDGOnb':{type:'bundle',credits:10000,shipTier:4,shipPos:'front'}};
 const AFFIX_TYPES=[{id:'heavy_armor',name:'重甲',desc:'血量上限加10%~15%'},{id:'burst',name:'连发',desc:'攻击降低20%~35%，每次攻击两次'},{id:'focus',name:'聚焦',desc:'伤害提高5%~20%'},{id:'plunder',name:'掠夺',desc:'每击沉一架战舰回复10%~25%生命'},{id:'self_destruct',name:'自爆',desc:'死亡时对敌方全体造成自身血量5%~15%伤害'}];
 const QUALITY_COLORS={1:{name:'普通',color:'#8fa5c9'},2:{name:'优秀',color:'#4aad7a'},3:{name:'精良',color:'#4a8aaa'},4:{name:'稀有',color:'#8e44ad'},5:{name:'史诗',color:'#d4a843'},6:{name:'传说',color:'#d4853a'},7:{name:'神话',color:'#c06a9a'}};
-
 function getQualityClass(t){return 'q-'+t}
 function getQualityName(t){return QUALITY_COLORS[t]?.name||'普通'}
 function getQualityColor(t){return QUALITY_COLORS[t]?.color||'#8fa5c9'}
@@ -457,67 +433,115 @@ function getShipContribution(tier){const m={1:10,2:20,3:40,4:80,5:100,6:200,7:40
 function getTaskReward(tier){const m={1:10,2:20,3:50,4:100,5:300,6:500,7:1000};return m[tier]||10}
 
 // ============================================================
-//  Gist 存储（含重试）
+//  Gist 存储（★核心修复★）
 // ============================================================
 async function saveToGist(data){
   const url=`https://api.github.com/gists/${GIST_ID}`;
   let sha='';
-  try{const r=await fetch(url);if(r.ok){const i=await r.json();sha=i.files[GIST_FILENAME]?.sha||''}}catch(e){}
+  try{
+    const r=await fetch(url,{headers:{'Authorization':`token ${GITHUB_TOKEN}`}});
+    if(r.ok){const i=await r.json();sha=i.files[GIST_FILENAME]?.sha||''}
+  }catch(e){debugLog('获取SHA失败: '+e.message)}
   const payload={files:{[GIST_FILENAME]:{content:JSON.stringify(data,null,2)}}};
   if(sha)payload.sha=sha;
   try{
     const r=await fetch(url,{method:'PATCH',headers:{'Authorization':`token ${GITHUB_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    if(r.ok)return true;
+    if(r.ok){
+      const result=await r.json();
+      debugLog('✅ 保存成功，size: '+result.files[GIST_FILENAME].size+' bytes');
+      return true;
+    }
     const errText=await r.text();
-    console.error('Gist保存失败:',r.status,errText);
+    debugLog('❌ 保存失败 '+r.status+': '+errText.substring(0,200));
     return false;
-  }catch(e){console.error('Gist保存异常:',e);return false}
+  }catch(e){debugLog('❌ 保存异常: '+e.message);return false}
 }
+
+// ★修复：支持 raw_url 处理大文件截断
 async function loadFromGist(){
   try{
     const r=await fetch(`https://api.github.com/gists/${GIST_ID}`,{headers:{'Authorization':`token ${GITHUB_TOKEN}`}});
     if(!r.ok){
-      console.error('Gist加载失败:',r.status);
+      const errText=await r.text();
+      debugLog('❌ 加载失败 '+r.status+': '+errText.substring(0,200));
       return null;
     }
     const i=await r.json();
-    const c=i.files[GIST_FILENAME]?.content;
-    if(!c)return{};
-    return JSON.parse(c);
-  }catch(e){console.error('Gist加载异常:',e);return null}
+    const file=i.files[GIST_FILENAME];
+    if(!file){
+      debugLog('⚠️ 文件不存在，返回空对象');
+      return {};
+    }
+    
+    let content=file.content;
+    const sizeKB=Math.round((file.size||0)/1024);
+    
+    // ★关键：如果 content 为空或者被截断，使用 raw_url
+    if(!content||content.trim()===''||file.truncated){
+      debugLog(`📥 文件大小 ${sizeKB}KB，使用 raw_url 获取完整内容`);
+      const rawResp=await fetch(file.raw_url);
+      if(!rawResp.ok){
+        debugLog('❌ raw_url 获取失败');
+        return null;
+      }
+      content=await rawResp.text();
+    }
+    
+    if(!content||content.trim()===''){
+      debugLog('📭 内容为空，返回空对象');
+      return {};
+    }
+    
+    const data=JSON.parse(content);
+    const playerCount=Object.keys(data.players||{}).length;
+    const allianceCount=Object.keys(data.alliances||{}).length;
+    debugLog(`✅ 加载成功：${playerCount} 玩家，${allianceCount} 联盟 (${sizeKB}KB)`);
+    return data;
+  }catch(e){
+    debugLog('❌ 加载异常: '+e.message);
+    return null;
+  }
 }
 
 function getPlayerData(){return{inventory,tradeList,credits,playerShips,statBattles,statWins,statLosses,statDrops,playerLevel,playerExp,maxExp,currentGalaxyIdx,currentSystemIdx,blueprints,constructionQueue,maxShips,upgradeLevel,alphaSquadDefeated,redeemedCodes,currentAlliance,lastOnline:now(),lastTaskRefresh}}
 
-// 保存（多次重试）
-async function saveGameImmediate(retry=3){
+// ★关键修复：加载失败不保存
+async function saveGameImmediate(){
   if(!currentUser)return false;
-  if(_saveInProgress){await new Promise(r=>setTimeout(r,100));return saveGameImmediate()}
+  if(_saveInProgress){
+    // 等待最多3秒
+    for(let i=0;i<30;i++){await new Promise(r=>setTimeout(r,100));if(!_saveInProgress)break}
+    if(_saveInProgress)return false;
+  }
   _saveInProgress=true;
   updateSyncStatus('syncing','保存中...');
+  
   try{
-    for(let attempt=0;attempt<retry;attempt++){
-      let allData=await loadFromGist();
-      if(!allData)allData={};
-      if(!allData.players)allData.players={};
-      if(!allData.alliances)allData.alliances={};
-      if(!allData.meta)allData.meta={};
-      allData.players[currentUser]=getPlayerData();
-      allData.alliances=allianceData;
-      allData.meta.lastUpdate=now();
-      allData.leaderboard=Object.keys(allData.players).map(name=>{const p=allData.players[name];let power=100;(p.playerShips||[]).forEach(s=>{power+=Math.floor(s.maxHp/2)+s.atk*3});return{name,power,level:p.playerLevel||1}}).sort((a,b)=>b.power-a.power);
-      const ok=await saveToGist(allData);
-      if(ok){
-        updateSyncStatus('ok','已同步');
-        _saveInProgress=false;
-        return true;
-      }
-      await new Promise(r=>setTimeout(r,800*(attempt+1)));
+    // ★先加载现有数据（必须成功，否则不保存）
+    let allData=await loadFromGist();
+    if(allData===null){
+      updateSyncStatus('fail','加载失败，已取消保存');
+      debugLog('❌ 加载失败，为防止覆盖云端数据，已取消保存');
+      _saveInProgress=false;
+      return false;
     }
-    updateSyncStatus('fail','同步失败');
+    
+    if(!allData.players)allData.players={};
+    if(!allData.alliances)allData.alliances={};
+    if(!allData.meta)allData.meta={};
+    
+    // 更新当前玩家
+    allData.players[currentUser]=getPlayerData();
+    allData.alliances=allianceData;
+    allData.meta.lastUpdate=now();
+    allData.leaderboard=Object.keys(allData.players).map(name=>{const p=allData.players[name];let power=100;(p.playerShips||[]).forEach(s=>{power+=Math.floor(s.maxHp/2)+s.atk*3});return{name,power,level:p.playerLevel||1}}).sort((a,b)=>b.power-a.power);
+    
+    const ok=await saveToGist(allData);
+    updateSyncStatus(ok?'ok':'fail',ok?'已同步':'保存失败');
     _saveInProgress=false;
-    return false;
+    return ok;
   }catch(e){
+    debugLog('❌ 保存异常: '+e.message);
     updateSyncStatus('fail','保存异常');
     _saveInProgress=false;
     return false;
@@ -536,9 +560,68 @@ async function loadFromServer(){
 }
 
 async function manualSync(){
+  addLog('☁️ 手动同步中...','sys');
   const s=await saveGameImmediate();
   if(s)addLog('☁️ 手动同步成功','sys');
-  else addLog('❌ 手动同步失败，请检查网络或Token','dmg');
+  else addLog('❌ 手动同步失败','dmg');
+}
+
+// ★新增：测试同步
+async function testSync(){
+  debugLog('==== 开始测试同步 ====');
+  debugLog('Token: '+GITHUB_TOKEN.substring(0,10)+'...');
+  debugLog('Gist ID: '+GIST_ID);
+  debugLog('文件名: '+GIST_FILENAME);
+  debugLog('当前玩家: '+currentUser);
+  
+  debugLog('1. 测试加载...');
+  const data=await loadFromGist();
+  if(data===null){debugLog('❌ 加载失败，Token 可能无效');return}
+  debugLog('✅ 加载成功，玩家数: '+Object.keys(data.players||{}).length);
+  
+  debugLog('2. 测试保存...');
+  const testData=data;
+  if(!testData.players)testData.players={};
+  if(!testData.players[currentUser])testData.players[currentUser]={test:true,time:now()};
+  else testData.players[currentUser]._testTime=now();
+  
+  const ok=await saveToGist(testData);
+  debugLog(ok?'✅ 保存成功！':'❌ 保存失败！');
+  debugLog('==== 测试结束 ====');
+}
+
+// ★新增：检查 Gist 状态
+async function checkGistStatus(){
+  debugLog('==== Gist 状态 ====');
+  try{
+    const r=await fetch(`https://api.github.com/gists/${GIST_ID}`,{headers:{'Authorization':`token ${GITHUB_TOKEN}`}});
+    if(!r.ok){
+      debugLog('❌ 无法访问 Gist，状态码: '+r.status);
+      if(r.status===401)debugLog('⚠️ Token 无效或已过期');
+      if(r.status===404)debugLog('⚠️ Gist 不存在或Token无权限');
+      return;
+    }
+    const i=await r.json();
+    const file=i.files[GIST_FILENAME];
+    if(!file){debugLog('⚠️ 文件 '+GIST_FILENAME+' 不存在');return}
+    debugLog('✅ Gist 可访问');
+    debugLog('文件名: '+file.filename);
+    debugLog('文件大小: '+Math.round(file.size/1024)+' KB');
+    debugLog('是否截断: '+(file.truncated?'是':'否'));
+    debugLog('content 长度: '+(file.content||'').length);
+    debugLog('raw_url: '+file.raw_url);
+    
+    // 尝试解析内容
+    if(file.content&&!file.truncated){
+      try{
+        const data=JSON.parse(file.content);
+        debugLog('玩家数: '+Object.keys(data.players||{}).length);
+        debugLog('联盟数: '+Object.keys(data.alliances||{}).length);
+        debugLog('玩家列表: '+Object.keys(data.players||{}).join(', '));
+      }catch(e){debugLog('❌ JSON 解析失败: '+e.message)}
+    }
+  }catch(e){debugLog('❌ 异常: '+e.message)}
+  debugLog('==== 结束 ====');
 }
 
 async function consumeItems(items,actionFn){
@@ -562,7 +645,6 @@ function showModal(t,c){document.getElementById('modalTitle').textContent=t;docu
 function hideModal(){document.getElementById('modalOverlay').classList.remove('show')}
 document.getElementById('modalClose').addEventListener('click',hideModal);
 document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('modalOverlay'))hideModal()});
-
 function initTheme(){const s=localStorage.getItem('starfleet_theme')||'dark';if(s==='light'){document.body.classList.add('light');document.getElementById('themeToggle').textContent='☀️'}}
 document.getElementById('themeToggle').addEventListener('click',function(){if(document.body.classList.contains('light')){document.body.classList.remove('light');this.textContent='🌙';localStorage.setItem('starfleet_theme','dark')}else{document.body.classList.add('light');this.textContent='☀️';localStorage.setItem('starfleet_theme','light')}});
 
@@ -575,69 +657,68 @@ function showLogin(){document.getElementById('loginFields').style.display='block
 function showRegister(){document.getElementById('loginFields').style.display='none';document.getElementById('registerFields').style.display='block';document.getElementById('loginSub').textContent='注册新的星际账号'}
 document.getElementById('toggleMode').addEventListener('click',showRegister);
 document.getElementById('toggleModeBack').addEventListener('click',showLogin);
-
 function createInitialShips(){const t1f=SHIP_DB.T1.front,t1m=SHIP_DB.T1.mid,t1r=SHIP_DB.T1.rear;const s=[];for(let i=0;i<2;i++)s.push(createShip(t1f[Math.floor(Math.random()*t1f.length)],'front',1,true));s.push(createShip(t1m[Math.floor(Math.random()*t1m.length)],'mid',1,true));for(let i=0;i<2;i++)s.push(createShip(t1r[Math.floor(Math.random()*t1r.length)],'rear',1,i<1));return s}
 function createInitialInventory(){return{'电路板':{count:10,tier:1},'螺丝':{count:20,tier:2},'基础护盾发生器':{count:1,tier:1}}}
 
 async function doRegister(){
-const u=document.getElementById('registerUsername').value.trim(),p=document.getElementById('registerPassword').value.trim(),c=document.getElementById('registerConfirm').value.trim();
-const errEl=document.getElementById('registerError'),okEl=document.getElementById('registerSuccess');
-if(!u||!p||!c){errEl.textContent='请填写完整信息';return}
-if(u.length<2){errEl.textContent='账号至少2个字符';return}
-if(p.length<3){errEl.textContent='密码至少3个字符';return}
-if(p!==c){errEl.textContent='两次密码不一致';return}
-const users=getUsers();
-if(users[u]){errEl.textContent='账号已存在';return}
-inventory=createInitialInventory();tradeList=[];credits=0;playerShips=createInitialShips();blueprints=[];constructionQueue=[];
-maxShips={front:2,mid:1,rear:2};upgradeLevel={front:0,mid:0,rear:0};
-statBattles=0;statWins=0;statLosses=0;statDrops=0;playerLevel=1;playerExp=0;maxExp=100;
-currentGalaxyIdx=0;currentSystemIdx=0;alphaSquadDefeated={};redeemedCodes={};currentAlliance=null;lastTaskRefresh=getToday();
-users[u]=p;saveUsers(users);
-const tempUser=currentUser;currentUser=u;
-const saved=await saveGameImmediate();
-if(saved){errEl.textContent='';okEl.textContent='注册成功！正在登录...';currentUser=tempUser;document.getElementById('loginUsername').value=u;document.getElementById('loginPassword').value=p;setTimeout(()=>{showLogin();doLogin()},500)}
-else{errEl.textContent='注册失败，请检查网络';currentUser=tempUser}
+  const u=document.getElementById('registerUsername').value.trim(),p=document.getElementById('registerPassword').value.trim(),c=document.getElementById('registerConfirm').value.trim();
+  const errEl=document.getElementById('registerError'),okEl=document.getElementById('registerSuccess');
+  if(!u||!p||!c){errEl.textContent='请填写完整信息';return}
+  if(u.length<2){errEl.textContent='账号至少2个字符';return}
+  if(p.length<3){errEl.textContent='密码至少3个字符';return}
+  if(p!==c){errEl.textContent='两次密码不一致';return}
+  const users=getUsers();
+  if(users[u]){errEl.textContent='账号已存在';return}
+  inventory=createInitialInventory();tradeList=[];credits=0;playerShips=createInitialShips();blueprints=[];constructionQueue=[];
+  maxShips={front:2,mid:1,rear:2};upgradeLevel={front:0,mid:0,rear:0};
+  statBattles=0;statWins=0;statLosses=0;statDrops=0;playerLevel=1;playerExp=0;maxExp=100;
+  currentGalaxyIdx=0;currentSystemIdx=0;alphaSquadDefeated={};redeemedCodes={};currentAlliance=null;lastTaskRefresh=getToday();
+  users[u]=p;saveUsers(users);
+  const tempUser=currentUser;currentUser=u;
+  const saved=await saveGameImmediate();
+  if(saved){errEl.textContent='';okEl.textContent='注册成功！正在登录...';currentUser=tempUser;document.getElementById('loginUsername').value=u;document.getElementById('loginPassword').value=p;setTimeout(()=>{showLogin();doLogin()},500)}
+  else{errEl.textContent='注册失败，请检查网络';currentUser=tempUser}
 }
 
 async function doLogin(){
-const u=document.getElementById('loginUsername').value.trim(),p=document.getElementById('loginPassword').value.trim();
-const errEl=document.getElementById('loginError'),okEl=document.getElementById('loginSuccess');
-if(!u||!p){errEl.textContent='请输入账号和密码';return}
-const users=getUsers();
-if(!users[u]){errEl.textContent='账号不存在，请先注册';return}
-if(users[u]!==p){errEl.textContent='密码错误';return}
-errEl.textContent='';okEl.textContent='登录成功！';
-currentUser=u;document.getElementById('playerName').textContent=u;
-document.getElementById('loginOverlay').classList.add('hidden');
-document.getElementById('app').style.display='flex';
-const loaded=await loadFromServer();
-if(loaded&&Object.keys(loaded).length>0){
-Object.assign(window,loaded);
-if(!Array.isArray(playerShips)||playerShips.length===0)playerShips=createInitialShips();
-if(!Array.isArray(blueprints))blueprints=[];
-if(!Array.isArray(constructionQueue))constructionQueue=[];
-if(!currentAlliance)currentAlliance=null;
-addLog('☁️ 从 Gist 加载数据成功','sys');
-}else{
-inventory=createInitialInventory();playerShips=createInitialShips();credits=0;lastTaskRefresh=getToday();
-await saveGameImmediate();
-addLog('🆕 新玩家已初始化','sys');
-}
-checkDailyTaskRefresh();
-renderAll();
-updateSyncStatus('ok');
+  const u=document.getElementById('loginUsername').value.trim(),p=document.getElementById('loginPassword').value.trim();
+  const errEl=document.getElementById('loginError'),okEl=document.getElementById('loginSuccess');
+  if(!u||!p){errEl.textContent='请输入账号和密码';return}
+  const users=getUsers();
+  if(!users[u]){errEl.textContent='账号不存在，请先注册';return}
+  if(users[u]!==p){errEl.textContent='密码错误';return}
+  errEl.textContent='';okEl.textContent='登录成功！';
+  currentUser=u;document.getElementById('playerName').textContent=u;
+  document.getElementById('loginOverlay').classList.add('hidden');
+  document.getElementById('app').style.display='flex';
+  const loaded=await loadFromServer();
+  if(loaded&&Object.keys(loaded).length>0){
+    Object.assign(window,loaded);
+    if(!Array.isArray(playerShips)||playerShips.length===0)playerShips=createInitialShips();
+    if(!Array.isArray(blueprints))blueprints=[];
+    if(!Array.isArray(constructionQueue))constructionQueue=[];
+    if(!currentAlliance)currentAlliance=null;
+    addLog('☁️ 从 Gist 加载数据成功','sys');
+  }else{
+    inventory=createInitialInventory();playerShips=createInitialShips();credits=0;lastTaskRefresh=getToday();
+    await saveGameImmediate();
+    addLog('🆕 新玩家已初始化','sys');
+  }
+  checkDailyTaskRefresh();
+  renderAll();
+  updateSyncStatus('ok');
 }
 document.getElementById('loginBtn').addEventListener('click',doLogin);
 document.getElementById('loginPassword').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 document.getElementById('registerBtn').addEventListener('click',doRegister);
 document.getElementById('registerConfirm').addEventListener('keydown',e=>{if(e.key==='Enter')doRegister()});
 document.getElementById('logoutBtn').addEventListener('click',async function(){
-if(currentUser)await saveGameImmediate();
-currentUser=null;
-document.getElementById('loginOverlay').classList.remove('hidden');
-document.getElementById('app').style.display='none';
-document.getElementById('loginPassword').value='';
-showLogin();
+  if(currentUser)await saveGameImmediate();
+  currentUser=null;
+  document.getElementById('loginOverlay').classList.remove('hidden');
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginPassword').value='';
+  showLogin();
 });
 
 // ============================================================
@@ -691,7 +772,6 @@ enemies.push({id:'e'+i+'_'+Date.now(),name:name+' Lv.'+baseLv,hp,maxHp:hp,atk,al
 }
 renderEnemy();updateBattleInfo();
 }
-
 function renderEnemy(){
 const col=document.getElementById('enemyColumn');col.innerHTML='';
 const alive=enemies.filter(e=>e.alive);
@@ -705,7 +785,6 @@ col.appendChild(div);
 });
 document.getElementById('enemyCount').textContent=alive.length;
 }
-
 function updateFleetUI(){
 if(!playerShips||playerShips.length===0)playerShips=createInitialShips();
 const dep=playerShips.filter(s=>s.deployed);
@@ -715,7 +794,6 @@ document.getElementById('fleetCountLabel').textContent=dep.length+'/'+(maxShips.
 friendlyShips=dep.map(s=>({...s,hp:s.hp,maxHp:s.maxHp,atk:s.atk,charge:s.charge||0,maxCharge:100,heal:s.pos==='rear'?12:0,burst:s.affixes.some(a=>a.id==='burst'),dmgBonus:s.affixes.reduce((sum,a)=>sum+(a.id==='focus'?a.value/100:0),0),plunder:s.affixes.reduce((sum,a)=>sum+(a.id==='plunder'?a.value/100:0),0),selfDestruct:s.affixes.reduce((sum,a)=>sum+(a.id==='self_destruct'?a.value/100:0),0),isAlive:true}));
 renderFleet();updatePower();
 }
-
 function renderFleet(){
 const col=document.getElementById('friendlyColumn');col.innerHTML='';
 if(!friendlyShips||friendlyShips.length===0){col.innerHTML='<div style="color:#4a6080;font-size:.5rem;text-align:center;">暂无战舰</div>';return}
@@ -725,29 +803,25 @@ const div=document.createElement('div');div.className='friendly-unit';
 const color=getQualityColor(ship.tier);div.style.borderColor=color;
 const pct=Math.round((ship.hp/ship.maxHp)*100);
 let extra='';
-if(ship.pos==='mid'){const cp=Math.round((ship.charge||0));extra=`<div class="charge-bar"><div class="fill" style="width:${cp}%;"></div></div>`}
+if(ship.pos==='mid'){const cp=Math.round(ship.charge||0);extra=`<div class="charge-bar"><div class="fill" style="width:${cp}%;"></div></div>`}
 const at=ship.affixes?.map(a=>`<span style="font-size:.3rem;color:#9b59b6;">[${a.name}]</span>`).join('')||'';
 div.innerHTML=`<span class="pos-tag ${ship.pos}">${ship.pos==='front'?'先锋':ship.pos==='mid'?'中间':'后勤'}</span><div class="ship-info"><div class="ship-name" style="color:${color};">${ship.name} ${at}</div><div class="hp-wrap"><div class="hp-bar"><div class="fill" style="width:${pct}%;"></div></div><span class="hp-text">${Math.floor(ship.hp)}/${ship.maxHp}</span></div>${extra}</div>`;
 div.addEventListener('click',()=>showShipDetail(ship.id));
 col.appendChild(div);
 });
 }
-
 function updateBattleInfo(){
 const g=getCurrentGalaxy(),lv=getSystemLevel();
 document.getElementById('battleLocation').textContent=g.name+' · '+getCurrentSystemName();
 document.getElementById('enemyInfo').textContent='敌人等级: '+lv.min+'-'+lv.max;
 document.getElementById('enemyCount').textContent=enemies.filter(e=>e.alive).length;
 }
-
 function updatePower(){
 let t=100;
 playerShips.forEach(s=>{t+=Math.floor(s.maxHp/2)+s.atk*3;if(s.affixes)s.affixes.forEach(a=>{if(a.id==='heavy_armor')t+=Math.floor(s.maxHp*.05);if(a.id==='focus')t+=Math.floor(s.atk*.1)})});
 document.getElementById('powerDisplay').textContent=Math.floor(t);
 }
-
 function syncFleetHpToPlayer(){if(!friendlyShips||!playerShips)return;friendlyShips.forEach(fs=>{const ps=playerShips.find(s=>s.id===fs.id);if(ps){ps.hp=fs.hp;ps.maxHp=fs.maxHp;ps.atk=fs.atk;ps.charge=fs.charge||0}})}
-
 function handleEnemyDeath(target,ship){
 const reward=target.reward||10;credits+=reward;document.getElementById('creditDisplay').textContent=credits;
 addLog(`💰 击杀 ${target.name} 获得 ${reward} 星际币`,'loot');
@@ -758,9 +832,7 @@ if(Math.random()<dropRate){const dt=Math.min(target.tier||1,7);const pool=ALL_MA
 if(Math.random()<.01){addBlueprint(getGalaxyTier());renderWarehouse()}
 saveGameImmediate();
 }
-
 function addExp(a){playerExp+=a;while(playerExp>=maxExp){playerExp-=maxExp;playerLevel++;maxExp=Math.floor(maxExp*1.3)+50;addLog('🎉 升级！Lv.'+playerLevel,'exp')}document.getElementById('levelDisplay').textContent='Lv.'+playerLevel}
-
 function handleDefeat(){
 if(isDefeated)return;isDefeated=true;isAuto=false;
 document.getElementById('statusLabel').textContent='💀 战败·暂停5秒';
@@ -780,7 +852,6 @@ isAuto=true;document.getElementById('btnAutoBattle').textContent='⏸️ 暂停'
 generateEnemies();renderFleet();defeatTimer=null;
 },5000);
 }
-
 function doBattle(){
 if(!isAuto||isDefeated||isPaused)return;
 enemies=enemies.filter(e=>e.alive||e.hp>0);enemies.forEach(e=>{if(e.hp<=0)e.alive=false});
@@ -843,7 +914,6 @@ updateWarehouseCount();updateSellSelect();
 }
 function updateWarehouseCount(){const c=Object.keys(inventory).length+blueprints.filter(b=>!b.learned&&!b.used).length;document.getElementById('warehouseCount').textContent=c+'/100';document.getElementById('itemCount').textContent=Object.values(inventory).reduce((s,d)=>s+d.count,0)}
 function updateSellSelect(){const s=document.getElementById('sellSelectPage');const slots=Object.keys(inventory);if(slots.length===0){s.innerHTML='<option value="">仓库为空</option>';return}s.innerHTML=slots.map(n=>`<option value="${n}">${n} x${inventory[n].count} (T${inventory[n].tier})</option>`).join('')}
-
 function showItemDetail(name){const d=inventory[name];if(!d)return;showModal('📦 '+name,`<div class="item"><span>名称</span><span>${name}</span></div><div class="item"><span>数量</span><span>${d.count}</span></div><div class="item"><span>等级</span><span>T${d.tier}</span></div><div style="margin-top:12px;display:flex;gap:8px;"><button class="btn-sm" style="flex:1;background:#2a5a7a;" onclick="hideModal();quickSell('${name}')">📤 上架</button><button class="btn-sm" style="flex:1;background:#4a1a1a;" onclick="hideModal();dropItem('${name}')">🗑️ 丢弃</button></div>`)}
 function showBlueprintDetail(id){const bp=blueprints.find(b=>b.id===id);if(!bp)return;showModal('📐 '+bp.name,`<div class="item"><span>名称</span><span style="color:#d4a843;">${bp.name}</span></div><div class="item"><span>等级</span><span>T${bp.tier}</span></div><div class="item"><span>位置</span><span>${bp.pos}</span></div><div style="margin-top:12px;display:flex;gap:8px;"><button class="btn-sm" style="flex:1;background:#4a2a6a;" onclick="hideModal();learnBlueprint('${bp.id}')">📖 学习</button><button class="btn-sm" style="flex:1;background:#4a1a1a;" onclick="hideModal();discardBlueprint('${bp.id}')">🗑️ 丢弃</button></div>`)}
 function addBlueprint(gt){const tier=Math.min(gt,7);const db=SHIP_DB['T'+tier];if(!db)return;const pos=['front','mid','rear'][Math.floor(Math.random()*3)];const list=db[pos];if(!list||!list.length)return;const name=list[Math.floor(Math.random()*list.length)];blueprints.push({id:'bp_'+Date.now()+Math.random().toString(36).substr(2,4),name,tier,pos,used:false,learned:false});addLog('📐 获得蓝图: '+name+' (T'+tier+')','blueprint');saveGameImmediate()}
@@ -880,7 +950,6 @@ html+=`<div class="factory-item ${canBuild?'':'dim'}" style="border-color:${colo
 html+='</div>';fl.innerHTML+=html;
 }
 }
-
 window.startBuilding=async function(bpId){
 const bp=blueprints.find(b=>b.id===bpId);if(!bp||!bp.learned||bp.used)return;
 const recipe=getShipRecipe(bp.name);if(!recipe){addLog('❌ 无配方','dmg');return}
@@ -888,7 +957,6 @@ const result=await consumeItems(recipe,async()=>{bp.used=true;constructionQueue.
 if(result.success){addLog('🔧 开始建造 '+bp.name+'，预计'+(bp.tier*30)+'秒','sys');renderWarehouse();renderFactory();await saveGameImmediate()}
 else addLog('❌ '+result.error,'dmg');
 };
-
 setInterval(()=>{
 let ch=false;
 constructionQueue.forEach(c=>{
@@ -953,7 +1021,6 @@ addLog(`🛒 购买 ${it.name} x${num}，花费 ${tp}`,'loot');
 if(it.qty<=0)tradeList.splice(i,1);
 renderWarehouse();renderMarket();renderMyOrders();saveGameImmediate();
 };
-
 function renderMarket(){
 const s=document.getElementById('tradeSearchInput')?.value?.toLowerCase()||'';
 const tf=document.getElementById('tradeTierFilter')?.value||'all';
@@ -1046,18 +1113,9 @@ if(my>def){p.miner=currentUser;addLog('🎉 占领！','loot')}else addLog('💀
 renderMineralStatus();
 };
 setInterval(()=>{mineralTimer++;if(mineralTimer%10===0)checkMineralSpawn();mineralPlanets=mineralPlanets.filter(p=>p.expireTime>now());renderMineralStatus()},60000);
+function checkDailyTaskRefresh(){const t=getToday();if(lastTaskRefresh!==t){lastTaskRefresh=t;addLog('📋 每日任务已刷新','sys');saveGameImmediate()}}
 
-// ============================================================
-//  每日任务刷新
-// ============================================================
-function checkDailyTaskRefresh(){
-const t=getToday();
-if(lastTaskRefresh!==t){lastTaskRefresh=t;addLog('📋 每日任务已刷新','sys');saveGameImmediate()}
-}
-
-// ============================================================
-//  兑换码
-// ============================================================
+// 兑换码
 document.getElementById('redeemInviteBtn').addEventListener('click',async function(){
 const code=document.getElementById('inviteInput').value.trim();
 const res=document.getElementById('inviteResult');
@@ -1065,23 +1123,12 @@ if(!code){res.textContent='❌ 请输入';res.style.color='#c0392b';return}
 if(!currentUser){res.textContent='❌ 请先登录';res.style.color='#c0392b';return}
 if(redeemedCodes[code]){res.textContent='❌ 已兑换过';res.style.color='#c0392b';return}
 const rw=VALID_CODES[code];if(!rw){res.textContent='❌ 无效';res.style.color='#c0392b';return}
-if(rw.type==='bundle'){
-credits+=rw.credits||10000;
-const tier=rw.shipTier||4,pos=rw.shipPos||'front';const db=SHIP_DB['T'+tier];
-if(db&&db[pos]){const name=db[pos][Math.floor(Math.random()*db[pos].length)];playerShips.push(createShip(name,pos,tier,false));addLog(`🎁 兑换成功！获得 ${rw.credits} 星际币 + ${name}`,'loot')}
-res.textContent='✅ 兑换成功！';res.style.color='#4aad7a';
-}else if(rw.type==='ship'){
-const tier=rw.tier,pos=rw.pos;const db=SHIP_DB['T'+tier];
-if(db&&db[pos]){const name=db[pos][Math.floor(Math.random()*db[pos].length)];playerShips.push(createShip(name,pos,tier,false));addLog(`🎁 兑换成功！获得 ${name}`,'loot')}
-res.textContent='✅ 兑换成功！';res.style.color='#4aad7a';
-}
-redeemedCodes[code]=true;renderAll();saveGameImmediate();
-document.getElementById('inviteInput').value='';
+if(rw.type==='bundle'){credits+=rw.credits||10000;const tier=rw.shipTier||4,pos=rw.shipPos||'front';const db=SHIP_DB['T'+tier];if(db&&db[pos]){const name=db[pos][Math.floor(Math.random()*db[pos].length)];playerShips.push(createShip(name,pos,tier,false));addLog(`🎁 兑换成功！${rw.credits} 星际币 + ${name}`,'loot')}res.textContent='✅ 兑换成功！';res.style.color='#4aad7a'}
+else if(rw.type==='ship'){const tier=rw.tier,pos=rw.pos;const db=SHIP_DB['T'+tier];if(db&&db[pos]){const name=db[pos][Math.floor(Math.random()*db[pos].length)];playerShips.push(createShip(name,pos,tier,false));addLog(`🎁 兑换成功！${name}`,'loot')}res.textContent='✅ 兑换成功！';res.style.color='#4aad7a'}
+redeemedCodes[code]=true;renderAll();saveGameImmediate();document.getElementById('inviteInput').value='';
 });
 
-// ============================================================
-//  战舰详情/锻造
-// ============================================================
+// 战舰详情/锻造
 function showShipDetail(id){
 const s=playerShips.find(x=>x.id===id);if(!s)return;
 const color=getQualityColor(s.tier);
@@ -1112,8 +1159,6 @@ if(dep){const d=playerShips.filter(x=>x.deployed&&x.pos===s.pos);if(d.length>=ma
 else{s.deployed=false;addLog('📤 已撤下','sys')}
 updateFleetUI();saveGameImmediate();
 };
-
-// 编队编辑
 document.getElementById('btnEditFleet').addEventListener('click',function(){
 let html='<div style="color:#6f8bb0;font-size:.7rem;margin-bottom:6px;">💡 点击卡片查看详情</div>';
 ['front','mid','rear'].forEach(pos=>{
@@ -1130,9 +1175,7 @@ html+='</div>';
 showModal('⚔️ 编辑战队',html);
 });
 
-// ============================================================
-//  星际联盟
-// ============================================================
+// 星际联盟
 async function renderAllianceList(){
 const listEl=document.getElementById('allianceList');if(!listEl)return;
 const ad=await loadFromGist()||{};
@@ -1142,14 +1185,10 @@ if(list.length===0){listEl.innerHTML='<div style="text-align:center;color:#4a608
 let html='';
 list.forEach(a=>{
 const lv=getAllianceLevel(a.reputation||0);
-html+=`<div class="alliance-item" data-name="${a.name}" onclick="showAllianceDetail('${a.name}')">
-<div class="a-name">🏛️ ${a.name}</div>
-<div class="a-info">等级：${lv} | 声望：${a.reputation||0} | 成员：${(a.members||[]).length}人 | 盟主：${a.leader}</div>
-</div>`;
+html+=`<div class="alliance-item" data-name="${a.name}" onclick="showAllianceDetail('${a.name}')"><div class="a-name">🏛️ ${a.name}</div><div class="a-info">等级：${lv} | 声望：${a.reputation||0} | 成员：${(a.members||[]).length}人 | 盟主：${a.leader}</div></div>`;
 });
 listEl.innerHTML=html;
 }
-
 window.filterAlliance=function(){
 const q=document.getElementById('allySearch').value.toLowerCase();
 document.querySelectorAll('#allianceList .alliance-item').forEach(el=>{
@@ -1157,7 +1196,6 @@ const n=el.dataset.name.toLowerCase();
 el.style.display=n.includes(q)?'':'none';
 });
 };
-
 window.showCreateAlliance=async function(){
 if(credits<10000){alert('需要 10000 星际币');return}
 const name=prompt('请输入联盟名称（不可重复）：');
@@ -1167,13 +1205,7 @@ if(!ad.alliances)ad.alliances={};
 if(ad.alliances[name]){alert('联盟名已存在');return}
 if(currentAlliance){alert('你已经在一个联盟中');return}
 credits-=10000;
-ad.alliances[name]={
-name,leader:currentUser,
-members:[{name:currentUser,contribution:0,joinTime:now()}],
-pending:[],reputation:0,
-warehouse:{},
-tasks:{}
-};
+ad.alliances[name]={name,leader:currentUser,members:[{name:currentUser,contribution:0,joinTime:now()}],pending:[],reputation:0,warehouse:{},tasks:{}};
 allianceData=ad.alliances;
 await saveToGist(ad);
 currentAlliance=name;
@@ -1182,7 +1214,6 @@ document.getElementById('allianceDisplay').textContent=name;
 renderAllianceList();saveGameImmediate();
 setTimeout(()=>showAllianceDetail(name),300);
 };
-
 window.showAllianceDetail=async function(name){
 const ad=await loadFromGist()||{};
 allianceData=ad.alliances||{};
@@ -1190,38 +1221,14 @@ const a=allianceData[name];if(!a){alert('联盟不存在');return}
 const isLeader=a.leader===currentUser;
 const isMember=(a.members||[]).some(m=>m.name===currentUser);
 const lv=getAllianceLevel(a.reputation||0);
-let html=`
-<div style="font-size:.85rem;color:#d4a843;font-weight:600;margin-bottom:6px;">🏛️ ${a.name}</div>
-<div style="font-size:.65rem;color:var(--ts);line-height:1.6;">
-等级：<span style="color:#4aad7a;">${lv}</span><br>
-声望：${a.reputation||0}<br>
-盟主：${a.leader}<br>
-成员：${(a.members||[]).length}人
-</div>
-<div style="margin-top:10px;display:flex;gap:4px;flex-wrap:wrap;">
-`;
-if(!isMember&&!isLeader){
-const isPending=(a.pending||[]).some(p=>p.name===currentUser);
-if(isPending)html+=`<button class="btn-sm" disabled>⏳ 已申请</button>`;
-else html+=`<button class="btn-sm" style="background:#1f6a3a;" onclick="applyAlliance('${name}')">📝 申请加入</button>`;
-}
-if(isMember||isLeader){
-html+=`<button class="btn-sm" style="background:#2a5a7a;" onclick="showAllianceWarehouse('${name}')">📦 仓库</button>`;
-html+=`<button class="btn-sm" style="background:#4a2a6a;" onclick="showAllianceTasks('${name}')">📋 任务</button>`;
-html+=`<button class="btn-sm" style="background:#6a5a2a;" onclick="showAllianceContribute('${name}')">💰 捐献</button>`;
-html+=`<button class="btn-sm" style="background:#2a5a7a;" onclick="showAllianceMembers('${name}')">👥 成员</button>`;
-}
-if(isLeader){
-if((a.pending||[]).length>0)html+=`<button class="btn-sm" style="background:#6a2a2a;" onclick="showPending('${name}')">⏳ 待审核(${a.pending.length})</button>`;
-html+=`<button class="btn-sm" style="background:#8a2a2a;" onclick="disbandAlliance('${name}')">💥 解散联盟</button>`;
-}
-if(isMember&&!isLeader){
-html+=`<button class="btn-sm" style="background:#6a2a2a;" onclick="quitAlliance('${name}')">🚪 退出联盟</button>`;
-}
+let html=`<div style="font-size:.85rem;color:#d4a843;font-weight:600;margin-bottom:6px;">🏛️ ${a.name}</div><div style="font-size:.65rem;color:var(--ts);line-height:1.6;">等级：<span style="color:#4aad7a;">${lv}</span><br>声望：${a.reputation||0}<br>盟主：${a.leader}<br>成员：${(a.members||[]).length}人</div><div style="margin-top:10px;display:flex;gap:4px;flex-wrap:wrap;">`;
+if(!isMember&&!isLeader){const isPending=(a.pending||[]).some(p=>p.name===currentUser);if(isPending)html+=`<button class="btn-sm" disabled>⏳ 已申请</button>`;else html+=`<button class="btn-sm" style="background:#1f6a3a;" onclick="applyAlliance('${name}')">📝 申请加入</button>`}
+if(isMember||isLeader){html+=`<button class="btn-sm" style="background:#2a5a7a;" onclick="showAllianceWarehouse('${name}')">📦 仓库</button><button class="btn-sm" style="background:#4a2a6a;" onclick="showAllianceTasks('${name}')">📋 任务</button><button class="btn-sm" style="background:#6a5a2a;" onclick="showAllianceContribute('${name}')">💰 捐献</button><button class="btn-sm" style="background:#2a5a7a;" onclick="showAllianceMembers('${name}')">👥 成员</button>`}
+if(isLeader){if((a.pending||[]).length>0)html+=`<button class="btn-sm" style="background:#6a2a2a;" onclick="showPending('${name}')">⏳ 待审核(${a.pending.length})</button>`;html+=`<button class="btn-sm" style="background:#8a2a2a;" onclick="disbandAlliance('${name}')">💥 解散联盟</button>`}
+if(isMember&&!isLeader){html+=`<button class="btn-sm" style="background:#6a2a2a;" onclick="quitAlliance('${name}')">🚪 退出联盟</button>`}
 html+='</div>';
 showModal('🏛️ '+a.name,html);
 };
-
 window.applyAlliance=async function(name){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[name];
@@ -1233,22 +1240,18 @@ if(!a.pending)a.pending=[];
 a.pending.push({name:currentUser,applyTime:now()});
 await saveToGist(ad);
 addLog('📝 已申请加入 '+name,'sys');
-hideModal();
-setTimeout(()=>showAllianceDetail(name),300);
+hideModal();setTimeout(()=>showAllianceDetail(name),300);
 };
-
 window.quitAlliance=async function(name){
 if(!confirm('确定退出联盟？'))return;
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[name];if(!a)return;
 a.members=a.members.filter(m=>m.name!==currentUser);
 await saveToGist(ad);
-currentAlliance=null;
-document.getElementById('allianceDisplay').textContent='无';
+currentAlliance=null;document.getElementById('allianceDisplay').textContent='无';
 addLog('🚪 已退出联盟','sys');
 hideModal();renderAllianceList();saveGameImmediate();
 };
-
 window.showAllianceMembers=async function(name){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[name];if(!a)return;
@@ -1260,7 +1263,6 @@ html+=`<div class="member-row"><span><span style="color:var(--th);">${m.name}</s
 });
 showModal('👥 成员列表 ('+(a.members||[]).length+')',html);
 };
-
 window.showPending=async function(name){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[name];if(!a)return;
@@ -1271,7 +1273,6 @@ html+=`<div class="member-row"><span style="color:var(--th);">${p.name}</span><d
 });
 showModal('⏳ 待审核',html);
 };
-
 window.approveMember=async function(an,pn){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[an];if(!a)return;
@@ -1282,7 +1283,6 @@ await saveToGist(ad);
 addLog('✅ '+pn+' 已加入联盟','sys');
 hideModal();setTimeout(()=>showPending(an),300);
 };
-
 window.rejectMember=async function(an,pn){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[an];if(!a)return;
@@ -1290,7 +1290,6 @@ a.pending=a.pending.filter(p=>p.name!==pn);
 await saveToGist(ad);
 hideModal();setTimeout(()=>showPending(an),300);
 };
-
 window.kickMember=async function(an,mn){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[an];if(!a)return;
@@ -1301,7 +1300,6 @@ await saveToGist(ad);
 addLog('👢 '+mn+' 已被踢出','sys');
 hideModal();setTimeout(()=>showAllianceDetail(an),300);
 };
-
 window.disbandAlliance=async function(name){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[name];if(!a)return;
@@ -1313,7 +1311,6 @@ if(currentAlliance===name){currentAlliance=null;document.getElementById('allianc
 addLog('💥 联盟已解散','dmg');
 hideModal();renderAllianceList();saveGameImmediate();
 };
-
 window.showAllianceContribute=async function(name){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[name];if(!a)return;
@@ -1325,25 +1322,14 @@ const d=inventory[mat];const cv=getMaterialContribution(d.tier);
 html+=`<div class="member-row"><span>${mat} <span style="color:#4a6080;font-size:.5rem;">(T${d.tier}, 有${d.count}, +${cv}贡献/个)</span></span><button class="m-action" style="background:#1f6a3a;" onclick="contributeMaterial('${name}','${mat}',1)">捐1</button></div>`;
 });
 const un=blueprints.filter(b=>!b.learned&&!b.used);
-if(un.length){
-html+='<div style="color:#d4a843;font-weight:600;font-size:.65rem;margin:6px 0;">📐 蓝图</div>';
-un.forEach(bp=>{
-const cv=getBlueprintContribution(bp.tier);
-html+=`<div class="member-row"><span>${bp.name} <span style="color:#4a6080;font-size:.5rem;">(T${bp.tier}, +${cv}贡献)</span></span><button class="m-action" style="background:#1f6a3a;" onclick="contributeBlueprint('${name}','${bp.id}')">捐献</button></div>`;
-});
-}
+if(un.length){html+='<div style="color:#d4a843;font-weight:600;font-size:.65rem;margin:6px 0;">📐 蓝图</div>';
+un.forEach(bp=>{const cv=getBlueprintContribution(bp.tier);html+=`<div class="member-row"><span>${bp.name} <span style="color:#4a6080;font-size:.5rem;">(T${bp.tier}, +${cv}贡献)</span></span><button class="m-action" style="background:#1f6a3a;" onclick="contributeBlueprint('${name}','${bp.id}')">捐献</button></div>`})}
 const ships=playerShips.filter(s=>!s.deployed);
-if(ships.length){
-html+='<div style="color:#d4a843;font-weight:600;font-size:.65rem;margin:6px 0;">🚀 战舰(未上阵)</div>';
-ships.forEach(s=>{
-const cv=getShipContribution(s.tier);
-html+=`<div class="member-row"><span>${s.name} <span style="color:#4a6080;font-size:.5rem;">(T${s.tier}, +${cv}贡献)</span></span><button class="m-action" style="background:#1f6a3a;" onclick="contributeShip('${name}','${s.id}')">捐献</button></div>`;
-});
-}
+if(ships.length){html+='<div style="color:#d4a843;font-weight:600;font-size:.65rem;margin:6px 0;">🚀 战舰(未上阵)</div>';
+ships.forEach(s=>{const cv=getShipContribution(s.tier);html+=`<div class="member-row"><span>${s.name} <span style="color:#4a6080;font-size:.5rem;">(T${s.tier}, +${cv}贡献)</span></span><button class="m-action" style="background:#1f6a3a;" onclick="contributeShip('${name}','${s.id}')">捐献</button></div>`})}
 html+='</div>';
 showModal('💰 捐献 - '+name,html);
 };
-
 window.contributeMaterial=async function(an,mat,qty){
 if(!inventory[mat]||inventory[mat].count<qty){alert('数量不足');return}
 const ad=await loadFromGist()||{};
@@ -1360,7 +1346,6 @@ addLog(`💰 捐献 ${mat} x${qty}，获得 ${cv} 贡献`,'loot');
 renderWarehouse();saveGameImmediate();
 hideModal();setTimeout(()=>showAllianceContribute(an),300);
 };
-
 window.contributeBlueprint=async function(an,bid){
 const bp=blueprints.find(b=>b.id===bid);if(!bp||bp.learned||bp.used){alert('蓝图不可用');return}
 const ad=await loadFromGist()||{};
@@ -1377,7 +1362,6 @@ addLog(`💰 捐献蓝图 ${bp.name}，获得 ${cv} 贡献`,'loot');
 renderWarehouse();saveGameImmediate();
 hideModal();setTimeout(()=>showAllianceContribute(an),300);
 };
-
 window.contributeShip=async function(an,sid){
 const s=playerShips.find(x=>x.id===sid);if(!s||s.deployed){alert('战舰不可捐');return}
 const ad=await loadFromGist()||{};
@@ -1393,7 +1377,6 @@ addLog(`💰 捐献战舰 ${s.name}，获得 ${cv} 贡献`,'loot');
 updateFleetUI();saveGameImmediate();
 hideModal();setTimeout(()=>showAllianceContribute(an),300);
 };
-
 window.showAllianceWarehouse=async function(name){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[name];if(!a)return;
@@ -1410,7 +1393,6 @@ html+=`<div class="member-row"><span>${it.isBlueprint?'📐':it.isShip?'🚀':'�
 html+='</div>';
 showModal('📦 联盟仓库 - '+name,html);
 };
-
 window.buyFromAlliance=async function(an,key){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[an];if(!a)return;
@@ -1421,13 +1403,9 @@ if(it.contributor===currentUser){alert('不能购买自己的');return}
 me.contribution-=it.contribValue;
 const seller=a.members?.find(m=>m.name===it.contributor);
 if(seller)seller.contribution=(seller.contribution||0)+it.contribValue;
-if(it.isBlueprint){
-blueprints.push({id:'bp_'+Date.now()+Math.random().toString(36).substr(2,4),name:it.name,tier:it.tier,pos:'front',used:false,learned:false});
-}else if(it.isShip){
-playerShips.push({...it.shipData,id:'ship_'+Date.now()+Math.random().toString(36).substr(2,4),deployed:false});
-}else{
-if(inventory[it.name])inventory[it.name].count+=1;else inventory[it.name]={count:1,tier:it.tier};
-}
+if(it.isBlueprint){blueprints.push({id:'bp_'+Date.now()+Math.random().toString(36).substr(2,4),name:it.name,tier:it.tier,pos:'front',used:false,learned:false})}
+else if(it.isShip){playerShips.push({...it.shipData,id:'ship_'+Date.now()+Math.random().toString(36).substr(2,4),deployed:false})}
+else{if(inventory[it.name])inventory[it.name].count+=1;else inventory[it.name]={count:1,tier:it.tier}}
 it.count--;
 if(it.count<=0)delete a.warehouse[key];
 await saveToGist(ad);
@@ -1435,7 +1413,6 @@ addLog(`🛒 购买 ${it.name}，花费 ${it.contribValue} 贡献`,'loot');
 renderWarehouse();updateFleetUI();saveGameImmediate();
 hideModal();setTimeout(()=>showAllianceWarehouse(an),300);
 };
-
 window.showAllianceTasks=async function(name){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[name];if(!a)return;
@@ -1462,7 +1439,6 @@ html+=`<div class="task-row"><span>T${tier}: ${t.material} ×${t.qty} <span clas
 }
 showModal('📋 每日任务 - '+name,html);
 };
-
 window.completeTask=async function(an,tk){
 const ad=await loadFromGist()||{};
 const a=ad.alliances?.[an];if(!a)return;
@@ -1482,9 +1458,7 @@ renderWarehouse();saveGameImmediate();
 hideModal();setTimeout(()=>showAllianceTasks(an),300);
 };
 
-// ============================================================
-//  渲染全部
-// ============================================================
+// 渲染
 function renderAll(){
 try{
 if(!playerShips||playerShips.length===0)playerShips=createInitialShips();
@@ -1494,14 +1468,10 @@ updateWarehouseCount();updateSellSelect();
 document.getElementById('creditDisplay').textContent=credits;
 document.getElementById('levelDisplay').textContent='Lv.'+playerLevel;
 document.getElementById('allianceDisplay').textContent=currentAlliance||'无';
-renderFleet();
-renderAllianceList();
+renderFleet();renderAllianceList();
 }catch(e){console.error('渲染出错:',e)}
 }
-
-// ============================================================
-//  顶部导航切换
-// ============================================================
+// 顶部导航
 document.querySelectorAll('.top-nav-tab').forEach(tab=>{
 tab.addEventListener('click',function(){
 document.querySelectorAll('.top-nav-tab').forEach(t=>t.classList.remove('active'));
@@ -1538,10 +1508,7 @@ if(isDefeated)return;
 if(!isAuto){isAuto=true;isPaused=false;this.textContent='⏸️ 暂停';document.getElementById('statusLabel').textContent='⚔️ 战斗中';if(enemies.filter(e=>e.alive).length===0)generateEnemies();doBattle()}
 else{isAuto=false;isPaused=true;this.textContent='▶️ 继续';document.getElementById('statusLabel').textContent='⏸️ 已暂停'}
 });
-
-// ============================================================
-//  启动
-// ============================================================
+// 启动
 initTheme();
 syncServerTime();
 setInterval(()=>{
@@ -1554,14 +1521,10 @@ document.getElementById('battleTimer').textContent=m+':'+s;
 },2000);
 setInterval(()=>{if(currentUser)saveGameImmediate()},300000);
 setInterval(syncServerTime,1800000);
-
 document.getElementById('loginOverlay').classList.remove('hidden');
 document.getElementById('app').style.display='none';
-console.log('🚀 星际征途 v2.1 完整版已加载');
-console.log('📡 Gist ID:',GIST_ID);
-console.log('✅ 顶部导航两行布局');
-console.log('✅ 星际联盟改为标签页');
-console.log('✅ 云同步失败修复');
+console.log('🚀 星际征途 v2.2 Gist修复版已加载');
+console.log('🔧 修复：raw_url 支持 + 加载失败不保存');
 </script>
 </body>
 </html>
