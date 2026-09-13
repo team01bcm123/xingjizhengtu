@@ -313,7 +313,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);overflow:h
 // ============================================================
 //  配置
 // ============================================================
-const GITHUB_TOKEN='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';
+const GITHUB_TOKEN='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';
 const GIST_ID='402a30a54871075e9291d963c165ca29';
 const GIST_FILENAME='starfleet_data.json';
 
@@ -348,12 +348,28 @@ function debugLog(msg){
 //  联网时间
 // ============================================================
 async function syncServerTime(){
-try{const r=await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');if(r.ok){const d=await r.json();serverTimeOffset=new Date(d.datetime).getTime()-Date.now();debugLog('⏰ 时间同步完成')}}catch(e){debugLog('⚠️ 时间同步失败')}
-}
-function now(){return Date.now()+serverTimeOffset}
-function getToday(){const d=new Date(now());return d.getUTCFullYear()+'-'+(d.getUTCMonth()+1)+'-'+d.getUTCDate()}
-
-// ============================================================
+  // 用多个备用时间API
+  const apis=[
+    'https://worldtimeapi.org/api/timezone/Etc/UTC',
+    'https://timeapi.io/api/Time/current/zone?timeZone=UTC'
+  ];
+  for(const api of apis){
+    try{
+      const r=await fetch(api);
+      if(r.ok){
+        const d=await r.json();
+        const t=d.datetime||d.dateTime||d.utc_datetime;
+        if(t){
+          serverTimeOffset=new Date(t).getTime()-Date.now();
+          debugLog('⏰ 时间同步完成，偏移 '+serverTimeOffset+'ms');
+          return;
+        }
+      }
+    }catch(e){}
+  }
+  debugLog('⚠️ 所有时间API都失败，使用本地时间');
+  serverTimeOffset=0;
+}// ============================================================
 //  数据定义
 // ============================================================
 const GALAXY_DATA=[
